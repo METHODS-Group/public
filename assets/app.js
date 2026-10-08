@@ -26,125 +26,119 @@
       '&slot=' + encodeURIComponent(slot.id);
   }
 
-  function el(tag, attrs, children) {
-    var node = document.createElement(tag);
-    if (attrs) Object.keys(attrs).forEach(function (k) {
-      if (k === 'text') node.textContent = attrs[k];
-      else if (k === 'html') node.innerHTML = attrs[k];
-      else if (attrs[k] !== null && attrs[k] !== undefined) node.setAttribute(k, attrs[k]);
+  function el(tag, cls, text) {
+    var e = document.createElement(tag);
+    if (cls) e.className = cls;
+    if (text != null) e.textContent = text;
+    return e;
+  }
+  function link(cls, text, href) {
+    var a = el('a', 'btn ' + cls, text);
+    a.href = href; a.target = '_blank'; a.rel = 'noopener';
+    return a;
+  }
+  function disabledBtn(cls, text) {
+    var b = el('button', 'btn ' + cls, text);
+    b.type = 'button'; b.disabled = true;
+    return b;
+  }
+
+  // Times: "10:00" -> 10:00; a range shares one am/pm suffix when it can ("10:00–10:30 am").
+  function mins(t) { var p = t.split(':'); return Number(p[0]) * 60 + Number(p[1]); }
+  function clock(t) { var p = t.split(':'); return (((Number(p[0]) + 11) % 12) + 1) + ':' + p[1]; }
+  function ampm(t) { return Number(t.split(':')[0]) < 12 ? 'am' : 'pm'; }
+  function range(s, e) {
+    if (!e) return clock(s) + ' ' + ampm(s);
+    return ampm(s) === ampm(e) ? clock(s) + '–' + clock(e) + ' ' + ampm(e)
+      : clock(s) + ' ' + ampm(s) + '–' + clock(e) + ' ' + ampm(e);
+  }
+
+  // Room strings in signups look like "Room 105 (Thomas's ...)"; the sheet shows "Room 105".
+  function shortRoom(room) { var m = /^Room\s+\S+/.exec(room || ''); return m ? m[0] : room; }
+
+  var TALK_SVG = '<svg viewBox="0 0 150 110" aria-hidden="true"><path d="M150 20 C110 25 95 60 60 70 S10 85 0 110"/><path d="M150 38 C118 42 104 72 72 82 S28 96 18 110"/><path d="M150 56 C126 60 114 84 86 93 S50 104 40 110"/><path d="M150 74 C134 77 124 96 104 102 S76 108 68 110"/><path d="M150 92 C142 94 136 104 124 108"/></svg>';
+
+  // A meeting slot: one row with the time, the people in it, the room, and a Claim/Join button.
+  function slotCell(slot, claims, dayOpen) {
+    var cell = el('div', 'cell slot');
+    var cap = slot.capacity == null ? Infinity : slot.capacity;
+    var left = Math.max(0, cap - claims.length);
+    cell.classList.add(claims.length === 0 ? 'open' : left === 0 ? 'full' : 'taken');
+
+    var body = el('div', 'body');
+    var list = el('div', 'who-list');
+    if (!claims.length) {
+      list.append(el('span', 'free', dayOpen ? 'Open · up to ' + slot.capacity + ' people' : 'Open'));
+    }
+    claims.forEach(function (c) {
+      var who = el('div', 'who');
+      var line = el('div', 'who-line');
+      line.append(el('span', null, c.name), el('span', 'mail', '@' + c.login));
+      who.append(line);
+      list.append(who);
     });
-    (children || []).forEach(function (c) { if (c) node.appendChild(c); });
-    return node;
-  }
-
-  // "10:00" -> "10:00 am"; a range shares one am/pm suffix when it can: "10:00–10:30 am".
-  function clock(hhmm) {
-    var parts = hhmm.split(':');
-    var h = parseInt(parts[0], 10);
-    return (h % 12 === 0 ? 12 : h % 12) + ':' + parts[1];
-  }
-  function ampm(hhmm) { return parseInt(hhmm.split(':')[0], 10) >= 12 ? 'pm' : 'am'; }
-  function timeRange(slot) {
-    if (!slot.start) return '';
-    if (!slot.end) return clock(slot.start) + ' ' + ampm(slot.start);
-    if (ampm(slot.start) === ampm(slot.end)) return clock(slot.start) + '–' + clock(slot.end) + ' ' + ampm(slot.end);
-    return clock(slot.start) + ' ' + ampm(slot.start) + '–' + clock(slot.end) + ' ' + ampm(slot.end);
-  }
-
-  // Room strings in signups look like "Room 105 (Thomas's ...)"; the card shows just "Room 105".
-  function shortRoom(room) {
-    var m = /^Room\s+\S+/.exec(room || '');
-    return m ? m[0] : room;
-  }
-
-  var norm = function (s) { return (s || '').toLowerCase().replace(/[^a-z0-9]+/g, ' ').trim(); };
-  // Show a description only when it says something the title does not.
-  function usefulDescription(slot) {
-    var d = slot.description, t = slot.title || slot.label;
-    if (!d) return null;
-    var nd = norm(d), nt = norm(t);
-    if (!nd || nd === nt || nt.indexOf(nd) !== -1 || nd.indexOf(nt) !== -1) return null;
-    return d;
-  }
-
-  var TALK_SVG = '<svg class="talk-lines" viewBox="0 0 150 110" aria-hidden="true">' +
-    '<path d="M150 20 C110 25 95 60 60 70 S10 85 0 110"/><path d="M150 38 C118 42 104 72 72 82 S28 96 18 110"/>' +
-    '<path d="M150 56 C126 60 114 84 86 93 S50 104 40 110"/><path d="M150 74 C134 77 124 96 104 102 S76 108 68 110"/>' +
-    '<path d="M150 92 C142 94 136 104 124 108"/></svg>';
-
-  function renderPeople(claims) {
-    if (!claims.length) return el('p', { class: 'nobody', text: 'Nobody yet.' });
-    return el('ul', { class: 'people' }, claims.map(function (c) {
-      return el('li', null, [
-        el('span', { class: 'name', text: c.name }),
-        el('span', { class: 'login', text: '@' + c.login })
-      ]);
-    }));
-  }
-
-  // The room belongs to the slot: whoever booked first picked it.
-  function slotRoom(claims) {
     var first = claims.filter(function (c) { return c.room; })[0];
-    return first ? first.room : null;
+    if (first) {
+      var loc = el('span', 'loc', shortRoom(first.room)); loc.title = first.room;
+      var row = el('div', 'who'); row.append(loc); list.append(row);
+    }
+    if (claims.length && left > 0) list.append(el('span', 'free', left + ' spot left'));
+    if (claims.length && dayOpen) list.append(link('link', 'Cancel my sign-up', issueUrl('cancel', slot)));
+    body.append(list);
+
+    if (!dayOpen) body.append(disabledBtn('primary', 'Claim'));
+    else if (left > 0) body.append(link('primary', claims.length ? 'Join' : 'Claim', issueUrl('claim', slot)));
+    else body.append(el('span', 'full-tag', 'Full'));
+
+    cell.append(el('span', 'time', range(slot.start, slot.end)), body);
+    return cell;
   }
 
-  function renderSlot(slot, claims) {
-    var isMeeting = slot.kind === 'meeting';
-    var isGroup = slot.kind === 'group';
-    var blocked = slot.kind === 'blocked';
-    var closed = !slot.open;
-    var left = slot.capacity == null ? null : Math.max(0, slot.capacity - claims.length);
-    var full = left === 0;
-
-    var classes = ['slot', slot.kind];
-    if (closed && !blocked) classes.push('closed');
-    if (full && !closed) classes.push('full');
-    var card = el('article', { class: classes.join(' '), 'data-slot': slot.id });
-    if (blocked) card.innerHTML = TALK_SVG;
-
-    var kind = blocked ? 'Presentation' : isGroup ? 'Group · all welcome' : 'One-on-one · 30 min';
-    var headText = el('div', { class: 'head-text' }, [el('span', { class: 'kind', text: kind })]);
-    if (isMeeting) {
-      headText.appendChild(el('p', { class: 'slot-time', text: timeRange(slot) }));
-      var room = slotRoom(claims);
-      if (room) headText.appendChild(el('p', { class: 'room', text: shortRoom(room), title: room }));
-    } else {
-      headText.appendChild(el('p', { class: 'slot-title', text: slot.title || slot.label }));
-      headText.appendChild(el('p', { class: 'slot-time', text: timeRange(slot) }));
+  // A group event (lunch, the Tuesday outing): everyone can join.
+  function groupCell(slot, claims, dayOpen) {
+    if (!dayOpen) {
+      // Not open yet: the sheet's striped placeholder block.
+      var ph = el('div', 'cell block lunch');
+      ph.append(el('span', 'label', slot.title || slot.label), el('span', 'time', range(slot.start, slot.end)));
+      return ph;
     }
-
-    var tag = null;
-    if (blocked) tag = null;
-    else if (closed) tag = el('span', { class: 'tag closed', text: 'Not open yet' });
-    else if (isGroup) tag = el('span', { class: 'tag going', text: claims.length + ' going' });
-    else if (full) tag = el('span', { class: 'tag full', text: 'Full' });
-    else tag = el('span', { class: 'tag open', text: left + ' of ' + slot.capacity + (left === 1 ? ' spot left' : ' spots left') });
-
-    card.appendChild(el('div', { class: 'slot-head' }, [headText, tag]));
-
-    var desc = isMeeting ? null : usefulDescription(slot);
-    if (desc) card.appendChild(el('p', { class: 'slot-desc', text: desc }));
-
-    if (!blocked) card.appendChild(renderPeople(claims));
-
-    if (!blocked) {
-      var actions = el('div', { class: 'actions' });
-      var template = isMeeting ? 'claim' : 'join';
-      var label = isMeeting ? 'Claim' : 'Join';
-      if (closed) {
-        actions.appendChild(el('button', { class: 'btn primary', type: 'button', disabled: '', text: label }));
-      } else if (!full) {
-        actions.appendChild(el('a', { class: 'btn primary', href: issueUrl(template, slot), target: '_blank', rel: 'noopener', text: label }));
-      }
-      if (!closed) {
-        actions.appendChild(el('a', { class: 'btn link', href: issueUrl('cancel', slot), target: '_blank', rel: 'noopener', text: 'Cancel my sign-up' }));
-      }
-      card.appendChild(actions);
+    var cell = el('div', 'cell block group');
+    var head = el('div', 'group-head');
+    var left = el('div'); left.style.display = 'flex'; left.style.flexDirection = 'column';
+    left.append(el('span', 'kind', 'Group · all welcome'), el('span', 'label', slot.title || slot.label));
+    head.append(left, el('span', 'time', range(slot.start, slot.end)));
+    cell.append(head);
+    if (slot.description) cell.append(el('span', 'group-empty', slot.description));
+    if (claims.length) {
+      var names = el('ul', 'group-names');
+      claims.forEach(function (c) {
+        var li = el('li', null, c.name);
+        li.append(el('span', 'mail', '@' + c.login));
+        names.append(li);
+      });
+      cell.append(names);
     }
-    return card;
+    var foot = el('div', 'group-foot');
+    foot.append(el('span', 'group-empty', claims.length
+      ? claims.length + (claims.length === 1 ? ' person' : ' people') + ' going'
+      : 'No one yet. Join if you’d like to come.'));
+    var btns = el('div', 'btns');
+    if (claims.length && dayOpen) btns.append(link('link', 'Cancel my sign-up', issueUrl('cancel', slot)));
+    btns.append(dayOpen ? link('primary', 'Join', issueUrl('join', slot)) : disabledBtn('primary', 'Join'));
+    foot.append(btns);
+    cell.append(foot);
+    return cell;
   }
 
-  // Open one-on-one spots across the given slots: [open, total].
+  // The talk: no sign-up.
+  function talkCell(slot) {
+    var cell = el('div', 'cell block talk');
+    cell.innerHTML = TALK_SVG;
+    var title = (slot.title || slot.label).replace(/^Thomas's talk:\s*/i, '');
+    cell.append(el('span', 'kind', 'Presentation'), el('span', 'label', title), el('span', 'time', range(slot.start, slot.end)));
+    return cell;
+  }
+
   function spots(slots, byslot) {
     var open = 0, total = 0;
     slots.forEach(function (s) {
@@ -155,31 +149,55 @@
     return [open, total];
   }
 
+  // Days whose slots fall in the shared daytime grid share one 30-minute row scale;
+  // a day with only evening events gets a single wide row above them.
   function render(schedule, signups) {
     var byslot = {};
     (signups.claims || []).forEach(function (c) { (byslot[c.slot] = byslot[c.slot] || []).push(c); });
 
-    var all = spots(schedule.days.reduce(function (a, d) { return a.concat(d.slots); }, []), byslot);
+    var allSlots = schedule.days.reduce(function (a, d) { return a.concat(d.slots); }, []);
+    var tot = spots(allSlots, byslot);
     var count = document.getElementById('count');
     count.textContent = '';
-    count.appendChild(el('b', { text: String(all[0]) }));
-    count.appendChild(document.createTextNode(' of ' + all[1] + ' one-on-one spots open'));
+    count.append(el('b', null, String(tot[0])), document.createTextNode(' of ' + tot[1] + ' spots open'));
+
+    var timed = schedule.days.filter(function (d) { return d.slots.some(function (s) { return s.end; }); });
+    var dayStart = Infinity, dayEnd = 0;
+    timed.forEach(function (d) { d.slots.forEach(function (s) {
+      if (!s.end) return;
+      dayStart = Math.min(dayStart, mins(s.start)); dayEnd = Math.max(dayEnd, mins(s.end));
+    }); });
+    var rows = Math.max(1, Math.round((dayEnd - dayStart) / 30));
 
     var root = document.getElementById('days');
     root.textContent = '';
     schedule.days.forEach(function (day) {
       var dayOpen = day.slots.some(function (s) { return s.open; });
+      var wide = timed.indexOf(day) === -1;
+      var sec = el('section', 'day' + (dayOpen ? '' : ' closed') + (wide ? ' wide' : ''));
+      sec.id = day.id;
       var ds = spots(day.slots, byslot);
-      var countText = !dayOpen ? 'Not open yet' : ds[1] ? ds[0] + ' of ' + ds[1] + ' spots open' : '';
-      var section = el('section', { class: 'day' + (dayOpen ? '' : ' closed'), id: day.id }, [
-        el('div', { class: 'day-head' }, [
-          el('h2', { text: day.label }),
-          countText ? el('span', { class: 'day-count', text: countText }) : null
-        ]),
-        day.note ? el('p', { class: 'closed-note', text: day.note }) : null,
-        el('div', { class: 'slots' }, day.slots.map(function (s) { return renderSlot(s, byslot[s.id] || []); }))
-      ]);
-      root.appendChild(section);
+      var head = el('div', 'day-head');
+      head.append(el('h2', null, day.label),
+        el('span', null, !dayOpen ? 'Not open yet' : ds[1] ? ds[0] + ' of ' + ds[1] + ' spots open' : 'Everyone welcome'));
+      sec.append(head);
+      if (day.note) sec.append(el('p', 'closed-note', day.note));
+      var grid = el('div', 'grid');
+      if (!wide) grid.style.gridTemplateRows = 'repeat(' + rows + ', minmax(var(--unit), auto))';
+      day.slots.forEach(function (slot) {
+        var claims = byslot[slot.id] || [];
+        var cell = slot.kind === 'blocked' ? talkCell(slot)
+          : slot.kind === 'group' ? groupCell(slot, claims, slot.open)
+          : slotCell(slot, claims, slot.open);
+        cell.setAttribute('data-slot', slot.id);
+        if (!wide && slot.end) {
+          var r0 = (mins(slot.start) - dayStart) / 30 + 1, r1 = (mins(slot.end) - dayStart) / 30 + 1;
+          cell.style.gridRow = r0 + ' / ' + r1;
+        }
+        grid.append(cell);
+      });
+      sec.append(grid);
+      root.append(sec);
     });
   }
 
@@ -199,7 +217,7 @@
     return Promise.all([fetchJson('data/schedule.json'), fetchJson('data/signups.json')])
       .then(function (res) {
         render(res[0], res[1]);
-        setStatus('live', 'Last updated ' + new Date().toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' }));
+        setStatus('live', 'Updated ' + new Date().toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' }) + ' · refresh to see new sign-ups');
       })
       .catch(function (err) {
         setStatus('off', 'Could not load the sign-ups (' + err.message + '). Try Refresh.');

@@ -5,24 +5,29 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Meet with Thomas Surowiec</title>
 <meta name="description" content="Sign up for a one-on-one, lunch, or an evening out with Thomas Surowiec during his visit to the METHODS Group, October 13 to 15, 2026.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,500;8..60,600&family=Atkinson+Hyperlegible:wght@400;700&family=IBM+Plex+Mono:wght@400;500&display=swap">
 <link rel="stylesheet" href="assets/style.css">
 </head>
 <body>
-<main class="wrap">
-  <header class="masthead">
-    <p class="eyebrow">METHODS Group visitor &middot; Tue Oct 13 &ndash; Thu Oct 15, 2026</p>
+<div class="wrap">
+  <header>
+    <div class="eyebrow">Campus visit &middot; Tue Oct 13 &ndash; Thu Oct 15, 2026</div>
     <h1>Meet with Thomas Surowiec</h1>
-    <p class="sub">
-      Pick a slot and press <strong>Claim</strong> (or <strong>Join</strong> for a group event). That opens a pre-filled
-      GitHub issue form; submit it and your name appears here within about a minute. You need to be signed in to GitHub.
-    </p>
-    <p class="where-line"><span class="label">Where</span> 182 George St &middot; Room 105 (Thomas&rsquo;s visiting scholar office) or Room 303 (Brendan&rsquo;s office). Whoever books a slot first picks the room.</p>
+    <p class="sub">For everyone in the METHODS Group. 30-minute slots, Eastern Time. Press <strong>Claim</strong> (or <strong>Join</strong>) to open a pre-filled GitHub issue form; submit it and your name appears here within about a minute.</p>
+    <p class="where-line"><span class="bar-label">Where</span> 182 George St &middot; Room 105 (Thomas&rsquo;s visiting scholar office) or Room 303 (Brendan&rsquo;s office). Whoever books a slot first picks the room.</p>
   </header>
 
   <div class="bar">
-    <div class="bar-links">
-      <a id="my-issues" class="btn ghost" href="#" target="_blank" rel="noopener">Open your sign-up issues</a>
-      <button id="refresh" type="button" class="btn ghost">Refresh</button>
+    <div class="fields">
+      <div class="field">
+        <span class="bar-label">Your sign-ups</span>
+        <div class="btns">
+          <a id="my-issues" class="btn ghost" href="#" target="_blank" rel="noopener">Open your sign-up issues</a>
+          <button id="refresh" type="button" class="btn ghost">Refresh</button>
+        </div>
+      </div>
     </div>
     <div class="tally">
       <div class="count" id="count"><b>&ndash;</b> spots open</div>
@@ -30,13 +35,12 @@
     </div>
   </div>
 
-  <div id="days" class="days"></div>
+  <p class="notice" id="notice">You need to be signed in to GitHub to sign up. Changed your mind? Use <em>Cancel my sign-up</em> next to your name.</p>
 
-  <footer class="foot">
-    <p>One-on-one slots are 30 minutes, at most two people per slot. Lunch and the Tuesday evening outing are open to everyone and don&rsquo;t use up your slot. Changed your mind? Use <em>Cancel my sign-up</em> under the slot.</p>
-    <p>All times are Eastern (US). Names, GitHub logins, and emails (if entered) are stored in this public repository and are visible to anyone. Something wrong? Open an issue or edit <code>data/signups.json</code> in the repository.</p>
-  </footer>
-</main>
+  <div class="days" id="days"></div>
+
+  <p class="foot">Adding your email is optional. It&rsquo;s used only for a calendar invite. Up to two people can share a meeting slot. Please take one slot per person. Lunch and the Tuesday evening outing are open to everyone and don&rsquo;t use up your slot. Names, GitHub logins, and emails (if entered) are stored in this public repository and are visible to anyone. Something wrong? Open an issue or edit <code>data/signups.json</code> in the repository.</p>
+</div>
 <script src="assets/app.js"></script>
 </body>
 </html>
