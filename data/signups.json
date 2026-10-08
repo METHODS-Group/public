@@ -23,6 +23,14 @@
       "email": null,
       "issue": 3,
       "created_at": "2026-10-08T19:43:23Z"
+    },
+    {
+      "slot": "wed-lunch",
+      "name": "Dohyun",
+      "login": "dohyun-cse",
+      "email": null,
+      "issue": 4,
+      "created_at": "2026-10-08T21:26:26Z"
     }
   ]
 }
