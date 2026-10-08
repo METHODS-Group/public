@@ -3,7 +3,7 @@ const test = require('node:test');
 const assert = require('node:assert/strict');
 const fs = require('fs');
 const path = require('path');
-const { parseBody, apply } = require('./process.js');
+const { parseBody, apply, templateFor } = require('./process.js');
 
 const schedule = JSON.parse(fs.readFileSync(path.join(__dirname, '..', 'data', 'schedule.json'), 'utf8'));
 const ROOM_105 = "Room 105 (Thomas's visiting scholar office, 182 George St)";
@@ -111,4 +111,31 @@ test('slot falls back to the title when the field is missing', () => {
   const r = apply({ claims: [] }, schedule, req('claim', body, 'ada', 'Claim: Wed 3:30 pm'));
   assert.ok(r.ok, r.message);
   assert.equal(r.signups.claims[0].slot, 'wed-1530');
+});
+
+// Issue #1 as GitHub delivered it: the "join" label was missing because the
+// label did not exist in the repo yet, so the template must come from the title.
+test('issue #1 verbatim: unlabeled Join issue is recorded for tue-2100', () => {
+  const issue = {
+    number: 1,
+    title: 'Join: Tue 9:00 pm, late dinner, a snack, or an ice cold beer with Thomas',
+    body: '### Slot\n\ntue-2100\n\n### Your name\n\nBrendan Keith\n\n### Email (optional, for a calendar invite)\n\nbrendan_keith@brown.edu',
+    labels: [],
+    user: { login: 'brendankeith' },
+    created_at: '2026-10-08T19:22:54Z',
+  };
+  assert.equal(templateFor(issue), 'join');
+  assert.equal(templateFor({ ...issue, title: 'Something else', labels: [{ name: 'join' }] }), 'join');
+  assert.equal(templateFor({ ...issue, title: 'Something else' }), null);
+  const fields = parseBody(issue.body);
+  assert.deepEqual(fields, { slot: 'tue-2100', name: 'Brendan Keith', email: 'brendan_keith@brown.edu' });
+  const r = apply({ claims: [] }, schedule, {
+    template: templateFor(issue), fields, login: issue.user.login, number: issue.number,
+    created_at: issue.created_at, title: issue.title,
+  });
+  assert.ok(r.ok, r.message);
+  assert.deepEqual(r.signups.claims[0], {
+    slot: 'tue-2100', name: 'Brendan Keith', login: 'brendankeith',
+    email: 'brendan_keith@brown.edu', issue: 1, created_at: '2026-10-08T19:22:54Z',
+  });
 });

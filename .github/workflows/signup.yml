@@ -2,7 +2,7 @@ name: Record sign-up
 
 on:
   issues:
-    types: [opened]
+    types: [opened, reopened, labeled]
 
 permissions:
   contents: write
@@ -14,7 +14,17 @@ concurrency:
 
 jobs:
   record:
-    if: contains(fromJSON('["claim","join","cancel"]'), github.event.issue.labels[0].name)
+    # The issue forms set a label, but GitHub silently drops a label that does
+    # not exist in the repo, so also accept the form's title prefix.
+    if: >-
+      github.event.issue.state == 'open' && (
+        contains(github.event.issue.labels.*.name, 'claim')
+        || contains(github.event.issue.labels.*.name, 'join')
+        || contains(github.event.issue.labels.*.name, 'cancel')
+        || startsWith(github.event.issue.title, 'Claim:')
+        || startsWith(github.event.issue.title, 'Join:')
+        || startsWith(github.event.issue.title, 'Cancel:')
+      )
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4

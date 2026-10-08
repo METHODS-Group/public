@@ -151,11 +151,23 @@ async function github(method, url, token, body) {
   return res.json();
 }
 
+const TEMPLATES = ['claim', 'join', 'cancel'];
+
+// Which issue form the issue came from: by label, or by the form's title
+// prefix ("Claim: ...") when the label was not applied (GitHub drops a
+// template label that does not exist in the repo).
+function templateFor(issue) {
+  const labels = (issue.labels || []).map((l) => (typeof l === 'string' ? l : l.name));
+  const byLabel = TEMPLATES.find((t) => labels.includes(t));
+  if (byLabel) return byLabel;
+  const m = /^(claim|join|cancel):/i.exec(String(issue.title || '').trim());
+  return m ? m[1].toLowerCase() : null;
+}
+
 async function main(eventPath) {
   const event = JSON.parse(fs.readFileSync(eventPath, 'utf8'));
   const issue = event.issue;
-  const labels = (issue.labels || []).map((l) => l.name);
-  const template = ['claim', 'join', 'cancel'].find((t) => labels.includes(t)) || null;
+  const template = templateFor(issue);
 
   const schedule = JSON.parse(fs.readFileSync(SCHEDULE_PATH, 'utf8'));
   const signups = JSON.parse(fs.readFileSync(SIGNUPS_PATH, 'utf8'));
@@ -188,7 +200,7 @@ async function main(eventPath) {
   });
 }
 
-module.exports = { parseBody, apply, findSlot, pageUrl, FIELD_IDS };
+module.exports = { parseBody, apply, findSlot, templateFor, pageUrl, FIELD_IDS };
 
 if (require.main === module) {
   const eventPath = process.argv[2] || process.env.GITHUB_EVENT_PATH;
