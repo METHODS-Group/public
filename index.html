@@ -8,31 +8,33 @@
 <link rel="stylesheet" href="assets/style.css">
 </head>
 <body>
-<main class="page">
+<main class="wrap">
   <header class="masthead">
-    <p class="eyebrow">METHODS Group visitor, October 13 to 15, 2026</p>
+    <p class="eyebrow">METHODS Group visitor &middot; Tue Oct 13 &ndash; Thu Oct 15, 2026</p>
     <h1>Meet with Thomas Surowiec</h1>
-    <p class="lede">
-      Pick a slot and press <strong>Claim</strong>. That opens a pre-filled GitHub issue form; submit it and your name
-      appears here within about a minute. You need to be signed in to GitHub.
+    <p class="sub">
+      Pick a slot and press <strong>Claim</strong> (or <strong>Join</strong> for a group event). That opens a pre-filled
+      GitHub issue form; submit it and your name appears here within about a minute. You need to be signed in to GitHub.
     </p>
-    <ul class="howto">
-      <li>One-on-one slots are 30 minutes, at most two people per slot, at 182 George St.</li>
-      <li>Lunch and the Tuesday evening outing are open to everyone.</li>
-      <li>Changed your mind? Use <em>Cancel my sign-up</em> under the slot.</li>
-    </ul>
-    <p class="toolbar">
-      <a id="my-issues" class="link-button" href="#" target="_blank" rel="noopener">Open your sign-up issues</a>
-      <button id="refresh" type="button" class="link-button">Refresh</button>
-      <span id="status" class="status" aria-live="polite">Loading the schedule…</span>
-    </p>
+    <p class="where-line"><span class="label">Where</span> 182 George St &middot; Room 105 (Thomas&rsquo;s visiting scholar office) or Room 303 (Brendan&rsquo;s office). Whoever books a slot first picks the room.</p>
   </header>
+
+  <div class="bar">
+    <div class="bar-links">
+      <a id="my-issues" class="btn ghost" href="#" target="_blank" rel="noopener">Open your sign-up issues</a>
+      <button id="refresh" type="button" class="btn ghost">Refresh</button>
+    </div>
+    <div class="tally">
+      <div class="count" id="count"><b>&ndash;</b> spots open</div>
+      <div class="status" id="status" data-state="wait" aria-live="polite"><span class="dot"></span><span id="status-text">Loading the schedule&hellip;</span></div>
+    </div>
+  </div>
 
   <div id="days" class="days"></div>
 
-  <footer class="colophon">
-    <p>All times are Eastern (US). Names, GitHub logins, and emails (if entered) are stored in this public repository and are visible to anyone.</p>
-    <p>Something wrong? Open an issue or edit <code>data/signups.json</code> in the repository.</p>
+  <footer class="foot">
+    <p>One-on-one slots are 30 minutes, at most two people per slot. Lunch and the Tuesday evening outing are open to everyone and don&rsquo;t use up your slot. Changed your mind? Use <em>Cancel my sign-up</em> under the slot.</p>
+    <p>All times are Eastern (US). Names, GitHub logins, and emails (if entered) are stored in this public repository and are visible to anyone. Something wrong? Open an issue or edit <code>data/signups.json</code> in the repository.</p>
   </footer>
 </main>
 <script src="assets/app.js"></script>

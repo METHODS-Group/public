@@ -37,18 +37,40 @@
     return node;
   }
 
-  function fmtTime(hhmm) {
-    if (!hhmm) return '';
+  // "10:00" -> "10:00 am"; a range shares one am/pm suffix when it can: "10:00–10:30 am".
+  function clock(hhmm) {
     var parts = hhmm.split(':');
-    var h = parseInt(parts[0], 10), m = parts[1];
-    var suffix = h >= 12 ? 'pm' : 'am';
-    var h12 = h % 12 === 0 ? 12 : h % 12;
-    return h12 + ':' + m + ' ' + suffix;
+    var h = parseInt(parts[0], 10);
+    return (h % 12 === 0 ? 12 : h % 12) + ':' + parts[1];
   }
+  function ampm(hhmm) { return parseInt(hhmm.split(':')[0], 10) >= 12 ? 'pm' : 'am'; }
   function timeRange(slot) {
-    if (!slot.end) return fmtTime(slot.start);
-    return fmtTime(slot.start) + ' to ' + fmtTime(slot.end);
+    if (!slot.start) return '';
+    if (!slot.end) return clock(slot.start) + ' ' + ampm(slot.start);
+    if (ampm(slot.start) === ampm(slot.end)) return clock(slot.start) + '–' + clock(slot.end) + ' ' + ampm(slot.end);
+    return clock(slot.start) + ' ' + ampm(slot.start) + '–' + clock(slot.end) + ' ' + ampm(slot.end);
   }
+
+  // Room strings in signups look like "Room 105 (Thomas's ...)"; the card shows just "Room 105".
+  function shortRoom(room) {
+    var m = /^Room\s+\S+/.exec(room || '');
+    return m ? m[0] : room;
+  }
+
+  var norm = function (s) { return (s || '').toLowerCase().replace(/[^a-z0-9]+/g, ' ').trim(); };
+  // Show a description only when it says something the title does not.
+  function usefulDescription(slot) {
+    var d = slot.description, t = slot.title || slot.label;
+    if (!d) return null;
+    var nd = norm(d), nt = norm(t);
+    if (!nd || nd === nt || nt.indexOf(nd) !== -1 || nd.indexOf(nt) !== -1) return null;
+    return d;
+  }
+
+  var TALK_SVG = '<svg class="talk-lines" viewBox="0 0 150 110" aria-hidden="true">' +
+    '<path d="M150 20 C110 25 95 60 60 70 S10 85 0 110"/><path d="M150 38 C118 42 104 72 72 82 S28 96 18 110"/>' +
+    '<path d="M150 56 C126 60 114 84 86 93 S50 104 40 110"/><path d="M150 74 C134 77 124 96 104 102 S76 108 68 110"/>' +
+    '<path d="M150 92 C142 94 136 104 124 108"/></svg>';
 
   function renderPeople(claims, showRoom) {
     if (!claims.length) return el('p', { class: 'nobody', text: 'Nobody yet.' });
@@ -56,7 +78,7 @@
       return el('li', null, [
         el('span', { class: 'name', text: c.name }),
         el('span', { class: 'login', text: '@' + c.login }),
-        showRoom && c.room ? el('span', { class: 'meta', text: c.room }) : null
+        showRoom && c.room ? el('span', { class: 'room', text: shortRoom(c.room), title: c.room }) : null
       ]);
     }));
   }
@@ -70,25 +92,31 @@
     var full = left === 0;
 
     var classes = ['slot', slot.kind];
-    if (blocked || closed) classes.push('shaded');
+    if (closed && !blocked) classes.push('closed');
+    if (full && !closed) classes.push('full');
     var card = el('article', { class: classes.join(' '), 'data-slot': slot.id });
+    if (blocked) card.innerHTML = TALK_SVG;
 
-    var badge = null;
-    if (blocked) badge = null;
-    else if (closed) badge = el('span', { class: 'badge closed', text: 'Not open yet' });
-    else if (isGroup) badge = el('span', { class: 'badge open', text: claims.length + ' going' });
-    else if (full) badge = el('span', { class: 'badge full', text: 'Full' });
-    else badge = el('span', { class: 'badge open', text: left + ' of ' + slot.capacity + (left === 1 ? ' spot left' : ' spots left') });
+    var kind = blocked ? 'Presentation' : isGroup ? 'Group · all welcome' : 'One-on-one · 30 min';
+    var headText = el('div', { class: 'head-text' }, [el('span', { class: 'kind', text: kind })]);
+    if (isMeeting) {
+      headText.appendChild(el('p', { class: 'slot-time', text: timeRange(slot) }));
+    } else {
+      headText.appendChild(el('p', { class: 'slot-title', text: slot.title || slot.label }));
+      headText.appendChild(el('p', { class: 'slot-time', text: timeRange(slot) }));
+    }
 
-    var head = el('div', { class: 'slot-head' }, [
-      el('p', { class: 'slot-time', text: timeRange(slot) }),
-      badge
-    ]);
-    card.appendChild(head);
+    var tag = null;
+    if (blocked) tag = null;
+    else if (closed) tag = el('span', { class: 'tag closed', text: 'Not open yet' });
+    else if (isGroup) tag = el('span', { class: 'tag going', text: claims.length + ' going' });
+    else if (full) tag = el('span', { class: 'tag full', text: 'Full' });
+    else tag = el('span', { class: 'tag open', text: left + ' of ' + slot.capacity + (left === 1 ? ' spot left' : ' spots left') });
 
-    var title = slot.title || slot.label;
-    card.appendChild(el('p', { class: 'slot-title', text: title }));
-    if (slot.description && !isMeeting) card.appendChild(el('p', { class: 'slot-desc', text: slot.description }));
+    card.appendChild(el('div', { class: 'slot-head' }, [headText, tag]));
+
+    var desc = isMeeting ? null : usefulDescription(slot);
+    if (desc) card.appendChild(el('p', { class: 'slot-desc', text: desc }));
 
     if (!blocked) card.appendChild(renderPeople(claims, isMeeting));
 
@@ -97,29 +125,51 @@
       var template = isMeeting ? 'claim' : 'join';
       var label = isMeeting ? 'Claim' : 'Join';
       if (closed) {
-        actions.appendChild(el('button', { class: 'claim', type: 'button', disabled: '', text: label }));
+        actions.appendChild(el('button', { class: 'btn primary', type: 'button', disabled: '', text: label }));
       } else if (!full) {
-        actions.appendChild(el('a', { class: 'claim', href: issueUrl(template, slot), target: '_blank', rel: 'noopener', text: label }));
+        actions.appendChild(el('a', { class: 'btn primary', href: issueUrl(template, slot), target: '_blank', rel: 'noopener', text: label }));
       }
       if (!closed) {
-        actions.appendChild(el('a', { class: 'cancel', href: issueUrl('cancel', slot), target: '_blank', rel: 'noopener', text: 'Cancel my sign-up' }));
+        actions.appendChild(el('a', { class: 'btn link', href: issueUrl('cancel', slot), target: '_blank', rel: 'noopener', text: 'Cancel my sign-up' }));
       }
       card.appendChild(actions);
     }
     return card;
   }
 
+  // Open one-on-one spots across the given slots: [open, total].
+  function spots(slots, byslot) {
+    var open = 0, total = 0;
+    slots.forEach(function (s) {
+      if (s.kind !== 'meeting' || !s.open || s.capacity == null) return;
+      total += s.capacity;
+      open += Math.max(0, s.capacity - (byslot[s.id] || []).length);
+    });
+    return [open, total];
+  }
+
   function render(schedule, signups) {
     var byslot = {};
     (signups.claims || []).forEach(function (c) { (byslot[c.slot] = byslot[c.slot] || []).push(c); });
+
+    var all = spots(schedule.days.reduce(function (a, d) { return a.concat(d.slots); }, []), byslot);
+    var count = document.getElementById('count');
+    count.textContent = '';
+    count.appendChild(el('b', { text: String(all[0]) }));
+    count.appendChild(document.createTextNode(' of ' + all[1] + ' one-on-one spots open'));
+
     var root = document.getElementById('days');
     root.textContent = '';
     schedule.days.forEach(function (day) {
-      var section = el('section', { class: 'day', id: day.id }, [
+      var dayOpen = day.slots.some(function (s) { return s.open; });
+      var ds = spots(day.slots, byslot);
+      var countText = !dayOpen ? 'Not open yet' : ds[1] ? ds[0] + ' of ' + ds[1] + ' spots open' : '';
+      var section = el('section', { class: 'day' + (dayOpen ? '' : ' closed'), id: day.id }, [
         el('div', { class: 'day-head' }, [
           el('h2', { text: day.label }),
-          day.note ? el('p', { class: 'day-note', text: day.note }) : null
+          countText ? el('span', { class: 'day-count', text: countText }) : null
         ]),
+        day.note ? el('p', { class: 'closed-note', text: day.note }) : null,
         el('div', { class: 'slots' }, day.slots.map(function (s) { return renderSlot(s, byslot[s.id] || []); }))
       ]);
       root.appendChild(section);
@@ -134,15 +184,18 @@
   }
 
   var status = document.getElementById('status');
+  var statusText = document.getElementById('status-text');
+  function setStatus(state, text) { status.dataset.state = state; statusText.textContent = text; }
+
   function load() {
-    status.textContent = 'Refreshing…';
+    setStatus('wait', 'Refreshing…');
     return Promise.all([fetchJson('data/schedule.json'), fetchJson('data/signups.json')])
       .then(function (res) {
         render(res[0], res[1]);
-        status.textContent = 'Last updated ' + new Date().toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' });
+        setStatus('live', 'Last updated ' + new Date().toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' }));
       })
       .catch(function (err) {
-        status.textContent = 'Could not load the sign-ups (' + err.message + '). Try Refresh.';
+        setStatus('off', 'Could not load the sign-ups (' + err.message + '). Try Refresh.');
       });
   }
 
