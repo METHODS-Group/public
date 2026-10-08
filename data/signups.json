@@ -15,6 +15,14 @@
       "email": "brendan_keith@brown.edu",
       "issue": 2,
       "created_at": "2026-10-08T19:38:01Z"
+    },
+    {
+      "slot": "wed-lunch",
+      "name": "Rami",
+      "login": "ramimasri",
+      "email": null,
+      "issue": 3,
+      "created_at": "2026-10-08T19:43:23Z"
     }
   ]
 }
