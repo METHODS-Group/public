@@ -1,0 +1,5 @@
+# Meet with Thomas Surowiec
+
+A sign-up sheet for the METHODS Group's meetings with Thomas Surowiec during his visit (October 13 to 15, 2026). The page is served by GitHub Pages from the root of `main`; members pick a one-on-one slot, lunch, or the Tuesday evening outing and press Claim.
+
+How it works: pressing Claim opens a pre-filled GitHub issue form (`.github/ISSUE_TEMPLATE/`). When the issue is opened, the `Record sign-up` workflow runs `scripts/process.js`, which validates the request against `data/schedule.json` (slot exists and is open, capacity not exceeded, valid room, no duplicate), appends the claim to `data/signups.json`, commits to `main`, then comments on the issue and closes it. Pages republishes on the push, so the name appears on the page within about a minute. To fix a mistake, edit `data/signups.json` by hand (each claim is one object in `claims`) and push to `main`; to change the schedule, edit `data/schedule.json` the same way. Run `node scripts/test.js` to check the processing logic.

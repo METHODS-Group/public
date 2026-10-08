@@ -1,0 +1,12 @@
+name: Cancel my sign-up
+description: Remove your name from a slot you signed up for.
+title: "Cancel: "
+labels: [cancel]
+body:
+  - type: input
+    id: slot
+    attributes:
+      label: Slot
+      description: Filled in from the sign-up page; leave it as is
+    validations:
+      required: true

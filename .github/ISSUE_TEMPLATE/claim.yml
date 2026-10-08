@@ -1,0 +1,31 @@
+name: Claim a meeting slot
+description: Book a 30-minute one-on-one with Thomas. Start from the sign-up page so the slot is filled in for you.
+title: "Claim: "
+labels: [claim]
+body:
+  - type: input
+    id: slot
+    attributes:
+      label: Slot
+      description: Filled in from the sign-up page; leave it as is
+    validations:
+      required: true
+  - type: input
+    id: name
+    attributes:
+      label: Your name
+    validations:
+      required: true
+  - type: dropdown
+    id: room
+    attributes:
+      label: Room
+      options:
+        - "Room 105 (Thomas's visiting scholar office, 182 George St)"
+        - "Room 303 (Brendan's office, 182 George St)"
+    validations:
+      required: true
+  - type: input
+    id: email
+    attributes:
+      label: Email (optional, for a calendar invite)

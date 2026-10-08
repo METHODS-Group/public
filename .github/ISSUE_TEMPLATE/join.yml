@@ -1,0 +1,22 @@
+name: Join lunch or the Tuesday evening outing
+description: Add your name to a group event with Thomas. Start from the sign-up page so the slot is filled in for you.
+title: "Join: "
+labels: [join]
+body:
+  - type: input
+    id: slot
+    attributes:
+      label: Slot
+      description: Filled in from the sign-up page; leave it as is
+    validations:
+      required: true
+  - type: input
+    id: name
+    attributes:
+      label: Your name
+    validations:
+      required: true
+  - type: input
+    id: email
+    attributes:
+      label: Email (optional, for a calendar invite)

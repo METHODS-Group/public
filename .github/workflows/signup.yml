@@ -1,0 +1,50 @@
+name: Record sign-up
+
+on:
+  issues:
+    types: [opened]
+
+permissions:
+  contents: write
+  issues: write
+
+concurrency:
+  group: signups
+  cancel-in-progress: false
+
+jobs:
+  record:
+    if: contains(fromJSON('["claim","join","cancel"]'), github.event.issue.labels[0].name)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+          fetch-depth: 0
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Process the issue
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: node scripts/process.js "$GITHUB_EVENT_PATH"
+
+      - name: Commit and push
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          if git diff --quiet -- data/signups.json; then
+            echo "No change to data/signups.json"
+            exit 0
+          fi
+          git add data/signups.json
+          git commit -m "Sign-up update from #${{ github.event.issue.number }}"
+          for attempt in 1 2 3 4 5; do
+            git pull --rebase origin main && git push origin HEAD:main && exit 0
+            echo "Push rejected, retrying ($attempt)"
+            sleep $((attempt * 3))
+          done
+          echo "Could not push after 5 attempts"
+          exit 1
