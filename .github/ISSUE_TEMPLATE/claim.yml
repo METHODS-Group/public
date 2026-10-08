@@ -20,6 +20,7 @@ body:
     id: room
     attributes:
       label: Room
+      description: Whoever books a slot first picks the room; if someone is already in this slot, their room is used.
       options:
         - "Room 105 (Thomas's visiting scholar office, 182 George St)"
         - "Room 303 (Brendan's office, 182 George St)"

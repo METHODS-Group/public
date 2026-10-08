@@ -109,11 +109,20 @@ function apply(signups, schedule, req) {
   const name = (fields.name || '').trim();
   if (!name) return fail('Please fill in your name.');
 
+  // Whoever books a meeting slot first picks the room; a second person inherits it.
   let room = null;
+  let inherited = false;
   if (slot.kind === 'meeting') {
-    room = (fields.room || '').trim();
-    if (!schedule.rooms.includes(room)) {
-      return fail(`Please pick one of the listed rooms: ${schedule.rooms.join(' or ')}.`);
+    const first = existing.find((c) => c.room);
+    const chosen = (fields.room || '').trim();
+    if (first) {
+      room = first.room;
+      inherited = chosen !== room;
+    } else {
+      room = chosen;
+      if (!schedule.rooms.includes(room)) {
+        return fail(`Please pick one of the listed rooms: ${schedule.rooms.join(' or ')}.`);
+      }
     }
   }
 
@@ -129,9 +138,10 @@ function apply(signups, schedule, req) {
   next.claims.push(claim);
 
   const where = room ? `, ${room}` : '';
+  const note = inherited ? ` (${existing.find((c) => c.room).name} booked this slot first and picked the room, so your choice was not used)` : '';
   return {
     ok: true,
-    message: `✅ Booked: ${slot.label}${where}. Your name now appears on the sign-up page: ${page}`,
+    message: `✅ Booked: ${slot.label}${where}${note}. Your name now appears on the sign-up page: ${page}`,
     signups: next,
   };
 }

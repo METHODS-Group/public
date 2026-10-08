@@ -41,9 +41,11 @@ test('claims, capacity, duplicates, cancel', () => {
   assert.equal(s.claims.length, 0, 'input is not mutated');
   s = r.signups;
 
-  // Second claim fills the slot.
+  // Second claim fills the slot and inherits the first claimant's room.
   r = apply(s, schedule, req('claim', claimBody('wed-1000', 'Emmy Noether', ROOM_303), 'emmy'));
   assert.ok(r.ok, r.message);
+  assert.equal(r.signups.claims[1].room, ROOM_105);
+  assert.match(r.message, /Room 105 .*Ada Lovelace booked this slot first/);
   s = r.signups;
 
   // Third is rejected as full.
@@ -71,6 +73,17 @@ test('claims, capacity, duplicates, cancel', () => {
   // Cancel by someone not signed up fails.
   r = apply(s, schedule, req('cancel', '### Slot\n\nwed-1000', 'nobody'));
   assert.equal(r.ok, false);
+});
+
+test('second claimant who picks the same room gets no note; a bad room is fine when inherited', () => {
+  let r = apply({ claims: [] }, schedule, req('claim', claimBody('wed-1500', 'Ada', ROOM_303), 'ada'));
+  r = apply(r.signups, schedule, req('claim', claimBody('wed-1500', 'Emmy', ROOM_303), 'emmy'));
+  assert.ok(r.ok, r.message);
+  assert.doesNotMatch(r.message, /booked this slot first/);
+  r = apply(r.signups.claims.length ? { claims: [r.signups.claims[0]] } : r.signups, schedule,
+    req('claim', claimBody('wed-1500', 'Carl', 'Room 999'), 'gauss'));
+  assert.ok(r.ok, r.message);
+  assert.equal(r.signups.claims[1].room, ROOM_303);
 });
 
 test('closed Thursday slots and the blocked talk are rejected', () => {

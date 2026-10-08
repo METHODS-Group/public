@@ -72,15 +72,20 @@
     '<path d="M150 56 C126 60 114 84 86 93 S50 104 40 110"/><path d="M150 74 C134 77 124 96 104 102 S76 108 68 110"/>' +
     '<path d="M150 92 C142 94 136 104 124 108"/></svg>';
 
-  function renderPeople(claims, showRoom) {
+  function renderPeople(claims) {
     if (!claims.length) return el('p', { class: 'nobody', text: 'Nobody yet.' });
     return el('ul', { class: 'people' }, claims.map(function (c) {
       return el('li', null, [
         el('span', { class: 'name', text: c.name }),
-        el('span', { class: 'login', text: '@' + c.login }),
-        showRoom && c.room ? el('span', { class: 'room', text: shortRoom(c.room), title: c.room }) : null
+        el('span', { class: 'login', text: '@' + c.login })
       ]);
     }));
+  }
+
+  // The room belongs to the slot: whoever booked first picked it.
+  function slotRoom(claims) {
+    var first = claims.filter(function (c) { return c.room; })[0];
+    return first ? first.room : null;
   }
 
   function renderSlot(slot, claims) {
@@ -101,6 +106,8 @@
     var headText = el('div', { class: 'head-text' }, [el('span', { class: 'kind', text: kind })]);
     if (isMeeting) {
       headText.appendChild(el('p', { class: 'slot-time', text: timeRange(slot) }));
+      var room = slotRoom(claims);
+      if (room) headText.appendChild(el('p', { class: 'room', text: shortRoom(room), title: room }));
     } else {
       headText.appendChild(el('p', { class: 'slot-title', text: slot.title || slot.label }));
       headText.appendChild(el('p', { class: 'slot-time', text: timeRange(slot) }));
@@ -118,7 +125,7 @@
     var desc = isMeeting ? null : usefulDescription(slot);
     if (desc) card.appendChild(el('p', { class: 'slot-desc', text: desc }));
 
-    if (!blocked) card.appendChild(renderPeople(claims, isMeeting));
+    if (!blocked) card.appendChild(renderPeople(claims));
 
     if (!blocked) {
       var actions = el('div', { class: 'actions' });
