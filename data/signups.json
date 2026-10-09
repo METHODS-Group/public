@@ -90,6 +90,14 @@
       "email": "ref_bari@brown.edu",
       "issue": 12,
       "created_at": "2026-10-09T21:20:42Z"
+    },
+    {
+      "slot": "wed-lunch",
+      "name": "Ref",
+      "login": "RefBari",
+      "email": "ref_bari@brown.edu",
+      "issue": 13,
+      "created_at": "2026-10-09T21:22:42Z"
     }
   ]
 }
