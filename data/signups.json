@@ -47,6 +47,14 @@
       "email": "ref_bari@brown.edu",
       "issue": 7,
       "created_at": "2026-10-09T04:26:55Z"
+    },
+    {
+      "slot": "wed-lunch",
+      "name": "Haojun Qin",
+      "login": "Haojun-D1r4c-Qin",
+      "email": "haojun_qin@brown.edu",
+      "issue": 8,
+      "created_at": "2026-10-09T17:38:50Z"
     }
   ]
 }
