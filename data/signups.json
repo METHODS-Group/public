@@ -98,6 +98,15 @@
       "email": "ref_bari@brown.edu",
       "issue": 13,
       "created_at": "2026-10-09T21:22:42Z"
+    },
+    {
+      "slot": "wed-1030",
+      "name": "Haojun Qin",
+      "login": "Haojun-D1r4c-Qin",
+      "room": "Room 303 (Brendan's office, 182 George St)",
+      "email": "haojun_qin@brown.edu",
+      "issue": 14,
+      "created_at": "2026-10-09T21:41:26Z"
     }
   ]
 }
