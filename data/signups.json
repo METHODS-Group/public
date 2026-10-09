@@ -73,6 +73,14 @@
       "email": null,
       "issue": 10,
       "created_at": "2026-10-09T17:49:51Z"
+    },
+    {
+      "slot": "wed-lunch",
+      "name": "Pratyush",
+      "login": "pratyushpotu",
+      "email": null,
+      "issue": 11,
+      "created_at": "2026-10-09T18:09:33Z"
     }
   ]
 }
