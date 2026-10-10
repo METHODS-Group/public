@@ -65,9 +65,21 @@ function pageUrl(repository) {
   return `https://${owner.toLowerCase()}.github.io/${repo}/`;
 }
 
+// A slot with `closes_at` (ISO 8601 with offset) takes no new sign-ups after that
+// time; cancellations are still allowed. `now` is a Date, ms, or ISO string.
+function closedAt(slot, now) {
+  if (!slot.closes_at) return false;
+  const t = Date.parse(slot.closes_at);
+  if (Number.isNaN(t)) return false;
+  const n = now instanceof Date ? now.getTime() : typeof now === 'string' ? Date.parse(now) : now;
+  return n >= t;
+}
+
 // Returns { ok, message, signups } without mutating the input signups.
+// req.now (optional) is the current time, for tests; it defaults to the clock.
 function apply(signups, schedule, req) {
   const { template, fields = {}, login, number, created_at, title } = req;
+  const now = req.now == null ? Date.now() : req.now;
   const next = { ...signups, claims: signups.claims.map((c) => ({ ...c })) };
   const page = req.pageUrl || pageUrl(process.env.GITHUB_REPOSITORY);
   const fail = (message) => ({ ok: false, message, signups });
@@ -93,6 +105,9 @@ function apply(signups, schedule, req) {
 
   if (slot.kind === 'blocked') return fail(`${slot.label} is not available for sign-up.`);
   if (!slot.open) return fail(`${slot.label} is not open yet; check the sign-up page later: ${page}`);
+  if (closedAt(slot, now)) {
+    return fail(slot.closed_message || `Sign-ups for ${slot.label} closed at ${slot.closes_at}; message Brendan if you'd still like to come.`);
+  }
   if (slot.kind !== TEMPLATE_KIND[template]) {
     const other = template === 'claim' ? 'Join' : 'Claim';
     return fail(`${slot.label} is a ${slot.kind} slot; use the "${other}" button for it on the sign-up page: ${page}`);
@@ -210,7 +225,7 @@ async function main(eventPath) {
   });
 }
 
-module.exports = { parseBody, apply, findSlot, templateFor, pageUrl, FIELD_IDS };
+module.exports = { parseBody, apply, findSlot, templateFor, pageUrl, closedAt, FIELD_IDS };
 
 if (require.main === module) {
   const eventPath = process.argv[2] || process.env.GITHUB_EVENT_PATH;

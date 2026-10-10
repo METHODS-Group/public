@@ -119,6 +119,63 @@ test('join on lunch and on tue-2100 succeeds; wrong template rejected', () => {
   assert.equal(r.ok, false);
 });
 
+test('wed-1600 is a regular open meeting slot', () => {
+  let r = apply({ claims: [] }, schedule, req('claim', claimBody('wed-1600', 'Ada', ROOM_105), 'ada'));
+  assert.ok(r.ok, r.message);
+  assert.match(r.message, /Booked: Wed 4:00 pm, Room 105/);
+  r = apply(r.signups, schedule, req('claim', claimBody('wed-1600', 'Emmy', ROOM_303), 'emmy'));
+  assert.ok(r.ok, r.message);
+  r = apply(r.signups, schedule, req('claim', claimBody('wed-1600', 'Carl', ROOM_303), 'gauss'));
+  assert.equal(r.ok, false);
+  assert.match(r.message, /already full/);
+});
+
+test('lunch sign-ups close at noon on Tuesday; cancellations still work', () => {
+  const lunch = schedule.days.flatMap((d) => d.slots).find((s) => s.id === 'wed-lunch');
+  assert.equal(lunch.closes_at, '2026-10-13T12:00:00-04:00');
+  const before = '2026-10-13T11:59:00-04:00';
+  const after = '2026-10-13T12:00:00-04:00';
+
+  // Before the cutoff: join works.
+  let r = apply({ claims: [] }, schedule, { ...req('join', joinBody('wed-lunch', 'Ada'), 'ada'), now: before });
+  assert.ok(r.ok, r.message);
+  const s = r.signups;
+
+  // At and after the cutoff: join is rejected with the explanation; nothing is recorded.
+  for (const now of [after, '2026-10-14T09:00:00-04:00', new Date('2026-10-13T16:00:01Z'), Date.parse('2026-10-13T16:00:01Z')]) {
+    r = apply(s, schedule, { ...req('join', joinBody('wed-lunch', 'Emmy'), 'emmy'), now });
+    assert.equal(r.ok, false, `expected rejection at ${now}`);
+    assert.equal(r.message, "Lunch sign-ups closed at noon on Tuesday so a table could be booked; message Brendan if you'd still like to come");
+    assert.equal(r.signups.claims.length, 1);
+  }
+
+  // Cancelling after the cutoff is still allowed.
+  r = apply(s, schedule, { ...req('cancel', '### Slot\n\nwed-lunch', 'ada'), now: after });
+  assert.ok(r.ok, r.message);
+  assert.equal(r.signups.claims.length, 0);
+
+  // Other slots are unaffected by the lunch cutoff.
+  r = apply(s, schedule, { ...req('claim', claimBody('wed-1600', 'Emmy', ROOM_303), 'emmy'), now: after });
+  assert.ok(r.ok, r.message);
+  r = apply(s, schedule, { ...req('join', joinBody('tue-2100', 'Emmy'), 'emmy'), now: after });
+  assert.ok(r.ok, r.message);
+});
+
+test('closes_at is generic: a meeting slot with a past deadline is rejected with a default message', () => {
+  const sched = JSON.parse(JSON.stringify(schedule));
+  const slot = sched.days.flatMap((d) => d.slots).find((s) => s.id === 'wed-1000');
+  slot.closes_at = '2026-10-12T09:00:00-04:00';
+  let r = apply({ claims: [] }, sched, { ...req('claim', claimBody('wed-1000', 'Ada', ROOM_105), 'ada'), now: '2026-10-12T08:59:59-04:00' });
+  assert.ok(r.ok, r.message);
+  r = apply({ claims: [] }, sched, { ...req('claim', claimBody('wed-1000', 'Ada', ROOM_105), 'ada'), now: '2026-10-12T09:00:00-04:00' });
+  assert.equal(r.ok, false);
+  assert.match(r.message, /Sign-ups for Wed 10:00 am closed at 2026-10-12T09:00:00-04:00; message Brendan/);
+  // An unparsable closes_at is ignored rather than locking the slot.
+  slot.closes_at = 'noon-ish';
+  r = apply({ claims: [] }, sched, { ...req('claim', claimBody('wed-1000', 'Ada', ROOM_105), 'ada'), now: '2026-10-20T09:00:00-04:00' });
+  assert.ok(r.ok, r.message);
+});
+
 test('slot falls back to the title when the field is missing', () => {
   const body = `### Your name\n\nAda\n\n### Room\n\n${ROOM_303}\n\n### Email (optional, for a calendar invite)\n\n_No response_`;
   const r = apply({ claims: [] }, schedule, req('claim', body, 'ada', 'Claim: Wed 3:30 pm'));

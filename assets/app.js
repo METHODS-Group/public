@@ -59,10 +59,11 @@
   var TALK_SVG = '<svg viewBox="0 0 150 110" aria-hidden="true"><path d="M150 20 C110 25 95 60 60 70 S10 85 0 110"/><path d="M150 38 C118 42 104 72 72 82 S28 96 18 110"/><path d="M150 56 C126 60 114 84 86 93 S50 104 40 110"/><path d="M150 74 C134 77 124 96 104 102 S76 108 68 110"/><path d="M150 92 C142 94 136 104 124 108"/></svg>';
 
   // A meeting slot: one row with the time, the people in it, the room, and a Claim/Join button.
-  function slotCell(slot, claims, dayOpen) {
+  function slotCell(slot, claims, dayOpen, now) {
     var cell = el('div', 'cell slot');
     var cap = slot.capacity == null ? Infinity : slot.capacity;
     var left = Math.max(0, cap - claims.length);
+    var closed = isClosed(slot, now);
     cell.classList.add(claims.length === 0 ? 'open' : left === 0 ? 'full' : 'taken');
 
     var body = el('div', 'body');
@@ -82,11 +83,17 @@
       var loc = el('span', 'loc', shortRoom(first.room)); loc.title = first.room;
       var row = el('div', 'who'); row.append(loc); list.append(row);
     }
-    if (claims.length && left > 0) list.append(el('span', 'free', left + ' spot left'));
+    if (claims.length && left > 0 && !closed) list.append(el('span', 'free', left + ' spot left'));
+    if (closesAt(slot) != null) {
+      list.append(el('span', 'free deadline', closed
+        ? (slot.closed_note || 'Sign-ups closed ' + deadlineText(slot))
+        : (slot.closes_note || 'Sign-ups close ' + deadlineText(slot))));
+    }
     if (claims.length && dayOpen) list.append(link('link', 'Cancel my sign-up', issueUrl('cancel', slot)));
     body.append(list);
 
     if (!dayOpen) body.append(disabledBtn('primary', 'Claim'));
+    else if (closed) body.append(el('span', 'full-tag', 'Closed'));
     else if (left > 0) body.append(link('primary', claims.length ? 'Join' : 'Claim', issueUrl('claim', slot)));
     else body.append(el('span', 'full-tag', 'Full'));
 
@@ -94,21 +101,39 @@
     return cell;
   }
 
+  // A slot with a `closes_at` deadline (ISO 8601 with offset) stops taking new
+  // sign-ups once that time has passed; cancellations are still allowed.
+  function closesAt(slot) {
+    if (!slot.closes_at) return null;
+    var t = Date.parse(slot.closes_at);
+    return isNaN(t) ? null : t;
+  }
+  function isClosed(slot, now) { var t = closesAt(slot); return t != null && now >= t; }
+  function deadlineText(slot) {
+    return new Date(closesAt(slot)).toLocaleString([], { weekday: 'long', month: 'short', day: 'numeric', hour: 'numeric', minute: '2-digit' });
+  }
+
   // A group event (lunch, the Tuesday outing): everyone can join.
-  function groupCell(slot, claims, dayOpen) {
+  function groupCell(slot, claims, dayOpen, now) {
     if (!dayOpen) {
       // Not open yet: the sheet's striped placeholder block.
       var ph = el('div', 'cell block lunch');
       ph.append(el('span', 'label', slot.title || slot.label), el('span', 'time', range(slot.start, slot.end)));
       return ph;
     }
-    var cell = el('div', 'cell block group');
+    var closed = isClosed(slot, now);
+    var cell = el('div', 'cell block group' + (closed ? ' closed' : ''));
     var head = el('div', 'group-head');
     var left = el('div'); left.style.display = 'flex'; left.style.flexDirection = 'column';
     left.append(el('span', 'kind', 'Group · all welcome'), el('span', 'label', slot.title || slot.label));
     head.append(left, el('span', 'time', range(slot.start, slot.end)));
     cell.append(head);
     if (slot.description) cell.append(el('span', 'group-empty', slot.description));
+    if (closesAt(slot) != null) {
+      cell.append(el('span', 'group-empty deadline', closed
+        ? (slot.closed_note || 'Sign-ups closed ' + deadlineText(slot))
+        : (slot.closes_note || 'Sign-ups close ' + deadlineText(slot))));
+    }
     if (claims.length) {
       var names = el('ul', 'group-names');
       claims.forEach(function (c) {
@@ -121,10 +146,11 @@
     var foot = el('div', 'group-foot');
     foot.append(el('span', 'group-empty', claims.length
       ? claims.length + (claims.length === 1 ? ' person' : ' people') + ' going'
-      : 'No one yet. Join if you’d like to come.'));
+      : closed ? 'No one signed up.' : 'No one yet. Join if you’d like to come.'));
     var btns = el('div', 'btns');
     if (claims.length && dayOpen) btns.append(link('link', 'Cancel my sign-up', issueUrl('cancel', slot)));
-    btns.append(dayOpen ? link('primary', 'Join', issueUrl('join', slot)) : disabledBtn('primary', 'Join'));
+    if (closed) btns.append(el('span', 'full-tag', 'Closed'));
+    else btns.append(dayOpen ? link('primary', 'Join', issueUrl('join', slot)) : disabledBtn('primary', 'Join'));
     foot.append(btns);
     cell.append(foot);
     return cell;
@@ -136,6 +162,7 @@
     cell.innerHTML = TALK_SVG;
     var title = (slot.title || slot.label).replace(/^Thomas's talk:\s*/i, '');
     cell.append(el('span', 'kind', 'Presentation'), el('span', 'label', title), el('span', 'time', range(slot.start, slot.end)));
+    if (slot.location) cell.append(el('span', 'loc', slot.location));
     return cell;
   }
 
@@ -152,6 +179,7 @@
   // Days whose slots fall in the shared daytime grid share one 30-minute row scale;
   // a day with only evening events gets a single wide row above them.
   function render(schedule, signups) {
+    var now = Date.now();
     var byslot = {};
     (signups.claims || []).forEach(function (c) { (byslot[c.slot] = byslot[c.slot] || []).push(c); });
 
@@ -187,8 +215,8 @@
       day.slots.forEach(function (slot) {
         var claims = byslot[slot.id] || [];
         var cell = slot.kind === 'blocked' ? talkCell(slot)
-          : slot.kind === 'group' ? groupCell(slot, claims, slot.open)
-          : slotCell(slot, claims, slot.open);
+          : slot.kind === 'group' ? groupCell(slot, claims, slot.open, now)
+          : slotCell(slot, claims, slot.open, now);
         cell.setAttribute('data-slot', slot.id);
         if (!wide && slot.end) {
           var r0 = (mins(slot.start) - dayStart) / 30 + 1, r1 = (mins(slot.end) - dayStart) / 30 + 1;

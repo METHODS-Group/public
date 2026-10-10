@@ -83,15 +83,6 @@
       "created_at": "2026-10-09T18:09:33Z"
     },
     {
-      "slot": "wed-1500",
-      "name": "Ref",
-      "login": "RefBari",
-      "room": "Room 303 (Brendan's office, 182 George St)",
-      "email": "ref_bari@brown.edu",
-      "issue": 12,
-      "created_at": "2026-10-09T21:20:42Z"
-    },
-    {
       "slot": "wed-lunch",
       "name": "Ref",
       "login": "RefBari",
