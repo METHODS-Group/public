@@ -163,6 +163,12 @@
     var title = (slot.title || slot.label).replace(/^Thomas's talk:\s*/i, '');
     cell.append(el('span', 'kind', 'Presentation'), el('span', 'label', title), el('span', 'time', range(slot.start, slot.end)));
     if (slot.location) cell.append(el('span', 'loc', slot.location));
+    if (slot.link && slot.link.url) {
+      // Cross-link to the talk's entry on the group meetings page (title, abstract, slides); same tab.
+      var a = el('a', 'talk-link', slot.link.label || slot.link.url);
+      a.href = slot.link.url;
+      cell.append(a);
+    }
     return cell;
   }
 

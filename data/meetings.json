@@ -498,14 +498,14 @@
       "keywords": [],
       "links": [
         {
-          "label": "Visit sign-up sheet",
+          "label": "Sign up to meet Thomas (visit page)",
           "url": "https://methods-group.github.io/public/",
-          "kind": "announcement"
+          "kind": "signup"
         }
       ],
       "status": "upcoming",
       "title_source": "data/schedule.json (visit sign-up sheet, slot wed-talk); the sign-up sheet row has no title yet",
-      "note": "Visiting speaker. Everyone is welcome; no sign-up needed. Abstract to be announced."
+      "note": "Visiting speaker. Everyone is welcome at the talk; use the visit page to book one-on-one time, lunch, or Tuesday drinks."
     },
     {
       "date": "2026-10-21",

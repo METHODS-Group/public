@@ -127,6 +127,7 @@ a:focus-visible, button:focus-visible, input:focus-visible { outline: 2px solid 
 .block.talk svg path { fill: none; stroke: var(--talk); stroke-width: 1.2; }
 .block .time { min-width: 0; }
 .block.talk .loc { margin-top: 2px; }
+.block.talk .talk-link { position: relative; z-index: 1; margin-top: 6px; font-size: 13px; font-weight: 700; color: var(--talk); }
 .block.group.closed { border-style: dashed; }
 .deadline { font-style: italic; }
 

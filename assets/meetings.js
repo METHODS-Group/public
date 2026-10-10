@@ -61,8 +61,20 @@
     return into;
   }
 
+  // Stable element ids, `talk-<date>`, so a card can be linked to directly (e.g. meetings/#talk-2026-10-14).
+  // Two talks on one date get `-2`, `-3`, ... in data order.
+  function assignIds(talks) {
+    var seen = {};
+    talks.forEach(function (t) {
+      var n = (seen[t.date] || 0) + 1;
+      seen[t.date] = n;
+      t.id = 'talk-' + t.date + (n > 1 ? '-' + n : '');
+    });
+  }
+
   function card(t, isNext) {
     var c = el('article', 'talk ' + t.status + (isNext ? ' next' : ''));
+    if (t.id) c.id = t.id;
     var head = el('div', 'talk-head');
     var date = el('span', 'date', fmtDate(t.date));
     if (isNext) date.appendChild(el('span', 'next-tag', 'Next'));
@@ -104,12 +116,15 @@
       var row = el('div', 'links');
       t.links.forEach(function (l) {
         if (!l || !/^https?:\/\//i.test(l.url || '')) return;
-        row.appendChild(extLink(l.label || l.url, l.url, 'btn ghost ' + (l.kind === 'slides' ? 'slides' : '')));
+        row.appendChild(extLink(l.label || l.url, l.url, 'btn ghost ' + (LINK_CLASS[l.kind] || '')));
       });
       c.appendChild(row);
     }
     return c;
   }
+
+  // Link kinds that get a highlighted button; any other kind renders as a plain ghost button.
+  var LINK_CLASS = { slides: 'slides', signup: 'signup' };
 
   var data = null;
   var view = 'upcoming';
@@ -150,7 +165,8 @@
     }
   }
 
-  function setView(v) {
+  // `writeHash` is true for tab clicks: the URL then reads #upcoming/#past. A talk hash (#talk-...) is left alone.
+  function setView(v, writeHash) {
     view = v;
     [['tab-upcoming', 'upcoming'], ['tab-past', 'past']].forEach(function (pair) {
       var b = $(pair[0]), on = pair[1] === v;
@@ -158,8 +174,33 @@
       b.classList.toggle('primary', on);
       b.classList.toggle('ghost', !on);
     });
-    try { history.replaceState(null, '', v === 'past' ? '#past' : '#upcoming'); } catch (e) { /* ignore */ }
+    if (writeHash) {
+      try { history.replaceState(null, '', v === 'past' ? '#past' : '#upcoming'); } catch (e) { /* ignore */ }
+    }
     render();
+  }
+
+  // #talk-<date>: show the tab that talk is on, scroll to its card, and flash it briefly.
+  function talkForHash() {
+    if (!data || !/^#talk-/.test(location.hash)) return null;
+    var id = decodeURIComponent(location.hash.slice(1));
+    return data.talks.filter(function (t) { return t.id === id; })[0] || null;
+  }
+  var flashTimer = null;
+  function applyHash() {
+    var h = location.hash;
+    if (h === '#past' || h === '#upcoming') { if (view !== h.slice(1)) setView(h.slice(1), false); return; }
+    var t = talkForHash();
+    if (!t) return;
+    if (view !== t.status) setView(t.status, false);
+    var c = $(t.id);
+    if (!c) return;
+    var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    c.scrollIntoView({ block: 'start', behavior: reduce ? 'auto' : 'smooth' });
+    Array.prototype.forEach.call(document.querySelectorAll('.talk.flash'), function (e) { e.classList.remove('flash'); });
+    c.classList.add('flash');
+    if (flashTimer) clearTimeout(flashTimer);
+    flashTimer = setTimeout(function () { c.classList.remove('flash'); }, 2000);
   }
 
   function renderInfo(s) {
@@ -180,16 +221,18 @@
     return { upcoming: u, past: p };
   }
 
-  $('tab-upcoming').addEventListener('click', function () { setView('upcoming'); });
-  $('tab-past').addEventListener('click', function () { setView('past'); });
+  $('tab-upcoming').addEventListener('click', function () { setView('upcoming', true); });
+  $('tab-past').addEventListener('click', function () { setView('past', true); });
+  window.addEventListener('hashchange', applyHash);
 
   if (location.hash === '#past') view = 'past';
-  setView(view);
+  setView(view, false);
 
   fetch(DATA_URL, { cache: 'no-store' })
     .then(function (r) { if (!r.ok) throw new Error('HTTP ' + r.status); return r.json(); })
     .then(function (d) {
       data = d;
+      assignIds(d.talks);
       renderInfo(d.semester || {});
       var n = counts(d);
       $('tab-upcoming').textContent = 'Upcoming (' + n.upcoming + ')';
@@ -197,6 +240,7 @@
       setStatus('live', n.upcoming + ' upcoming, ' + n.past + ' past');
       if (d.updated) $('updated').textContent = 'Updated ' + fmtDate(d.updated) + '.';
       render();
+      applyHash();
     })
     .catch(function (err) {
       setStatus('off', 'Could not load the schedule (' + err.message + ')');
