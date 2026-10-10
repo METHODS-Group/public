@@ -107,6 +107,15 @@
       "email": "haojun_qin@brown.edu",
       "issue": 14,
       "created_at": "2026-10-09T21:41:26Z"
+    },
+    {
+      "slot": "wed-1100",
+      "name": "Pratyush",
+      "login": "pratyushpotu",
+      "room": "Room 105 (Thomas's visiting scholar office, 182 George St)",
+      "email": null,
+      "issue": 15,
+      "created_at": "2026-10-10T02:09:51Z"
     }
   ]
 }
