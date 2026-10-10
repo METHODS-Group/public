@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>METHODS Group Meetings</title>
+<meta name="description" content="Weekly research meetings of the METHODS Group at Brown University: when and where we meet, the Zoom link, upcoming presentations, and past talks with abstracts and slides.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,500;8..60,600&family=Atkinson+Hyperlegible:wght@400;700&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="../assets/style.css">
+<link rel="stylesheet" href="../assets/meetings.css">
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <div class="eyebrow">METHODS Group &middot; Brown University</div>
+    <h1>Group Meetings</h1>
+    <p class="sub">Our weekly research meetings: members and visitors present work in progress, lead reading sessions, and rehearse talks. Everyone in the group is welcome.</p>
+  </header>
+
+  <section class="info" id="info" aria-labelledby="info-heading">
+    <h2 id="info-heading" class="bar-label">This semester</h2>
+    <dl class="info-grid" id="info-grid">
+      <div><dt>When</dt><dd id="info-when">&hellip;</dd></div>
+      <div><dt>Where</dt><dd id="info-where">&hellip;</dd></div>
+      <div><dt>Zoom</dt><dd id="info-zoom">&hellip;</dd></div>
+      <div><dt>Present</dt><dd id="info-signup">&hellip;</dd></div>
+    </dl>
+  </section>
+
+  <div class="bar toolbar">
+    <div class="seg" role="group" aria-label="Show upcoming or past presentations">
+      <button id="tab-upcoming" type="button" class="btn primary" aria-pressed="true">Upcoming</button>
+      <button id="tab-past" type="button" class="btn ghost" aria-pressed="false">Past</button>
+    </div>
+    <div class="status" id="status" data-state="wait" aria-live="polite"><span class="dot"></span><span id="status-text">Loading the schedule&hellip;</span></div>
+  </div>
+
+  <p class="notice slack-hint" id="slack-hint" hidden>Links marked <em>(Slack)</em> open in the <code>methods-group-hq</code> Slack workspace and need a Slack login.</p>
+
+  <noscript><p class="notice">This page needs JavaScript to list the talks. The data is in <a href="../data/meetings.json">data/meetings.json</a>.</p></noscript>
+
+  <div class="talks" id="talks" aria-live="polite"></div>
+
+  <p class="foot" id="foot">Past talks are compiled from the <code>#group-meetings</code> Slack channel; upcoming talks come from the sign-up sheet. Something missing or wrong? Edit <code>data/meetings.json</code> in the repository. <span id="updated"></span></p>
+</div>
+<script src="../assets/meetings.js"></script>
+</body>
+</html>

@@ -1,0 +1,671 @@
+{
+  "updated": "2026-10-10",
+  "semester": {
+    "name": "Fall 2026",
+    "when": "Wednesdays, 1:00–3:00 pm ET",
+    "location": "170 Hope St, Room 108, Providence, RI",
+    "zoom": "https://brown.zoom.us/my/brendankeith",
+    "signup_url": "https://docs.google.com/spreadsheets/d/1jcNUKmm2uvCUYQMNY8rUwx8yA91LiCYYOIfEvkDuJIQ/edit?usp=sharing"
+  },
+  "talks": [
+    {
+      "date": "2024-12-11",
+      "presenter": "Rami Masri",
+      "title": "",
+      "abstract": "",
+      "keywords": [],
+      "links": [
+        {
+          "label": "Paper (arXiv:2411.02646)",
+          "url": "https://arxiv.org/abs/2411.02646",
+          "kind": "paper"
+        },
+        {
+          "label": "Announcement",
+          "url": "https://methods-group-hq.slack.com/archives/C083Q60ESNS/p1733437272915879",
+          "kind": "announcement"
+        }
+      ],
+      "status": "past",
+      "term": "2024–25",
+      "note": "Informal discussion of the paper linked below; no formal title or abstract."
+    },
+    {
+      "date": "2025-01-28",
+      "presenter": "Dohyun Kim",
+      "title": "",
+      "abstract": "",
+      "keywords": [],
+      "links": [
+        {
+          "label": "Paper (doi:10.1016/j.cma.2018.02.009)",
+          "url": "https://doi.org/10.1016/j.cma.2018.02.009",
+          "kind": "paper"
+        },
+        {
+          "label": "Announcement",
+          "url": "https://methods-group-hq.slack.com/archives/C083Q60ESNS/p1737493137236889",
+          "kind": "announcement"
+        }
+      ],
+      "status": "past",
+      "term": "2024–25",
+      "note": "Informal discussion of the paper linked below; no formal title or abstract."
+    },
+    {
+      "date": "2025-02-27",
+      "presenter": "Boris Andrews",
+      "title": "",
+      "abstract": "",
+      "keywords": [],
+      "links": [
+        {
+          "label": "Paper (arXiv:2501.11654)",
+          "url": "https://arxiv.org/abs/2501.11654",
+          "kind": "paper"
+        },
+        {
+          "label": "Announcement",
+          "url": "https://methods-group-hq.slack.com/archives/C083Q60ESNS/p1740244341555319",
+          "kind": "announcement"
+        }
+      ],
+      "status": "past",
+      "term": "2024–25",
+      "note": "Visiting speaker. Informal discussion of the paper linked below; no formal title or abstract."
+    },
+    {
+      "date": "2025-04-17",
+      "presenter": "John Papadopoulos",
+      "title": "",
+      "abstract": "",
+      "keywords": [],
+      "links": [
+        {
+          "label": "Paper (doi:10.1007/s00211-024-01438-3)",
+          "url": "https://doi.org/10.1007/s00211-024-01438-3",
+          "kind": "paper"
+        },
+        {
+          "label": "Announcement",
+          "url": "https://methods-group-hq.slack.com/archives/C083Q60ESNS/p1744644358151809",
+          "kind": "announcement"
+        }
+      ],
+      "status": "past",
+      "term": "2024–25",
+      "note": "Informal discussion of the paper linked below; no formal title or abstract."
+    },
+    {
+      "date": "2025-05-01",
+      "presenter": "Three postdoc candidates",
+      "title": "Postdoc candidate presentations",
+      "abstract": "",
+      "keywords": [],
+      "links": [
+        {
+          "label": "Announcement",
+          "url": "https://methods-group-hq.slack.com/archives/C083Q60ESNS/p1745946350250529",
+          "kind": "announcement"
+        }
+      ],
+      "status": "past",
+      "term": "2024–25",
+      "note": "Short presentations by three candidates interviewing for a postdoc position; held on Zoom."
+    },
+    {
+      "date": "2025-08-22",
+      "presenter": "Dohyun Kim",
+      "title": "Basics of MFEM with Auto-Diff and Applications to Proximal Galerkin",
+      "abstract": "",
+      "keywords": [],
+      "links": [
+        {
+          "label": "Slides (Slack)",
+          "url": "https://methods-group-hq.slack.com/archives/C083Q60ESNS/p1755886169605359",
+          "kind": "slides"
+        },
+        {
+          "label": "Code: dohyun-cse/mfem-ad (AD implementation)",
+          "url": "https://github.com/dohyun-cse/mfem-ad",
+          "kind": "code"
+        },
+        {
+          "label": "Code: dohyun-cse/mfem-build (MFEM+PETSc build scripts)",
+          "url": "https://github.com/dohyun-cse/mfem-build",
+          "kind": "code"
+        },
+        {
+          "label": "Announcement",
+          "url": "https://methods-group-hq.slack.com/archives/C083Q60ESNS/p1755707546495059",
+          "kind": "announcement"
+        }
+      ],
+      "status": "past",
+      "note": "Online summer meeting, 1–2 pm ET on Zoom. No abstract was posted."
+    },
+    {
+      "date": "2025-10-15",
+      "presenter": "Brendan Keith",
+      "title": "Legendre functions and convergence of Bregman proximal point in finite dimensions",
+      "abstract": "Tomorrow, we will begin a series of weekly group meetings exploring various aspects of the Bregman proximal point algorithm. I will lead the first meeting by walking us through the main results in the classical paper by Chen and Teboulle.<br><br>Other members of the group will speak in future meetings to share work on the infinite-dimensional setting, analysis of Galerkin discretizations, implementation aspects, and stochastic forms of the algorithm.<br><br>Topic: Legendre functions and convergence of Bregman proximal point in finite dimensions<br>Material: <i>Convergence Analysis of a Proximal-Like Minimization Algorithm Using Bregman Functions</i> by Chen and Teboulle (1993)<br>Presenter: Brendan Keith",
+      "keywords": [],
+      "links": [
+        {
+          "label": "Reading (Slack)",
+          "url": "https://methods-group-hq.slack.com/archives/C083Q60ESNS/p1760457802874289",
+          "kind": "paper"
+        },
+        {
+          "label": "Announcement",
+          "url": "https://methods-group-hq.slack.com/archives/C083Q60ESNS/p1760457802874289",
+          "kind": "announcement"
+        }
+      ],
+      "status": "past",
+      "note": "First of the Fall 2025 weekly series on the Bregman proximal point algorithm. The attached file is reading material rather than slides."
+    },
+    {
+      "date": "2025-10-29",
+      "presenter": "Brendan Keith",
+      "title": "Convex Duality",
+      "abstract": "Tomorrow, we will continue our series of weekly group meetings exploring various aspects of the Bregman proximal point algorithm. This meeting will focus on a classical duality result by Rockafellar used in the proximal Galerkin method.<br><br>Topic: Convex Duality<br>Material: <i>Conjugates and Legendre Transforms of Convex Functions</i> by Rockafellar (1967)<br>Presenter: Brendan Keith",
+      "keywords": [],
+      "links": [
+        {
+          "label": "Reading (Slack)",
+          "url": "https://methods-group-hq.slack.com/archives/C083Q60ESNS/p1761701448510579",
+          "kind": "paper"
+        },
+        {
+          "label": "Announcement",
+          "url": "https://methods-group-hq.slack.com/archives/C083Q60ESNS/p1761701448510579",
+          "kind": "announcement"
+        }
+      ],
+      "status": "past",
+      "note": "Reading material rather than slides."
+    },
+    {
+      "date": "2025-11-05",
+      "presenter": "Dohyun Kim",
+      "title": "Proximal Methods, Bregman Divergence, and Galerkin Discretization",
+      "abstract": "In tomorrow's group meeting, we will explore the characteristics of Bregman proximal point and mirror descent methods.<br>We will begin with a geometric interpretation of Bregman proximal point methods in finite-dimensional settings. Then, we will turn our attention to infinite-dimensional settings and their discrete approximations, including some examples.",
+      "keywords": [],
+      "links": [
+        {
+          "label": "Reading: Examples of PG (CMAME)",
+          "url": "https://www.sciencedirect.com/science/article/abs/pii/S0045782525004530",
+          "kind": "paper"
+        },
+        {
+          "label": "Reading: Mirror Descent for Topology Optimization (SMO)",
+          "url": "https://link.springer.com/article/10.1007/s00158-025-04008-9",
+          "kind": "paper"
+        },
+        {
+          "label": "Announcement",
+          "url": "https://methods-group-hq.slack.com/archives/C083Q60ESNS/p1762301499669959",
+          "kind": "announcement"
+        }
+      ],
+      "status": "past"
+    },
+    {
+      "date": "2025-11-12",
+      "presenter": "Noe Reyes Rivas",
+      "title": "Bregman proximal point in function spaces",
+      "abstract": "",
+      "keywords": [],
+      "links": [
+        {
+          "label": "Announcement",
+          "url": "https://methods-group-hq.slack.com/archives/C083Q60ESNS/p1762969319114269",
+          "kind": "announcement"
+        }
+      ],
+      "status": "past",
+      "note": "Talk on Bregman proximal point in function spaces; no abstract was posted."
+    },
+    {
+      "date": "2025-11-19",
+      "presenter": "Rami Masri",
+      "title": "A priori error analysis of the proximal Galerkin method",
+      "abstract": "In tomorrow’s group meeting (1pm - 3pm), I will present on the a priori error analysis of the proximal Galerkin method:<br><br><a href=\"https://arxiv.org/pdf/2507.13516\">https://arxiv.org/pdf/2507.13516</a>",
+      "keywords": [],
+      "links": [
+        {
+          "label": "Paper (arXiv:2507.13516)",
+          "url": "https://arxiv.org/pdf/2507.13516",
+          "kind": "paper"
+        },
+        {
+          "label": "Announcement",
+          "url": "https://methods-group-hq.slack.com/archives/C083Q60ESNS/p1763500849932329",
+          "kind": "announcement"
+        }
+      ],
+      "status": "past"
+    },
+    {
+      "date": "2025-12-03",
+      "presenter": "Rami Masri; Pratyush Potu; Haojun Qin; Noe Reyes Rivas; Biswajit Khara; Dohyun Kim",
+      "title": "Short presentations on the proximal Galerkin method (for Alexandre Ern's visit)",
+      "abstract": "This week’s group meeting (1pm – 3pm) will consist of short presentations on the proximal Galerkin method.<br><br>What follows is a rough outline of the proposed schedule.<br><br>Rami: 1 – 1:20 pm<br>Pratyush Potu: 1:25 – 1:35 pm<br>Haojun Qin: 1:40 – 1:50 pm<br>Noe Reyes Rivas: 1:55 – 2:10 pm<br>Biswajit Khara: 2:15 – 2:25 pm<br>Dohyun: 2:30 – 2:50 pm",
+      "keywords": [],
+      "links": [
+        {
+          "label": "Announcement",
+          "url": "https://methods-group-hq.slack.com/archives/C083Q60ESNS/p1764541675816389",
+          "kind": "announcement"
+        }
+      ],
+      "status": "past",
+      "note": "Multi-speaker session during Alexandre Ern’s visit."
+    },
+    {
+      "date": "2025-12-10",
+      "presenter": "Ref Bari",
+      "title": "Learning approximate spacetime metrics from gravitational wave measurements via a thermodynamically-consistent approach",
+      "abstract": "In Wednesday's group meeting (1pm - 3pm), I will present the following lecture on black holes.<br><br><b>Topic</b>: Learning approximate spacetime metrics from gravitational wave measurements via a thermodynamically-consistent approach<br><b>Contents</b>:<br>1. Part I: Introduction to Black Holes<br>&nbsp;&nbsp;&nbsp;&nbsp;a. Newtonian Metric<br>&nbsp;&nbsp;&nbsp;&nbsp;b. Schwarzschild Metric<br>&nbsp;&nbsp;&nbsp;&nbsp;c. Kerr Metric<br>2. Part II: Modeling Binary Black Holes<br>&nbsp;&nbsp;&nbsp;&nbsp;a. Anatomy of a Gravitational Wave<br>&nbsp;&nbsp;&nbsp;&nbsp;b. The Forward Problem: From Schwarzschild Metric to Gravitational Wave h(t)<br>&nbsp;&nbsp;&nbsp;&nbsp;c. The Inverse Problem: From h(t) to the Orbit &amp; Metric<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i. GENERIC Formalism<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ii. Neural ODE Algorithm",
+      "keywords": [],
+      "links": [
+        {
+          "label": "Announcement",
+          "url": "https://methods-group-hq.slack.com/archives/C083Q60ESNS/p1765223503244579",
+          "kind": "announcement"
+        }
+      ],
+      "status": "past",
+      "note": "The abstract is the contents outline from the announcement."
+    },
+    {
+      "date": "2026-01-15",
+      "presenter": "Rami Masri",
+      "title": "Practice job talk",
+      "abstract": "",
+      "keywords": [],
+      "links": [
+        {
+          "label": "Announcement",
+          "url": "https://methods-group-hq.slack.com/archives/C083Q60ESNS/p1767907627375399",
+          "kind": "announcement"
+        }
+      ],
+      "status": "past",
+      "note": "Practice job talk, 3–5 pm. No abstract was posted."
+    },
+    {
+      "date": "2026-01-29",
+      "presenter": "Anton Malandii",
+      "title": "Decision Making Under Uncertainty: From Classical Methods to CVaR Optimization",
+      "abstract": "The talk will focus on the main ideas and mathematical models that underpin decision-making under uncertainty. Special attention will be devoted to <b>risk measures</b>—stochastic functionals used to rank random variables. In particular, we will introduce <b>conditional value-at-risk (CVaR)</b> and discuss its key properties and interpretations. Representative applications from <b>machine learning</b>, <b>quantitative finance</b>, and <b>PDE-constrained optimization</b> will be presented in detail. Finally, we will present a new algorithm for CVaR optimization, developed within the framework of the <b>Bregman proximal point method</b>.",
+      "keywords": [],
+      "links": [
+        {
+          "label": "Slides (Slack)",
+          "url": "https://methods-group-hq.slack.com/archives/C083Q60ESNS/p1769623358300299?thread_ts=1769623081.347349&cid=C083Q60ESNS",
+          "kind": "slides"
+        },
+        {
+          "label": "Reference: Heinkenschloss, ECOM 2025 tutorial",
+          "url": "https://math.gmu.edu/~hantil/ECOM/2025/Slides/Heinkenschloss/ECOM2025_MH_Tutorial1.pdf",
+          "kind": "paper"
+        },
+        {
+          "label": "Announcement",
+          "url": "https://methods-group-hq.slack.com/archives/C083Q60ESNS/p1769623081347349",
+          "kind": "announcement"
+        }
+      ],
+      "status": "past"
+    },
+    {
+      "date": "2026-02-05",
+      "presenter": "Anton Malandii",
+      "title": "Decision Making Under Uncertainty: From Classical Methods to CVaR Optimization (Round 2)",
+      "abstract": "We present a novel method for solving <b>conditional value-at-risk (CVaR)</b> optimization problems based on the dual representation of CVaR defined as a worst-case expectation over a risk envelope. The algorithm is based on a <b>Bregman proximal point method</b> and consists of alternating stochastic <b>primal</b> and <b>dual</b> stages. Every (inner) primal stage involves a subproblem solved by sampling from a probability distribution updated at each dual stage (outer iteration). The likelihood ratio of the dual probability distributions relative to the distribution underlying the original problem converges to the risk identifier of the solution’s CVaR. Thus, the dual probabilities provide the algorithm with a built-in <b>importance sampling mechanism</b> that draws from the tail of the underlying distribution. Because only samples in the tail influence the CVaR, and samples outside the tail are drawn with decreasing probability, the algorithm delivers exceptional performance over other stochastic approximation methods. We prove the convergence of the algorithm for convex objective functions and present numerical evidence for solving non-convex problems. Our numerical experiments target representative problems in machine learning and engineering design, focusing on support-vector classification, support-vector regression, and risk-averse large-scale topology optimization.",
+      "keywords": [],
+      "links": [
+        {
+          "label": "Announcement",
+          "url": "https://methods-group-hq.slack.com/archives/C083Q60ESNS/p1770249014109549",
+          "kind": "announcement"
+        }
+      ],
+      "status": "past"
+    },
+    {
+      "date": "2026-02-12",
+      "presenter": "Pratyush Potu",
+      "title": "Interpolation in finite element spaces and reconstruction operators for Proximal Galerkin",
+      "abstract": "In tomorrow’s group meeting (1pm - 3pm), I will present on interpolation in finite element spaces and reconstruction operators for Proximal Galerkin.<br>The focus will be on interpolation of nonsmooth functions and vector fields into lowest order conforming finite element spaces (e.g. Lagrange, Nedelec, Raviart-Thomas).<br>I will also briefly discuss how these interpolation ideas relate to the construction of reconstruction operators which are useful in the analysis of Proximal Galerkin.",
+      "keywords": [],
+      "links": [
+        {
+          "label": "Announcement",
+          "url": "https://methods-group-hq.slack.com/archives/C083Q60ESNS/p1770833203195539",
+          "kind": "announcement"
+        }
+      ],
+      "status": "past"
+    },
+    {
+      "date": "2026-02-19",
+      "presenter": "Noe Reyes Rivas",
+      "title": "A New Perspective on the Entropic Poisson Equation",
+      "abstract": "In this week's group meeting, I'll be presenting on a new* analytical method for proving existence and uniqueness of weak solutions for the entropic Poisson equation. We will also explore how to obtain the corresponding energy minimization principle and ideas on how to extend this approach for similar problems.",
+      "keywords": [],
+      "links": [
+        {
+          "label": "Announcement",
+          "url": "https://methods-group-hq.slack.com/archives/C083Q60ESNS/p1771364768260329",
+          "kind": "announcement"
+        }
+      ],
+      "status": "past"
+    },
+    {
+      "date": "2026-02-26",
+      "presenter": "Dohyun Kim",
+      "title": "Scalable Constrained Optimization in Finite Element Analysis",
+      "abstract": "Many engineering problems, from contact mechanics to topology optimization, involve PDEs with complex inequality constraints, making scalable and mesh-independent numerical solutions challenging. In this talk, we introduce the Proximal Galerkin (PG) method—a novel \"optimize-then-discretize\" approach derived from Bregman proximal point methods. By using distance generating functions, PG transforms constrained optimization into unconstrained saddle-point equations with auxiliary latent variables. We demonstrate that this formulation inherently preserves strict feasibility and yields optimal error estimates. Through applications like the obstacle problem and multi-material design, we highlight the framework's robustness, mesh-independent convergence, and scalability using preconditioned Krylov solvers.",
+      "keywords": [],
+      "links": [
+        {
+          "label": "Announcement",
+          "url": "https://methods-group-hq.slack.com/archives/C083Q60ESNS/p1772066054515909",
+          "kind": "announcement"
+        }
+      ],
+      "status": "past",
+      "note": "Job talk rehearsal."
+    },
+    {
+      "date": "2026-03-12",
+      "presenter": "Haojun Qin",
+      "title": "Convergence Rate of the Proximal Galerkin Method",
+      "abstract": "In this group meeting, I will present an improved convergence analysis of the Proximal Galerkin method for the Poisson obstacle problem. In particular, we improve the convergence rate from <code>O(k^{−1/2})</code> to <code>O(k^{-1})</code>. We will also show that <code>O(k^{-1})</code> is the optimal rate under general assumptions.",
+      "keywords": [],
+      "links": [
+        {
+          "label": "Announcement",
+          "url": "https://methods-group-hq.slack.com/archives/C083Q60ESNS/p1773196325187829",
+          "kind": "announcement"
+        }
+      ],
+      "status": "past"
+    },
+    {
+      "date": "2026-04-02",
+      "presenter": "Pratyush Potu",
+      "title": "An Introduction to Differential Geometry with Connections to Numerical Analysis and the Proximal Galerkin method",
+      "abstract": "In this group meeting, I will introduce the some of the basic definitions and results in differential geometry to give an idea of how working on curved geometries differs from that of flat geometries. We will discuss manifolds, in particular calculus on manifolds, and make connections with ideas from numerical analysis and the proximal Galerkin method.",
+      "keywords": [],
+      "links": [
+        {
+          "label": "Announcement",
+          "url": "https://methods-group-hq.slack.com/archives/C083Q60ESNS/p1774988849711949",
+          "kind": "announcement"
+        }
+      ],
+      "status": "past"
+    },
+    {
+      "date": "2026-04-09",
+      "presenter": "Biswajit Khara",
+      "title": "Solving phase-field fracture problems using the proximal Galerkin method",
+      "abstract": "In this group meeting, I will give a basic overview of variational fracture and related concepts, including phase-field models, strain energy splitting etc. Then we will discuss the mathematical formulation, and solution strategies such as fully coupled formulation and alternate minimization. Finally, we will discuss how to use proximal Galerkin for solving such problems.",
+      "keywords": [],
+      "links": [
+        {
+          "label": "Slides (Slack)",
+          "url": "https://methods-group-hq.slack.com/archives/C083Q60ESNS/p1775766668116529",
+          "kind": "slides"
+        },
+        {
+          "label": "Video shown in talk (1)",
+          "url": "https://www.youtube.com/watch?v=D8U4G5kcpcM",
+          "kind": "video"
+        },
+        {
+          "label": "Video shown in talk (2)",
+          "url": "https://www.youtube.com/watch?v=IRKCGSXSpDI",
+          "kind": "video"
+        },
+        {
+          "label": "Announcement",
+          "url": "https://methods-group-hq.slack.com/archives/C083Q60ESNS/p1775604172787959",
+          "kind": "announcement"
+        }
+      ],
+      "status": "past"
+    },
+    {
+      "date": "2026-04-23",
+      "presenter": "Alexey Izmailov",
+      "title": "Enforcing Inequality Constraints in Vector-Valued Function Spaces via Proximal Galerkin",
+      "abstract": "In this group meeting, I will present work in progress with Pratyush and Brendan, on extending PG to solving variational problems with pointwise inequality constraints in vector-valued function spaces, such as H(div) and H(curl). We will first review PG and the discrete a priori analysis developed for the H1 setting. Then through a series of problems from optimal control, image denoising, and generalizations of the obstacle problem, we derive two-fold saddlepoint systems, which are amenable to the same program of analysis and involve function spaces from across the L2 de Rham complex(es). The resulting schemes can be implemented similarly to other applications of PG, pretty pictures guaranteed.",
+      "keywords": [],
+      "links": [
+        {
+          "label": "Announcement",
+          "url": "https://methods-group-hq.slack.com/archives/C083Q60ESNS/p1776859553041229",
+          "kind": "announcement"
+        }
+      ],
+      "status": "past"
+    },
+    {
+      "date": "2026-04-30",
+      "presenter": "Dohyun Kim",
+      "title": "GPU Computing for Finite Element",
+      "abstract": "In this group meeting, I will present GPU acceleration for finite element computations. GPGPU is very powerful, but only when used correctly. We first review CPU and GPU architecture and the principles to keep in mind when porting FE code. We then discuss how MFEM manages memory between host and device, and how we can take advantage of it. Finally, I point out common caveats, and show how <code>CuDSS</code>, a GPU sparse direct solver, can help us.",
+      "keywords": [],
+      "links": [
+        {
+          "label": "Announcement",
+          "url": "https://methods-group-hq.slack.com/archives/C083Q60ESNS/p1777561752006929",
+          "kind": "announcement"
+        }
+      ],
+      "status": "past"
+    },
+    {
+      "date": "2026-05-07",
+      "presenter": "Sam Himel, Haojun Qin, Zichen Lu, Yiming Yu, Ref Bari",
+      "title": "Final Project and Thesis Presentations",
+      "abstract": "Sam Himel, Haojun Qin, Zichen Lu will present their APMA 2560 final projects in today's group meeting. Afterward, Yiming Yu and Ref Bari will present their master's theses.",
+      "keywords": [],
+      "links": [
+        {
+          "label": "Announcement",
+          "url": "https://methods-group-hq.slack.com/archives/C083Q60ESNS/p1778161872537919",
+          "kind": "announcement"
+        }
+      ],
+      "status": "past",
+      "note": "Multi-speaker session: APMA 2560 final projects and master’s thesis presentations. Last meeting of Spring 2026."
+    },
+    {
+      "date": "2026-09-16",
+      "presenter": "Rami Masri",
+      "title": "Observations on the Error Analysis of Proximal Galerkin Methods",
+      "abstract": "The proximal Galerkin (PG) method is a finite element method for solving variational problems with inequality constraints. I present PG for obstacle problems and share several observations and lessons learned on the error analysis of this class of methods.",
+      "keywords": [
+        "Proximal Galerkin",
+        "Finite Elements",
+        "Numerical Analysis"
+      ],
+      "links": [
+        {
+          "label": "Announcement",
+          "url": "https://methods-group-hq.slack.com/archives/C083Q60ESNS/p1789566427171999",
+          "kind": "announcement"
+        }
+      ],
+      "status": "past",
+      "note": "Board talk; no slides."
+    },
+    {
+      "date": "2026-09-23",
+      "presenter": "Haojun Qin",
+      "title": "Analysis of Bregman Proximal Point for the Obstacle Problem",
+      "abstract": "I’ll discuss convergence of Bregman proximal point for the obstacle problem:<br>• H^1 sublinear rates <code>O(k^{-\\zeta})</code>, with <code>\\zeta \\in (1/2,1]</code> depending on the entropy;<br>• uniform sharpness for Shannon and Tsallis entropies;<br>• linear convergence for Shannon and Spence entropies under additional assumptions on the free boundary and obstacle.",
+      "keywords": [
+        "Proximal Galerkin",
+        "Functional Analysis",
+        "Optimization"
+      ],
+      "links": [
+        {
+          "label": "Paper (arXiv:2609.23007)",
+          "url": "https://arxiv.org/abs/2609.23007",
+          "kind": "paper"
+        },
+        {
+          "label": "Announcement",
+          "url": "https://methods-group-hq.slack.com/archives/C083Q60ESNS/p1790099905216189",
+          "kind": "announcement"
+        }
+      ],
+      "status": "past"
+    },
+    {
+      "date": "2026-09-30",
+      "presenter": "Ref Bari",
+      "title": "Sonar: Imaging Black Holes with Gravitational Waves",
+      "abstract": "We present Sonar, an algorithm developed for LISA, which can predict the space-time metric, dissipative dynamics, and initial conditions of an extreme-mass ratio binary black hole system to within &lt;1% error (on synthetic Kerr waveforms). Sonar's 4-term loss function includes waveform, ricci, boundary, and a manhattan norm. I will share the latest results on GW190814, an actual LIGO detection. Time permitting, I'll share an image of GW190814 predicted by Sonar.",
+      "keywords": [
+        "Machine Learning"
+      ],
+      "links": [
+        {
+          "label": "Announcement",
+          "url": "https://methods-group-hq.slack.com/archives/C083Q60ESNS/p1790707230494599",
+          "kind": "announcement"
+        }
+      ],
+      "status": "past"
+    },
+    {
+      "date": "2026-10-07",
+      "presenter": "Yuan Chen",
+      "title": "Learning Stochastic Dynamics from Noisy Data",
+      "abstract": "We present a computational framework for learning unknown stochastic dynamics from trajectory data. The framework approximates conditional transition distributions using generative models, including generative adversarial networks, autoencoders, and normalizing flows. The resulting stochastic flow map generates sample trajectories through repeated sampling, enabling predictions beyond the time span of the training data. Applications to complex chemical reaction networks and multiscale stochastic differential equations demonstrate the framework’s ability to capture long-term statistical behavior from short bursts of observations. For multiscale systems, we further analyze the associated Markovian approximation in a linear setting, establishing its stability and characterizing its equilibrium and temporal statistics.",
+      "keywords": [
+        "Machine Learning"
+      ],
+      "links": [
+        {
+          "label": "Slides (Slack)",
+          "url": "https://methods-group-hq.slack.com/archives/C083Q60ESNS/p1791291615501499",
+          "kind": "slides"
+        },
+        {
+          "label": "Announcement",
+          "url": "https://methods-group-hq.slack.com/archives/C083Q60ESNS/p1791291615501499",
+          "kind": "announcement"
+        }
+      ],
+      "status": "past"
+    },
+    {
+      "date": "2026-10-14",
+      "presenter": "Thomas Surowiec",
+      "title": "PDE-Constrained Optimization",
+      "abstract": "",
+      "keywords": [],
+      "links": [
+        {
+          "label": "Visit sign-up sheet",
+          "url": "https://methods-group.github.io/public/",
+          "kind": "announcement"
+        }
+      ],
+      "status": "upcoming",
+      "title_source": "data/schedule.json (visit sign-up sheet, slot wed-talk); the sign-up sheet row has no title yet",
+      "note": "Visiting speaker. Everyone is welcome; no sign-up needed. Abstract to be announced."
+    },
+    {
+      "date": "2026-10-21",
+      "presenter": "Zichen Lu",
+      "title": "",
+      "abstract": "",
+      "keywords": [
+        "Proximal Galerkin"
+      ],
+      "links": [],
+      "status": "upcoming",
+      "note": "Title and abstract to be announced"
+    },
+    {
+      "date": "2026-10-28",
+      "presenter": "Dohyun Kim",
+      "title": "Riemannian optimization",
+      "abstract": "",
+      "keywords": [
+        "Finite Elements",
+        "Proximal Galerkin",
+        "Optimization",
+        "Numerical Analysis"
+      ],
+      "links": [],
+      "status": "upcoming",
+      "note": "Abstract to be announced"
+    },
+    {
+      "date": "2026-11-04",
+      "presenter": "Yiming Yu",
+      "title": "",
+      "abstract": "",
+      "keywords": [
+        "Optimization"
+      ],
+      "links": [],
+      "status": "upcoming",
+      "note": "Title and abstract to be announced"
+    },
+    {
+      "date": "2026-11-11",
+      "presenter": "Alexey Izmailov",
+      "title": "",
+      "abstract": "",
+      "keywords": [
+        "Numerical Analysis",
+        "Finite Elements",
+        "Proximal Galerkin"
+      ],
+      "links": [],
+      "status": "upcoming",
+      "note": "Title and abstract to be announced"
+    },
+    {
+      "date": "2026-11-18",
+      "presenter": "Noe Reyes Rivas",
+      "title": "",
+      "abstract": "",
+      "keywords": [
+        "Proximal Galerkin"
+      ],
+      "links": [],
+      "status": "upcoming",
+      "note": "Title and abstract to be announced"
+    },
+    {
+      "date": "2026-12-02",
+      "presenter": "Anton Malandii",
+      "title": "",
+      "abstract": "",
+      "keywords": [
+        "Stochastic Optimization",
+        "Optimization",
+        "Uncertainty Quantification",
+        "Machine Learning"
+      ],
+      "links": [],
+      "status": "upcoming",
+      "note": "Title and abstract to be announced"
+    }
+  ]
+}

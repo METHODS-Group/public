@@ -1,0 +1,43 @@
+/* Group meetings page: an info panel, an Upcoming/Past toggle, and a list of talk cards. Tokens come from style.css. */
+.info { display: flex; flex-direction: column; gap: 10px; padding: 16px 18px; border-radius: 10px; background: var(--accent-soft); border: 1px solid var(--line); }
+.info-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: 12px 24px; margin: 0; }
+.info-grid > div { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
+.info-grid dt { font-family: var(--font-mono); font-size: 11px; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); }
+.info-grid dd { margin: 0; font-size: 15px; min-width: 0; }
+.info-grid dd a { font-weight: 700; }
+
+.toolbar { align-items: center; }
+.seg { display: inline-flex; gap: 0; border: 1px solid var(--line); border-radius: 8px; padding: 3px; background: var(--surface); }
+.seg .btn { border-radius: 6px; }
+.seg .btn.ghost { border-color: transparent; }
+.seg .btn.ghost:hover { border-color: transparent; background: var(--accent-soft); }
+.slack-hint { font-size: 13px; }
+
+.talks { display: flex; flex-direction: column; gap: 14px; }
+.term { font-family: var(--font-display); font-weight: 600; font-size: 21px; margin: 14px 0 0; display: flex; align-items: baseline; gap: 10px; }
+.term:first-child { margin-top: 0; }
+.term small { font-family: var(--font-body); font-size: 13px; font-weight: 400; color: var(--muted); }
+.talk { background: var(--surface); border: 1px solid var(--line); border-radius: 10px; padding: 14px 18px; display: flex; flex-direction: column; gap: 8px; min-width: 0; }
+.talk.upcoming.next { border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-soft); }
+.talk-head { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 4px 16px; }
+.talk .date { font-family: var(--font-mono); font-size: 13px; color: var(--muted); font-variant-numeric: tabular-nums; white-space: nowrap; }
+.talk .next-tag { font-family: var(--font-mono); font-size: 11px; letter-spacing: .08em; text-transform: uppercase; color: var(--accent); margin-left: 8px; }
+.talk .presenter { font-weight: 700; font-size: 15px; }
+.talk .title { font-family: var(--font-display); font-weight: 600; font-size: 20px; line-height: 1.25; margin: 0; text-wrap: balance; }
+.talk .title.tba { font-style: italic; font-weight: 500; color: var(--muted); }
+.talk .chips li { font-size: 12.5px; padding: 2px 9px; background: var(--bg); }
+.talk .abstract { margin: 0; font-size: 14.5px; max-width: 78ch; overflow-wrap: anywhere; }
+.talk .abstract.clamp { display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 4; overflow: hidden; }
+.talk .abstract code { background: var(--lunch-soft); padding: 0 4px; border-radius: 4px; }
+.talk .note { margin: 0; font-size: 13.5px; color: var(--muted); font-style: italic; }
+.talk .more { align-self: flex-start; }
+.talk .links { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 2px; }
+.talk .links .btn { font-size: 12.5px; padding: 4px 10px; }
+.talk .links .btn.slides { background: var(--accent-soft); color: var(--accent); border-color: transparent; font-weight: 700; }
+.talk .links .btn.slides:hover { border-color: var(--accent); }
+.empty { margin: 0; padding: 16px 18px; border-radius: 10px; border: 1px dashed var(--line); background: var(--lunch-soft); color: var(--muted); }
+@media (max-width: 560px) {
+  .talk { padding: 12px 14px; }
+  .talk .title { font-size: 18px; }
+  .toolbar { flex-direction: column; align-items: flex-start; }
+}
