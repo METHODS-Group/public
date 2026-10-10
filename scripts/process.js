@@ -94,6 +94,9 @@ function apply(signups, schedule, req) {
     return fail('Could not find that slot. Start from the sign-up page so the slot is filled in for you: ' + page);
   }
 
+  // A reserved entry is assigned by hand in data/signups.json; the forms cannot touch it.
+  if (slot.kind === 'reserved') return fail(`${slot.label} is reserved and cannot be changed through the sign-up forms.`);
+
   if (template === 'cancel') {
     const before = next.claims.length;
     next.claims = next.claims.filter((c) => !(c.slot === slot.id && c.login === login));
@@ -104,7 +107,11 @@ function apply(signups, schedule, req) {
   }
 
   if (slot.kind === 'blocked') return fail(`${slot.label} is not available for sign-up.`);
-  if (!slot.open) return fail(`${slot.label} is not open yet; check the sign-up page later: ${page}`);
+  if (!slot.open) {
+    return fail(slot.closed_message
+      ? `${slot.closed_message}: ${page}`
+      : `${slot.label} is not open yet; check the sign-up page later: ${page}`);
+  }
   if (closedAt(slot, now)) {
     return fail(slot.closed_message || `Sign-ups for ${slot.label} closed at ${slot.closes_at}; message Brendan if you'd still like to come.`);
   }

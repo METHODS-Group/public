@@ -62,7 +62,7 @@ test('claims, capacity, duplicates, cancel', () => {
   assert.match(r.message, /already signed up/);
 
   // Bad room rejected.
-  r = apply(s, schedule, req('claim', claimBody('wed-1500', 'Sofia K', 'Room 999'), 'sofia'));
+  r = apply(s, schedule, req('claim', claimBody('wed-1630', 'Sofia K', 'Room 999'), 'sofia'));
   assert.equal(r.ok, false);
   assert.match(r.message, /listed rooms/);
 
@@ -76,12 +76,12 @@ test('claims, capacity, duplicates, cancel', () => {
 });
 
 test('second claimant who picks the same room gets no note; a bad room is fine when inherited', () => {
-  let r = apply({ claims: [] }, schedule, req('claim', claimBody('wed-1500', 'Ada', ROOM_303), 'ada'));
-  r = apply(r.signups, schedule, req('claim', claimBody('wed-1500', 'Emmy', ROOM_303), 'emmy'));
+  let r = apply({ claims: [] }, schedule, req('claim', claimBody('wed-1630', 'Ada', ROOM_303), 'ada'));
+  r = apply(r.signups, schedule, req('claim', claimBody('wed-1630', 'Emmy', ROOM_303), 'emmy'));
   assert.ok(r.ok, r.message);
   assert.doesNotMatch(r.message, /booked this slot first/);
   r = apply(r.signups.claims.length ? { claims: [r.signups.claims[0]] } : r.signups, schedule,
-    req('claim', claimBody('wed-1500', 'Carl', 'Room 999'), 'gauss'));
+    req('claim', claimBody('wed-1630', 'Carl', 'Room 999'), 'gauss'));
   assert.ok(r.ok, r.message);
   assert.equal(r.signups.claims[1].room, ROOM_303);
 });
@@ -128,6 +128,40 @@ test('wed-1600 is a regular open meeting slot', () => {
   r = apply(r.signups, schedule, req('claim', claimBody('wed-1600', 'Carl', ROOM_303), 'gauss'));
   assert.equal(r.ok, false);
   assert.match(r.message, /already full/);
+});
+
+test('wed-1630 is a regular open meeting slot; wed-1500 is held and rejects claims', () => {
+  let r = apply({ claims: [] }, schedule, req('claim', claimBody('wed-1630', 'Ada', ROOM_105), 'ada'));
+  assert.ok(r.ok, r.message);
+  assert.match(r.message, /Booked: Wed 4:30 pm, Room 105/);
+  const s = r.signups;
+  r = apply(s, schedule, req('claim', claimBody('wed-1500', 'Emmy', ROOM_303), 'emmy'));
+  assert.equal(r.ok, false);
+  assert.match(r.message, /Wed 3:00 pm is temporarily reserved; pick another slot/);
+  assert.equal(r.signups.claims.length, 1);
+  // Title fallback reaches the same held slot and is rejected too.
+  const body = `### Your name\n\nEmmy\n\n### Room\n\n${ROOM_303}`;
+  r = apply(s, schedule, req('claim', body, 'emmy', 'Claim: Wed 3:00 pm'));
+  assert.equal(r.ok, false);
+});
+
+test('the reserved Wednesday arrival entry is pre-filled and rejects claim, join, and cancel', () => {
+  const signups = JSON.parse(fs.readFileSync(path.join(__dirname, '..', 'data', 'signups.json'), 'utf8'));
+  const arrival = signups.claims.filter((c) => c.slot === 'wed-0900');
+  assert.deepEqual(arrival.map((c) => c.login), ['brendankeith', 'ramimasri']);
+  const slot = schedule.days.flatMap((d) => d.slots).find((s) => s.id === 'wed-0900');
+  assert.equal(slot.kind, 'reserved');
+  assert.equal(slot.open, false);
+  for (const r of [
+    apply(signups, schedule, req('claim', claimBody('wed-0900', 'Ada', ROOM_105), 'ada')),
+    apply(signups, schedule, req('join', joinBody('wed-0900', 'Ada'), 'ada')),
+    apply(signups, schedule, req('cancel', '### Slot\n\nwed-0900', 'brendankeith')),
+    apply(signups, schedule, req('cancel', '### Slot\n\nwed-0900', 'ramimasri')),
+  ]) {
+    assert.equal(r.ok, false);
+    assert.match(r.message, /reserved and cannot be changed/);
+    assert.equal(r.signups.claims.filter((c) => c.slot === 'wed-0900').length, 2);
+  }
 });
 
 test('lunch sign-ups close at noon on Tuesday; cancellations still work', () => {

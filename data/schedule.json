@@ -32,6 +32,19 @@
       "note": null,
       "slots": [
         {
+          "id": "wed-0900",
+          "label": "Wed 9:00 am, arrival",
+          "title": "Arrival at the Division of Applied Mathematics",
+          "start": "09:00",
+          "end": "10:00",
+          "kind": "reserved",
+          "capacity": 2,
+          "open": false,
+          "description": "Thomas arrives, collects his office key, and gets his ID card.",
+          "location": "182 George St",
+          "note": "Reserved"
+        },
+        {
           "id": "wed-1000",
           "label": "Wed 10:00 am",
           "title": "One-on-one with Thomas",
@@ -103,8 +116,10 @@
           "end": "15:30",
           "kind": "meeting",
           "capacity": 2,
-          "open": true,
-          "description": "30-minute one-on-one with Thomas."
+          "open": false,
+          "description": "30-minute one-on-one with Thomas.",
+          "note": "Temporarily reserved",
+          "closed_message": "Wed 3:00 pm is temporarily reserved; pick another slot on the sign-up page"
         },
         {
           "id": "wed-1530",
@@ -123,6 +138,17 @@
           "title": "One-on-one with Thomas",
           "start": "16:00",
           "end": "16:30",
+          "kind": "meeting",
+          "capacity": 2,
+          "open": true,
+          "description": "30-minute one-on-one with Thomas."
+        },
+        {
+          "id": "wed-1630",
+          "label": "Wed 4:30 pm",
+          "title": "One-on-one with Thomas",
+          "start": "16:30",
+          "end": "17:00",
           "kind": "meeting",
           "capacity": 2,
           "open": true,

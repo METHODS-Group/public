@@ -59,17 +59,22 @@
   var TALK_SVG = '<svg viewBox="0 0 150 110" aria-hidden="true"><path d="M150 20 C110 25 95 60 60 70 S10 85 0 110"/><path d="M150 38 C118 42 104 72 72 82 S28 96 18 110"/><path d="M150 56 C126 60 114 84 86 93 S50 104 40 110"/><path d="M150 74 C134 77 124 96 104 102 S76 108 68 110"/><path d="M150 92 C142 94 136 104 124 108"/></svg>';
 
   // A meeting slot: one row with the time, the people in it, the room, and a Claim/Join button.
+  // A `reserved` slot (assigned by hand, e.g. Thomas's arrival) and a closed slot that carries
+  // a `note` are "held": they show the note (and the people on them) with no buttons.
   function slotCell(slot, claims, dayOpen, now) {
     var cell = el('div', 'cell slot');
     var cap = slot.capacity == null ? Infinity : slot.capacity;
     var left = Math.max(0, cap - claims.length);
     var closed = isClosed(slot, now);
+    var held = !dayOpen && (slot.kind === 'reserved' || !!slot.note);
     cell.classList.add(claims.length === 0 ? 'open' : left === 0 ? 'full' : 'taken');
+    if (held) cell.classList.add('held');
 
     var body = el('div', 'body');
     var list = el('div', 'who-list');
+    if (held && slot.title) list.append(el('span', 'label', slot.title));
     if (!claims.length) {
-      list.append(el('span', 'free', dayOpen ? 'Open · up to ' + slot.capacity + ' people' : 'Open'));
+      list.append(el('span', 'free', held ? slot.note : dayOpen ? 'Open · up to ' + slot.capacity + ' people' : 'Open'));
     }
     claims.forEach(function (c) {
       var who = el('div', 'who');
@@ -82,8 +87,11 @@
     if (first) {
       var loc = el('span', 'loc', shortRoom(first.room)); loc.title = first.room;
       var row = el('div', 'who'); row.append(loc); list.append(row);
+    } else if (held && slot.location) {
+      var row2 = el('div', 'who'); row2.append(el('span', 'loc', slot.location)); list.append(row2);
     }
-    if (claims.length && left > 0 && !closed) list.append(el('span', 'free', left + ' spot left'));
+    if (held && slot.kind === 'reserved' && slot.description) list.append(el('span', 'free', slot.description));
+    if (claims.length && left > 0 && !closed && !held) list.append(el('span', 'free', left + ' spot left'));
     if (closesAt(slot) != null) {
       list.append(el('span', 'free deadline', closed
         ? (slot.closed_note || 'Sign-ups closed ' + deadlineText(slot))
@@ -92,7 +100,8 @@
     if (claims.length && dayOpen) list.append(link('link', 'Cancel my sign-up', issueUrl('cancel', slot)));
     body.append(list);
 
-    if (!dayOpen) body.append(disabledBtn('primary', 'Claim'));
+    if (held) body.append(el('span', 'full-tag', claims.length ? 'Reserved' : 'Held'));
+    else if (!dayOpen) body.append(disabledBtn('primary', 'Claim'));
     else if (closed) body.append(el('span', 'full-tag', 'Closed'));
     else if (left > 0) body.append(link('primary', claims.length ? 'Join' : 'Claim', issueUrl('claim', slot)));
     else body.append(el('span', 'full-tag', 'Full'));

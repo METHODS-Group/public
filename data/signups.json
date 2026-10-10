@@ -116,6 +116,24 @@
       "email": null,
       "issue": 17,
       "created_at": "2026-10-10T15:45:06Z"
+    },
+    {
+      "slot": "wed-0900",
+      "name": "Brendan Keith",
+      "login": "brendankeith",
+      "room": "182 George St",
+      "email": "brendan_keith@brown.edu",
+      "issue": null,
+      "created_at": "2026-10-10T17:30:00Z"
+    },
+    {
+      "slot": "wed-0900",
+      "name": "Rami",
+      "login": "ramimasri",
+      "room": "182 George St",
+      "email": null,
+      "issue": null,
+      "created_at": "2026-10-10T17:30:00Z"
     }
   ]
 }
