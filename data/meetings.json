@@ -7,95 +7,15 @@
     "zoom": "https://brown.zoom.us/my/brendankeith",
     "signup_url": "https://docs.google.com/spreadsheets/d/1jcNUKmm2uvCUYQMNY8rUwx8yA91LiCYYOIfEvkDuJIQ/edit?usp=sharing"
   },
+  "sync": {
+    "channel": "C083Q60ESNS",
+    "channel_last_ts": "1791645094.000000",
+    "sheet_id": "1jcNUKmm2uvCUYQMNY8rUwx8yA91LiCYYOIfEvkDuJIQ",
+    "sheet_tab": "Fall 2026",
+    "precedence": "channel",
+    "last_run": "2026-10-10"
+  },
   "talks": [
-    {
-      "date": "2024-12-11",
-      "presenter": "Rami Masri",
-      "title": "",
-      "abstract": "",
-      "keywords": [],
-      "links": [
-        {
-          "label": "Paper (arXiv:2411.02646)",
-          "url": "https://arxiv.org/abs/2411.02646",
-          "kind": "paper"
-        },
-        {
-          "label": "Announcement",
-          "url": "https://methods-group-hq.slack.com/archives/C083Q60ESNS/p1733437272915879",
-          "kind": "announcement"
-        }
-      ],
-      "status": "past",
-      "term": "2024–25",
-      "note": "Informal discussion of the paper linked below; no formal title or abstract."
-    },
-    {
-      "date": "2025-01-28",
-      "presenter": "Dohyun Kim",
-      "title": "",
-      "abstract": "",
-      "keywords": [],
-      "links": [
-        {
-          "label": "Paper (doi:10.1016/j.cma.2018.02.009)",
-          "url": "https://doi.org/10.1016/j.cma.2018.02.009",
-          "kind": "paper"
-        },
-        {
-          "label": "Announcement",
-          "url": "https://methods-group-hq.slack.com/archives/C083Q60ESNS/p1737493137236889",
-          "kind": "announcement"
-        }
-      ],
-      "status": "past",
-      "term": "2024–25",
-      "note": "Informal discussion of the paper linked below; no formal title or abstract."
-    },
-    {
-      "date": "2025-02-27",
-      "presenter": "Boris Andrews",
-      "title": "",
-      "abstract": "",
-      "keywords": [],
-      "links": [
-        {
-          "label": "Paper (arXiv:2501.11654)",
-          "url": "https://arxiv.org/abs/2501.11654",
-          "kind": "paper"
-        },
-        {
-          "label": "Announcement",
-          "url": "https://methods-group-hq.slack.com/archives/C083Q60ESNS/p1740244341555319",
-          "kind": "announcement"
-        }
-      ],
-      "status": "past",
-      "term": "2024–25",
-      "note": "Visiting speaker. Informal discussion of the paper linked below; no formal title or abstract."
-    },
-    {
-      "date": "2025-04-17",
-      "presenter": "John Papadopoulos",
-      "title": "",
-      "abstract": "",
-      "keywords": [],
-      "links": [
-        {
-          "label": "Paper (doi:10.1007/s00211-024-01438-3)",
-          "url": "https://doi.org/10.1007/s00211-024-01438-3",
-          "kind": "paper"
-        },
-        {
-          "label": "Announcement",
-          "url": "https://methods-group-hq.slack.com/archives/C083Q60ESNS/p1744644358151809",
-          "kind": "announcement"
-        }
-      ],
-      "status": "past",
-      "term": "2024–25",
-      "note": "Informal discussion of the paper linked below; no formal title or abstract."
-    },
     {
       "date": "2025-05-01",
       "presenter": "Three postdoc candidates",
