@@ -143,6 +143,15 @@
       "email": "alexey_izmailov@brown.edu",
       "issue": 18,
       "created_at": "2026-10-11T16:02:59Z"
+    },
+    {
+      "slot": "wed-1630",
+      "name": "Alexey",
+      "login": "alizma",
+      "room": "Room 303 (Brendan's office, 182 George St)",
+      "email": "alexey_izmailov@brown.edu",
+      "issue": 19,
+      "created_at": "2026-10-11T16:12:35Z"
     }
   ]
 }
