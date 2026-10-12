@@ -103,6 +103,9 @@
           "open": false,
           "description": "Room 108, 170 Hope St. No sign-up needed; everyone is welcome to attend.",
           "location": "Room 108, 170 Hope St",
+          "links": [
+            { "label": "Slides", "url": "https://github.com/thomas-surowiec/Brown-APMA-Lecture" }
+          ],
           "link": {
             "label": "Title and abstract on the group meetings page",
             "url": "https://methods-group.github.io/public/meetings/#talk-2026-10-14"

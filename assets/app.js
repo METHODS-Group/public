@@ -37,6 +37,18 @@
     a.href = href; a.target = '_blank'; a.rel = 'noopener';
     return a;
   }
+  // Optional `links` on any slot ([{label, url}]): small "Label ↗" links, new tab.
+  function slotLinks(slot) {
+    if (!slot.links || !slot.links.length) return null;
+    var row = el('div', 'slot-links');
+    slot.links.forEach(function (l) {
+      if (!l || !l.url) return;
+      var a = el('a', 'slot-link', (l.label || l.url) + ' \u2197');
+      a.href = l.url; a.target = '_blank'; a.rel = 'noopener';
+      row.append(a);
+    });
+    return row.childNodes.length ? row : null;
+  }
   function disabledBtn(cls, text) {
     var b = el('button', 'btn ' + cls, text);
     b.type = 'button'; b.disabled = true;
@@ -91,6 +103,7 @@
       var row2 = el('div', 'who'); row2.append(el('span', 'loc', slot.location)); list.append(row2);
     }
     if (held && slot.kind === 'reserved' && slot.description) list.append(el('span', 'free', slot.description));
+    var sl = slotLinks(slot); if (sl) list.append(sl);
     if (claims.length && left > 0 && !closed && !held) list.append(el('span', 'free', left + ' spot left'));
     if (closesAt(slot) != null) {
       list.append(el('span', 'free deadline', closed
@@ -138,6 +151,7 @@
     head.append(left, el('span', 'time', range(slot.start, slot.end)));
     cell.append(head);
     if (slot.description) cell.append(el('span', 'group-empty', slot.description));
+    var gl = slotLinks(slot); if (gl) cell.append(gl);
     if (closesAt(slot) != null) {
       cell.append(el('span', 'group-empty deadline', closed
         ? (slot.closed_note || 'Sign-ups closed ' + deadlineText(slot))
@@ -172,6 +186,7 @@
     var title = (slot.title || slot.label).replace(/^Thomas's talk:\s*/i, '');
     cell.append(el('span', 'kind', 'Presentation'), el('span', 'label', title), el('span', 'time', range(slot.start, slot.end)));
     if (slot.location) cell.append(el('span', 'loc', slot.location));
+    var tl = slotLinks(slot); if (tl) cell.append(tl);
     if (slot.link && slot.link.url) {
       // Cross-link to the talk's entry on the group meetings page (title, abstract, slides); same tab.
       var a = el('a', 'talk-link', slot.link.label || slot.link.url);
