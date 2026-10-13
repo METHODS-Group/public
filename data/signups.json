@@ -160,6 +160,15 @@
       "email": null,
       "issue": 20,
       "created_at": "2026-10-11T17:33:23Z"
+    },
+    {
+      "slot": "wed-1000",
+      "name": "Noe Reyes Rivas",
+      "login": "thatguynoe",
+      "room": "Room 303 (Brendan's office, 182 George St)",
+      "email": "noe_reyes_rivas@brown.edu",
+      "issue": 21,
+      "created_at": "2026-10-13T01:30:59Z"
     }
   ]
 }
