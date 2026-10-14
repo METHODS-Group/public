@@ -29,7 +29,7 @@
       "id": "wed",
       "label": "Wednesday, October 14",
       "date": "2026-10-14",
-      "note": null,
+      "note": "Sign-ups for Wednesday are closed. Existing bookings stand; message Brendan if your plans change.",
       "slots": [
         {
           "id": "wed-0900",
@@ -53,7 +53,10 @@
           "kind": "meeting",
           "capacity": 2,
           "open": true,
-          "description": "30-minute one-on-one with Thomas."
+          "description": "30-minute one-on-one with Thomas.",
+          "closes_at": "2026-10-14T10:20:00-04:00",
+          "closed_note": "Sign-ups closed",
+          "closed_message": "Sign-ups for Wednesday's meetings are closed; message Brendan if you'd still like to meet Thomas"
         },
         {
           "id": "wed-1030",
@@ -64,7 +67,10 @@
           "kind": "meeting",
           "capacity": 2,
           "open": true,
-          "description": "30-minute one-on-one with Thomas."
+          "description": "30-minute one-on-one with Thomas.",
+          "closes_at": "2026-10-14T10:20:00-04:00",
+          "closed_note": "Sign-ups closed",
+          "closed_message": "Sign-ups for Wednesday's meetings are closed; message Brendan if you'd still like to meet Thomas"
         },
         {
           "id": "wed-1100",
@@ -75,7 +81,10 @@
           "kind": "meeting",
           "capacity": 2,
           "open": true,
-          "description": "30-minute one-on-one with Thomas."
+          "description": "30-minute one-on-one with Thomas.",
+          "closes_at": "2026-10-14T10:20:00-04:00",
+          "closed_note": "Sign-ups closed",
+          "closed_message": "Sign-ups for Wednesday's meetings are closed; message Brendan if you'd still like to meet Thomas"
         },
         {
           "id": "wed-lunch",
@@ -133,7 +142,10 @@
           "kind": "meeting",
           "capacity": 2,
           "open": true,
-          "description": "30-minute one-on-one with Thomas."
+          "description": "30-minute one-on-one with Thomas.",
+          "closes_at": "2026-10-14T10:20:00-04:00",
+          "closed_note": "Sign-ups closed",
+          "closed_message": "Sign-ups for Wednesday's meetings are closed; message Brendan if you'd still like to meet Thomas"
         },
         {
           "id": "wed-1600",
@@ -144,7 +156,10 @@
           "kind": "meeting",
           "capacity": 2,
           "open": true,
-          "description": "30-minute one-on-one with Thomas."
+          "description": "30-minute one-on-one with Thomas.",
+          "closes_at": "2026-10-14T10:20:00-04:00",
+          "closed_note": "Sign-ups closed",
+          "closed_message": "Sign-ups for Wednesday's meetings are closed; message Brendan if you'd still like to meet Thomas"
         },
         {
           "id": "wed-1630",
@@ -155,7 +170,10 @@
           "kind": "meeting",
           "capacity": 2,
           "open": true,
-          "description": "30-minute one-on-one with Thomas."
+          "description": "30-minute one-on-one with Thomas.",
+          "closes_at": "2026-10-14T10:20:00-04:00",
+          "closed_note": "Sign-ups closed",
+          "closed_message": "Sign-ups for Wednesday's meetings are closed; message Brendan if you'd still like to meet Thomas"
         }
       ]
     },
@@ -222,25 +240,14 @@
         },
         {
           "id": "thu-lunch",
-          "label": "Thu lunch",
-          "title": "Lunch (details to come)",
+          "label": "Thu lunch with Thomas",
+          "title": "Lunch with Thomas",
           "start": "11:30",
-          "end": "13:00",
+          "end": "13:30",
           "kind": "group",
           "capacity": null,
-          "open": false,
-          "description": "Details to come."
-        },
-        {
-          "id": "thu-1300",
-          "label": "Thu 1:00 pm",
-          "title": "One-on-one with Thomas",
-          "start": "13:00",
-          "end": "13:30",
-          "kind": "meeting",
-          "capacity": 2,
           "open": true,
-          "description": "30-minute one-on-one with Thomas."
+          "description": "Location TBD. Everyone welcome."
         },
         {
           "id": "thu-1330",

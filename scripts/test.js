@@ -21,9 +21,12 @@ function joinBody(slot, name, email) {
   return `### Slot\n\n${slot}\n\n### Your name\n\n${name}\n\n### Email (optional, for a calendar invite)\n\n${email || '_No response_'}`;
 }
 
+// Requests default to a clock reading from before any `closes_at` deadline, so
+// the tests keep passing after the real deadlines; tests about deadlines pass their own `now`.
+const OPEN_TIME = '2026-10-12T09:00:00-04:00';
 let n = 1;
 function req(template, body, login, title) {
-  return { template, fields: parseBody(body), login, number: n++, created_at: '2026-10-08T12:00:00Z', title: title || '' };
+  return { template, fields: parseBody(body), login, number: n++, created_at: '2026-10-08T12:00:00Z', title: title || '', now: OPEN_TIME };
 }
 
 test('parseBody reads issue-form sections and maps _No response_ to null', () => {
@@ -86,16 +89,22 @@ test('second claimant who picks the same room gets no note; a bad room is fine w
   assert.equal(r.signups.claims[1].room, ROOM_303);
 });
 
-test('Thursday slots are open from 9 am; the closed Thursday lunch and the blocked talk are rejected', () => {
+test('Thursday slots are open from 9 am; the two-hour Thursday lunch takes joins; the blocked talk is rejected', () => {
   const s = { claims: [] };
   let r = apply(s, schedule, req('claim', claimBody('thu-0900', 'Ada', ROOM_105), 'ada'));
   assert.ok(r.ok, r.message);
   assert.match(r.message, /Booked: Thu 9:00 am, Room 105/);
   r = apply(s, schedule, req('claim', claimBody('thu-1000', 'Ada', ROOM_105), 'ada'));
   assert.ok(r.ok, r.message);
-  r = apply(s, schedule, req('join', joinBody('thu-lunch', 'Ada'), 'ada'));
-  assert.equal(r.ok, false);
-  assert.match(r.message, /not open yet/);
+  const lunch = schedule.days.flatMap((d) => d.slots).find((s) => s.id === 'thu-lunch');
+  assert.deepEqual([lunch.start, lunch.end, lunch.open, lunch.capacity, lunch.closes_at], ['11:30', '13:30', true, null, undefined]);
+  r = apply(s, schedule, { ...req('join', joinBody('thu-lunch', 'Ada'), 'ada'), now: Date.now() });
+  assert.ok(r.ok, r.message);
+  assert.match(r.message, /Booked: Thu lunch with Thomas\./);
+  // The 1:00 pm one-on-one made way for the longer lunch; one-on-ones resume at 1:30 pm.
+  assert.equal(schedule.days.flatMap((d) => d.slots).some((s) => s.id === 'thu-1300'), false);
+  r = apply(s, schedule, req('claim', claimBody('thu-1330', 'Ada', ROOM_105), 'ada'));
+  assert.ok(r.ok, r.message);
   r = apply(s, schedule, req('claim', claimBody('wed-talk', 'Ada', ROOM_105), 'ada'));
   assert.equal(r.ok, false);
 });
@@ -198,18 +207,53 @@ test('lunch sign-ups close at noon on Tuesday; cancellations still work', () => 
   assert.ok(r.ok, r.message);
 });
 
+test('Wednesday sign-ups closed at 10:20 am ET on Oct 14; bookings stand, Thursday is unaffected', () => {
+  const cutoff = '2026-10-14T10:20:00-04:00';
+  const wed = schedule.days.find((d) => d.id === 'wed');
+  assert.match(wed.note, /Sign-ups for Wednesday are closed/);
+  // Every Wednesday slot either carries the deadline, is reserved/held/blocked, or is the lunch (its own deadline).
+  for (const s of wed.slots) {
+    if (s.kind === 'meeting' && s.open) assert.equal(s.closes_at, cutoff, s.id);
+    else if (s.id === 'wed-lunch') assert.equal(s.closes_at, '2026-10-13T12:00:00-04:00');
+    else assert.equal(s.open, false, s.id);
+  }
+  const signups = JSON.parse(fs.readFileSync(path.join(__dirname, '..', 'data', 'signups.json'), 'utf8'));
+  for (const id of ['wed-1000', 'wed-1030', 'wed-1100', 'wed-1530', 'wed-1600', 'wed-1630']) {
+    // Just before the cutoff a free spot could still be claimed (wed-1000, wed-1100, wed-1630 are full).
+    let r = apply(signups, schedule, { ...req('claim', claimBody(id, 'Ada', ROOM_105), 'ada'), now: '2026-10-14T10:19:59-04:00' });
+    if (signups.claims.filter((c) => c.slot === id).length < 2) assert.ok(r.ok, r.message);
+    else assert.match(r.message, /already full/);
+    // At and after the cutoff every claim is rejected with the Wednesday message and nothing is recorded.
+    for (const now of [cutoff, '2026-10-14T15:00:00-04:00', Date.parse('2026-10-15T09:00:00-04:00')]) {
+      r = apply(signups, schedule, { ...req('claim', claimBody(id, 'Ada', ROOM_105), 'ada'), now });
+      assert.equal(r.ok, false, `${id} at ${now}`);
+      assert.equal(r.message, "Sign-ups for Wednesday's meetings are closed; message Brendan if you'd still like to meet Thomas");
+      assert.equal(r.signups, signups);
+    }
+  }
+  // Existing bookings are untouched and can still be cancelled by their owner.
+  let r = apply(signups, schedule, { ...req('cancel', '### Slot\n\nwed-1530', 'yJesseChen'), now: '2026-10-14T11:00:00-04:00' });
+  assert.ok(r.ok, r.message);
+  assert.equal(r.signups.claims.length, signups.claims.length - 1);
+  // Thursday is still open.
+  r = apply(signups, schedule, { ...req('claim', claimBody('thu-0900', 'Ada', ROOM_105), 'ada'), now: '2026-10-14T11:00:00-04:00' });
+  assert.ok(r.ok, r.message);
+  r = apply(signups, schedule, { ...req('join', joinBody('tue-2100', 'Ada'), 'ada'), now: '2026-10-14T11:00:00-04:00' });
+  assert.ok(r.ok, r.message);
+});
+
 test('closes_at is generic: a meeting slot with a past deadline is rejected with a default message', () => {
   const sched = JSON.parse(JSON.stringify(schedule));
-  const slot = sched.days.flatMap((d) => d.slots).find((s) => s.id === 'wed-1000');
+  const slot = sched.days.flatMap((d) => d.slots).find((s) => s.id === 'thu-0900');
   slot.closes_at = '2026-10-12T09:00:00-04:00';
-  let r = apply({ claims: [] }, sched, { ...req('claim', claimBody('wed-1000', 'Ada', ROOM_105), 'ada'), now: '2026-10-12T08:59:59-04:00' });
+  let r = apply({ claims: [] }, sched, { ...req('claim', claimBody('thu-0900', 'Ada', ROOM_105), 'ada'), now: '2026-10-12T08:59:59-04:00' });
   assert.ok(r.ok, r.message);
-  r = apply({ claims: [] }, sched, { ...req('claim', claimBody('wed-1000', 'Ada', ROOM_105), 'ada'), now: '2026-10-12T09:00:00-04:00' });
+  r = apply({ claims: [] }, sched, { ...req('claim', claimBody('thu-0900', 'Ada', ROOM_105), 'ada'), now: '2026-10-12T09:00:00-04:00' });
   assert.equal(r.ok, false);
-  assert.match(r.message, /Sign-ups for Wed 10:00 am closed at 2026-10-12T09:00:00-04:00; message Brendan/);
+  assert.match(r.message, /Sign-ups for Thu 9:00 am closed at 2026-10-12T09:00:00-04:00; message Brendan/);
   // An unparsable closes_at is ignored rather than locking the slot.
   slot.closes_at = 'noon-ish';
-  r = apply({ claims: [] }, sched, { ...req('claim', claimBody('wed-1000', 'Ada', ROOM_105), 'ada'), now: '2026-10-20T09:00:00-04:00' });
+  r = apply({ claims: [] }, sched, { ...req('claim', claimBody('thu-0900', 'Ada', ROOM_105), 'ada'), now: '2026-10-20T09:00:00-04:00' });
   assert.ok(r.ok, r.message);
 });
 

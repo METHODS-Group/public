@@ -86,7 +86,7 @@
     var list = el('div', 'who-list');
     if (held && slot.title) list.append(el('span', 'label', slot.title));
     if (!claims.length) {
-      list.append(el('span', 'free', held ? slot.note : dayOpen ? 'Open · up to ' + slot.capacity + ' people' : 'Open'));
+      list.append(el('span', 'free', held ? slot.note : closed ? 'No one signed up' : dayOpen ? 'Open · up to ' + slot.capacity + ' people' : 'Open'));
     }
     claims.forEach(function (c) {
       var who = el('div', 'who');
@@ -196,14 +196,19 @@
     return cell;
   }
 
-  function spots(slots, byslot) {
+  // Spots: open meeting capacity; a slot past its `closes_at` deadline has none left.
+  function spots(slots, byslot, now) {
     var open = 0, total = 0;
     slots.forEach(function (s) {
       if (s.kind !== 'meeting' || !s.open || s.capacity == null) return;
       total += s.capacity;
-      open += Math.max(0, s.capacity - (byslot[s.id] || []).length);
+      if (!isClosed(s, now)) open += Math.max(0, s.capacity - (byslot[s.id] || []).length);
     });
     return [open, total];
+  }
+  // A day whose every sign-up slot has passed its deadline (or is held) takes no new sign-ups.
+  function dayClosed(day, now) {
+    return day.slots.every(function (s) { return !s.open || s.kind === 'blocked' || isClosed(s, now); });
   }
 
   // Days whose slots fall in the shared daytime grid share one 30-minute row scale;
@@ -214,7 +219,7 @@
     (signups.claims || []).forEach(function (c) { (byslot[c.slot] = byslot[c.slot] || []).push(c); });
 
     var allSlots = schedule.days.reduce(function (a, d) { return a.concat(d.slots); }, []);
-    var tot = spots(allSlots, byslot);
+    var tot = spots(allSlots, byslot, now);
     var count = document.getElementById('count');
     count.textContent = '';
     count.append(el('b', null, String(tot[0])), document.createTextNode(' of ' + tot[1] + ' spots open'));
@@ -234,10 +239,11 @@
       var wide = timed.indexOf(day) === -1;
       var sec = el('section', 'day' + (dayOpen ? '' : ' closed') + (wide ? ' wide' : ''));
       sec.id = day.id;
-      var ds = spots(day.slots, byslot);
+      var ds = spots(day.slots, byslot, now);
       var head = el('div', 'day-head');
       head.append(el('h2', null, day.label),
-        el('span', null, !dayOpen ? 'Not open yet' : ds[1] ? ds[0] + ' of ' + ds[1] + ' spots open' : 'Everyone welcome'));
+        el('span', null, !dayOpen ? 'Not open yet' : dayClosed(day, now) ? 'Sign-ups closed'
+          : ds[1] ? ds[0] + ' of ' + ds[1] + ' spots open' : 'Everyone welcome'));
       sec.append(head);
       if (day.note) sec.append(el('p', 'closed-note', day.note));
       var grid = el('div', 'grid');
