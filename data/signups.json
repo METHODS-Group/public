@@ -230,6 +230,15 @@
       "email": null,
       "issue": 30,
       "created_at": "2026-10-14T19:39:13Z"
+    },
+    {
+      "slot": "thu-1030",
+      "name": "Ref",
+      "login": "RefBari",
+      "room": "Room 303 (Brendan's office, 182 George St)",
+      "email": "ref_bari@brown.edu",
+      "issue": 31,
+      "created_at": "2026-10-14T19:53:57Z"
     }
   ]
 }
