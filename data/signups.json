@@ -197,6 +197,14 @@
       "email": null,
       "issue": 26,
       "created_at": "2026-10-14T19:17:48Z"
+    },
+    {
+      "slot": "thu-lunch",
+      "name": "Anton Malandii",
+      "login": "tonmalan",
+      "email": "anton_malandii@brown.edu",
+      "issue": 27,
+      "created_at": "2026-10-14T19:32:53Z"
     }
   ]
 }
