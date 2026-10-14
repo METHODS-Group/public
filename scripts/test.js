@@ -86,13 +86,16 @@ test('second claimant who picks the same room gets no note; a bad room is fine w
   assert.equal(r.signups.claims[1].room, ROOM_303);
 });
 
-test('closed Thursday slots and the blocked talk are rejected', () => {
+test('Thursday slots are open from 9 am; the closed Thursday lunch and the blocked talk are rejected', () => {
   const s = { claims: [] };
-  let r = apply(s, schedule, req('claim', claimBody('thu-1000', 'Ada', ROOM_105), 'ada'));
-  assert.equal(r.ok, false);
-  assert.match(r.message, /not open yet/);
+  let r = apply(s, schedule, req('claim', claimBody('thu-0900', 'Ada', ROOM_105), 'ada'));
+  assert.ok(r.ok, r.message);
+  assert.match(r.message, /Booked: Thu 9:00 am, Room 105/);
+  r = apply(s, schedule, req('claim', claimBody('thu-1000', 'Ada', ROOM_105), 'ada'));
+  assert.ok(r.ok, r.message);
   r = apply(s, schedule, req('join', joinBody('thu-lunch', 'Ada'), 'ada'));
   assert.equal(r.ok, false);
+  assert.match(r.message, /not open yet/);
   r = apply(s, schedule, req('claim', claimBody('wed-talk', 'Ada', ROOM_105), 'ada'));
   assert.equal(r.ok, false);
 });
