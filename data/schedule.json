@@ -184,26 +184,15 @@
       "note": null,
       "slots": [
         {
-          "id": "thu-0900",
-          "label": "Thu 9:00 am",
-          "title": "One-on-one with Thomas",
+          "id": "thu-0900-talk",
+          "label": "Thu talk: presentation by David (Thomas's student)",
+          "title": "Presentation by David (Thomas's student)",
           "start": "09:00",
-          "end": "09:30",
-          "kind": "meeting",
-          "capacity": 2,
-          "open": true,
-          "description": "30-minute one-on-one with Thomas."
-        },
-        {
-          "id": "thu-0930",
-          "label": "Thu 9:30 am",
-          "title": "One-on-one with Thomas",
-          "start": "09:30",
           "end": "10:00",
-          "kind": "meeting",
-          "capacity": 2,
-          "open": true,
-          "description": "30-minute one-on-one with Thomas."
+          "kind": "blocked",
+          "capacity": null,
+          "open": false,
+          "description": "Talk by Thomas's student David. No sign-up needed; everyone is welcome to attend."
         },
         {
           "id": "thu-1000",
