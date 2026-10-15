@@ -192,7 +192,10 @@
           "kind": "blocked",
           "capacity": null,
           "open": false,
-          "description": "Talk by Thomas's student David. No sign-up needed; everyone is welcome to attend."
+          "description": "Talk by Thomas's student David. No sign-up needed; everyone is welcome to attend.",
+          "links": [
+            { "label": "Zoom", "url": "https://brown.zoom.us/my/brendankeith" }
+          ]
         },
         {
           "id": "thu-1000",
