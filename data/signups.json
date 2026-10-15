@@ -264,6 +264,15 @@
       "email": "zhiwei_gao@brown.edu",
       "issue": 34,
       "created_at": "2026-10-15T12:47:24Z"
+    },
+    {
+      "slot": "thu-1000",
+      "name": "Haojun",
+      "login": "Haojun-D1r4c-Qin",
+      "room": "Room 303 (Brendan's office, 182 George St)",
+      "email": "haojun_qin@brown.edu",
+      "issue": 35,
+      "created_at": "2026-10-15T13:46:26Z"
     }
   ]
 }
