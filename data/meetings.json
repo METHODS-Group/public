@@ -1,5 +1,5 @@
 {
-  "updated": "2026-10-10",
+  "updated": "2026-10-15",
   "semester": {
     "name": "Fall 2026",
     "when": "Wednesdays, 1:00–3:00 pm ET",
@@ -9,11 +9,11 @@
   },
   "sync": {
     "channel": "C083Q60ESNS",
-    "channel_last_ts": "1791645094.000000",
+    "channel_last_ts": "1791835644.455489",
     "sheet_id": "1jcNUKmm2uvCUYQMNY8rUwx8yA91LiCYYOIfEvkDuJIQ",
     "sheet_tab": "Fall 2026",
     "precedence": "channel",
-    "last_run": "2026-10-10"
+    "last_run": "2026-10-15"
   },
   "talks": [
     {
@@ -498,14 +498,24 @@
       "keywords": [],
       "links": [
         {
+          "label": "Slides source (GitHub)",
+          "url": "https://github.com/thomas-surowiec/Brown-APMA-Lecture",
+          "kind": "code"
+        },
+        {
           "label": "Sign up to meet Thomas (visit page)",
           "url": "https://methods-group.github.io/public/",
           "kind": "signup"
+        },
+        {
+          "label": "Announcement (slides link)",
+          "url": "https://methods-group-hq.slack.com/archives/C083Q60ESNS/p1791835086860519",
+          "kind": "announcement"
         }
       ],
-      "status": "upcoming",
+      "status": "past",
       "title_source": "data/schedule.json (visit sign-up sheet, slot wed-talk); the sign-up sheet row has no title yet",
-      "note": "Visiting speaker. Everyone is welcome at the talk; use the visit page to book one-on-one time, lunch, or Tuesday drinks."
+      "note": "Visiting speaker. Slides are in the speaker’s GitHub repository and may have been updated before the talk."
     },
     {
       "date": "2026-10-21",
