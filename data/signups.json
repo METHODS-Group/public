@@ -273,6 +273,14 @@
       "email": "haojun_qin@brown.edu",
       "issue": 35,
       "created_at": "2026-10-15T13:46:26Z"
+    },
+    {
+      "slot": "thu-lunch",
+      "name": "Alexey",
+      "login": "alizma",
+      "email": "alexey_izmailov@brown.edu",
+      "issue": 36,
+      "created_at": "2026-10-15T14:07:18Z"
     }
   ]
 }
