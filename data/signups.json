@@ -255,6 +255,15 @@
       "email": "ref_bari@brown.edu",
       "issue": 33,
       "created_at": "2026-10-15T07:42:10Z"
+    },
+    {
+      "slot": "thu-1000",
+      "name": "Zhiwei Gao",
+      "login": "gaozhiweiPHD",
+      "room": "Room 303 (Brendan's office, 182 George St)",
+      "email": "zhiwei_gao@brown.edu",
+      "issue": 34,
+      "created_at": "2026-10-15T12:47:24Z"
     }
   ]
 }
