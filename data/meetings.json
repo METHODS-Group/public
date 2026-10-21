@@ -1,5 +1,5 @@
 {
-  "updated": "2026-10-15",
+  "updated": "2026-10-21",
   "semester": {
     "name": "Fall 2026",
     "when": "Wednesdays, 1:00–3:00 pm ET",
@@ -9,11 +9,11 @@
   },
   "sync": {
     "channel": "C083Q60ESNS",
-    "channel_last_ts": "1791835644.455489",
+    "channel_last_ts": "1792537167.230389",
     "sheet_id": "1jcNUKmm2uvCUYQMNY8rUwx8yA91LiCYYOIfEvkDuJIQ",
     "sheet_tab": "Fall 2026",
     "precedence": "channel",
-    "last_run": "2026-10-15"
+    "last_run": "2026-10-21"
   },
   "talks": [
     {
@@ -520,14 +520,19 @@
     {
       "date": "2026-10-21",
       "presenter": "Zichen Lu",
-      "title": "",
-      "abstract": "",
+      "title": "A Posteriori Error Analysis for Obstacle Problem Using Proximal Galerkin Method",
+      "abstract": "We present a posteriori error estimates for the obstacle problem using the proximal Galerkin method. The estimates separate optimization error from spatial discretization error, helping us decide when to stop iterating and where to refine the mesh. We establish computable upper bounds for the errors in both the primal solution and the Lagrange multiplier. The analysis covers conforming finite element and symmetric interior penalty discontinuous Galerkin discretizations. Finally, we show how these estimates guide an adaptive algorithm and present numerical results on mesh refinement patterns, error reduction, and computational cost.",
       "keywords": [
         "Proximal Galerkin"
       ],
-      "links": [],
-      "status": "upcoming",
-      "note": "Title and abstract to be announced"
+      "links": [
+        {
+          "label": "Announcement",
+          "url": "https://methods-group-hq.slack.com/archives/C083Q60ESNS/p1792537167230389",
+          "kind": "announcement"
+        }
+      ],
+      "status": "upcoming"
     },
     {
       "date": "2026-10-28",
