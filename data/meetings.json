@@ -1,5 +1,5 @@
 {
-  "updated": "2026-10-21",
+  "updated": "2026-10-22",
   "semester": {
     "name": "Fall 2026",
     "when": "Wednesdays, 1:00–3:00 pm ET",
@@ -13,7 +13,7 @@
     "sheet_id": "1jcNUKmm2uvCUYQMNY8rUwx8yA91LiCYYOIfEvkDuJIQ",
     "sheet_tab": "Fall 2026",
     "precedence": "channel",
-    "last_run": "2026-10-21"
+    "last_run": "2026-10-22"
   },
   "talks": [
     {
@@ -532,7 +532,7 @@
           "kind": "announcement"
         }
       ],
-      "status": "upcoming"
+      "status": "past"
     },
     {
       "date": "2026-10-28",
