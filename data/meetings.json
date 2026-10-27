@@ -1,5 +1,5 @@
 {
-  "updated": "2026-10-22",
+  "updated": "2026-10-27",
   "semester": {
     "name": "Fall 2026",
     "when": "Wednesdays, 1:00–3:00 pm ET",
@@ -9,11 +9,11 @@
   },
   "sync": {
     "channel": "C083Q60ESNS",
-    "channel_last_ts": "1792537167.230389",
+    "channel_last_ts": "1793140290.983599",
     "sheet_id": "1jcNUKmm2uvCUYQMNY8rUwx8yA91LiCYYOIfEvkDuJIQ",
     "sheet_tab": "Fall 2026",
     "precedence": "channel",
-    "last_run": "2026-10-22"
+    "last_run": "2026-10-27"
   },
   "talks": [
     {
@@ -537,17 +537,22 @@
     {
       "date": "2026-10-28",
       "presenter": "Dohyun Kim",
-      "title": "Riemannian optimization",
-      "abstract": "",
+      "title": "Riemannian Optimization and Proximal Galerkin",
+      "abstract": "Many problems in continuum mechanics and geometric analysis, such as harmonic maps, incompressible elasticity, and Cosserat models, involve pointwise manifold constraints. We begin with the basics of Riemannian optimization in finite dimensions, including tangent spaces, metrics, retractions, and Riemannian gradients and Hessians, and review the Riemannian trust-region method. We then extend this framework to finite element discretizations, where the pointwise constraint is enforced weakly at the nodes, and examine the difficulties that arise under mesh refinement. In the second part, we formulate a Riemannian gradient flow at the continuous level (with some caveats). Discretizing this flow with the proximal Galerkin method yields a mixed scheme that parallels proximal Galerkin for bound constraints. We conclude with numerical results and open questions for discussion.",
       "keywords": [
         "Finite Elements",
         "Proximal Galerkin",
         "Optimization",
         "Numerical Analysis"
       ],
-      "links": [],
-      "status": "upcoming",
-      "note": "Abstract to be announced"
+      "links": [
+        {
+          "label": "Announcement",
+          "url": "https://methods-group-hq.slack.com/archives/C083Q60ESNS/p1793140290983599",
+          "kind": "announcement"
+        }
+      ],
+      "status": "upcoming"
     },
     {
       "date": "2026-11-04",
