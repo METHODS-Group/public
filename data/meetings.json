@@ -1,5 +1,5 @@
 {
-  "updated": "2026-10-29",
+  "updated": "2026-11-03",
   "semester": {
     "name": "Fall 2026",
     "when": "Wednesdays, 1:00–3:00 pm ET",
@@ -9,11 +9,11 @@
   },
   "sync": {
     "channel": "C083Q60ESNS",
-    "channel_last_ts": "1793140290.983599",
+    "channel_last_ts": "1793728234.985979",
     "sheet_id": "1jcNUKmm2uvCUYQMNY8rUwx8yA91LiCYYOIfEvkDuJIQ",
     "sheet_tab": "Fall 2026",
     "precedence": "channel",
-    "last_run": "2026-10-29"
+    "last_run": "2026-11-03"
   },
   "talks": [
     {
@@ -557,14 +557,20 @@
     {
       "date": "2026-11-04",
       "presenter": "Yiming Yu",
-      "title": "",
-      "abstract": "",
+      "title": "Topology optimization with attenuation constraints for inspectability",
+      "abstract": "We present a density-based topology optimization formulation that incorporates direction-dependent attenuation constraints to enhance design inspectability using X-ray computed tomography. We introduce a novel constraint-aggregation approach that couples local attenuation values to bounded slack design variables via a squared-error measure. This enables precise control of maximum material thickness with a single aggregate constraint for each imaging direction. Attenuation is evaluated using either explicit ray tracing or an advection-based finite element model. The advection-based model accommodates both parallel- and fan-beam geometries, leverages existing finite element discretization infrastructure, and scales on large parallel computing systems. The proposed bound-constraint formulation achieves tighter control of maximum thickness than standard Kreisselmeier-Steinhauser or p-norm formulations. PDE filtering and robust density projection establish a minimum design length scale. Adjoint-based sensitivity analysis facilitates gradient-based design optimization. Large-scale two- and three-dimensional examples illustrate how attenuation bounds, x-ray beam geometry, and the number of imaging directions affect material distribution and optimized topology.",
       "keywords": [
         "Optimization"
       ],
-      "links": [],
+      "links": [
+        {
+          "label": "Announcement",
+          "url": "https://methods-group-hq.slack.com/archives/C083Q60ESNS/p1793728234985979",
+          "kind": "announcement"
+        }
+      ],
       "status": "upcoming",
-      "note": "Title and abstract to be announced"
+      "title_source": "channel"
     },
     {
       "date": "2026-11-11",
