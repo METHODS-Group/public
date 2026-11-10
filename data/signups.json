@@ -1,3 +1,13 @@
 {
-  "claims": []
+  "claims": [
+    {
+      "slot": "dec07-1",
+      "name": "Anurag Rao",
+      "login": "AnuragRao1",
+      "title": "Level Set Method for Mean Curvature",
+      "description": "We will apply the Level Set method developed by Sethian and Osher to problems of Mean Curvature.",
+      "issue": 37,
+      "created_at": "2026-11-10T23:32:38Z"
+    }
+  ]
 }
