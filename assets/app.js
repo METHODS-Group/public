@@ -17,6 +17,9 @@
   }
 
   var repo = repoInfo();
+  // A schedule with `"archived": true` is a read-only record: every slot shows as
+  // closed and no Claim, Join, or Cancel links are drawn.
+  var ARCHIVED = false;
   var issuesBase = 'https://github.com/' + repo.owner + '/' + repo.repo + '/issues';
 
   function issueUrl(template, slot) {
@@ -110,7 +113,7 @@
         ? (slot.closed_note || 'Sign-ups closed ' + deadlineText(slot))
         : (slot.closes_note || 'Sign-ups close ' + deadlineText(slot))));
     }
-    if (claims.length && dayOpen) list.append(link('link', 'Cancel my sign-up', issueUrl('cancel', slot)));
+    if (claims.length && dayOpen && !ARCHIVED) list.append(link('link', 'Cancel my sign-up', issueUrl('cancel', slot)));
     body.append(list);
 
     if (held) body.append(el('span', 'full-tag', claims.length ? 'Reserved' : 'Held'));
@@ -130,7 +133,7 @@
     var t = Date.parse(slot.closes_at);
     return isNaN(t) ? null : t;
   }
-  function isClosed(slot, now) { var t = closesAt(slot); return t != null && now >= t; }
+  function isClosed(slot, now) { var t = closesAt(slot); return ARCHIVED || (t != null && now >= t); }
   function deadlineText(slot) {
     return new Date(closesAt(slot)).toLocaleString([], { weekday: 'long', month: 'short', day: 'numeric', hour: 'numeric', minute: '2-digit' });
   }
@@ -171,7 +174,7 @@
       ? claims.length + (claims.length === 1 ? ' person' : ' people') + ' going'
       : closed ? 'No one signed up.' : 'No one yet. Join if you’d like to come.'));
     var btns = el('div', 'btns');
-    if (claims.length && dayOpen) btns.append(link('link', 'Cancel my sign-up', issueUrl('cancel', slot)));
+    if (claims.length && dayOpen && !ARCHIVED) btns.append(link('link', 'Cancel my sign-up', issueUrl('cancel', slot)));
     if (closed) btns.append(el('span', 'full-tag', 'Closed'));
     else btns.append(dayOpen ? link('primary', 'Join', issueUrl('join', slot)) : disabledBtn('primary', 'Join'));
     foot.append(btns);
@@ -215,6 +218,7 @@
   // a day with only evening events gets a single wide row above them.
   function render(schedule, signups) {
     var now = Date.now();
+    ARCHIVED = !!schedule.archived;
     var byslot = {};
     (signups.claims || []).forEach(function (c) { (byslot[c.slot] = byslot[c.slot] || []).push(c); });
 
@@ -222,7 +226,12 @@
     var tot = spots(allSlots, byslot, now);
     var count = document.getElementById('count');
     count.textContent = '';
-    count.append(el('b', null, String(tot[0])), document.createTextNode(' of ' + tot[1] + ' spots open'));
+    if (ARCHIVED) {
+      var n = (signups.claims || []).length;
+      count.append(el('b', null, String(n)), document.createTextNode(n === 1 ? ' sign-up' : ' sign-ups'));
+    } else {
+      count.append(el('b', null, String(tot[0])), document.createTextNode(' of ' + tot[1] + ' spots open'));
+    }
 
     var timed = schedule.days.filter(function (d) { return d.slots.some(function (s) { return s.end; }); });
     var dayStart = Infinity, dayEnd = 0;
@@ -281,14 +290,17 @@
     return Promise.all([fetchJson('data/schedule.json'), fetchJson('data/signups.json')])
       .then(function (res) {
         render(res[0], res[1]);
-        setStatus('live', 'Updated ' + new Date().toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' }) + ' · refresh to see new sign-ups');
+        if (ARCHIVED) setStatus('live', 'Archived · sign-ups closed');
+        else setStatus('live', 'Updated ' + new Date().toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' }) + ' · refresh to see new sign-ups');
       })
       .catch(function (err) {
         setStatus('off', 'Could not load the sign-ups (' + err.message + '). Try Refresh.');
       });
   }
 
-  document.getElementById('my-issues').href = issuesBase + '?q=' + encodeURIComponent('is:issue author:@me');
-  document.getElementById('refresh').addEventListener('click', load);
+  var mine = document.getElementById('my-issues');
+  if (mine) mine.href = issuesBase + '?q=' + encodeURIComponent('is:issue author:@me');
+  var refresh = document.getElementById('refresh');
+  if (refresh) refresh.addEventListener('click', load);
   load();
 })();

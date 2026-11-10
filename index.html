@@ -3,44 +3,59 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Meet with Thomas Surowiec</title>
-<meta name="description" content="Sign up for a one-on-one, lunch, or an evening out with Thomas Surowiec during his visit to the METHODS Group, October 13 to 15, 2026.">
+<title>APMA 2570B Project Presentations &middot; Sign up</title>
+<meta name="description" content="Sign up for a course project presentation in APMA 2570B, Finite Element Methods for Nonlinear Problems (Brown University, Fall 2026). Presentations are in class on November 23, November 30, and December 7.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,500;8..60,600&family=Atkinson+Hyperlegible:wght@400;700&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.19.1/dist/katex.min.css" integrity="sha384-WwGtaC6ywCHxA5cstpj/3+xIZvTez8dq2IcBQaXRkenHZ7FVVq1ZROtURwfbtTlG" crossorigin="anonymous">
 <link rel="stylesheet" href="assets/style.css">
+<link rel="stylesheet" href="assets/presentations.css">
 </head>
 <body>
 <div class="wrap">
   <header>
-    <div class="eyebrow">Campus visit &middot; Tue Oct 13 &ndash; Thu Oct 15, 2026</div>
-    <h1>Meet with Thomas Surowiec</h1>
-    <p class="sub">For everyone in the METHODS Group. 30-minute slots, Eastern Time. Press <strong>Claim</strong> (or <strong>Join</strong>) to open a pre-filled GitHub issue form; submit it and your name appears here within about a minute.</p>
-    <p class="where-line"><span class="bar-label">Where</span> Meetings at 182 George St &middot; Room 105 (Thomas&rsquo;s visiting scholar office) or Room 303 (Brendan&rsquo;s office). Whoever books a slot first picks the room. Thomas&rsquo;s talk is in Room 108, 170 Hope St.</p>
+    <div class="eyebrow">APMA 2570B &middot; Fall 2026 &middot; Course project presentations</div>
+    <h1>Sign up to present your project</h1>
+    <p class="sub">Each course project ends with a one-hour lecture to the class. Pick a slot and press <strong>Sign up</strong> to open a pre-filled GitHub issue form, then enter your name, the title of your presentation, and a brief description. Submit it and your entry appears here within about a minute.</p>
+    <p class="where-line"><span class="bar-label">When &amp; where</span> In class, Mondays 3:00&ndash;5:30 pm &middot; Rockefeller Library A9</p>
   </header>
 
   <div class="bar">
     <div class="fields">
       <div class="field">
-        <span class="bar-label">Your sign-ups</span>
+        <span class="bar-label">Your sign-up</span>
         <div class="btns">
-          <a id="my-issues" class="btn ghost" href="#" target="_blank" rel="noopener">Open your sign-up issues</a>
+          <a id="my-issues" class="btn ghost" href="https://github.com/METHODS-Group/public/issues" target="_blank" rel="noopener">Open your sign-up issues</a>
           <button id="refresh" type="button" class="btn ghost">Refresh</button>
         </div>
       </div>
     </div>
     <div class="tally">
-      <div class="count" id="count"><b>&ndash;</b> spots open</div>
+      <div class="count" id="count"><b>&ndash;</b> slots open</div>
       <div class="status" id="status" data-state="wait" aria-live="polite"><span class="dot"></span><span id="status-text">Loading the schedule&hellip;</span></div>
     </div>
   </div>
 
-  <p class="notice" id="notice">You need to be signed in to GitHub to sign up. Changed your mind? Use <em>Cancel my sign-up</em> next to your name.</p>
+  <p class="notice" id="notice">Agree on your topic and its scope with Brendan before you sign up. One slot per person, first come, first served. You need to be signed in to GitHub. Each day&rsquo;s sign-ups close when that class starts.</p>
 
-  <div class="days" id="days"></div>
+  <noscript><p class="notice">This page needs JavaScript to show the schedule. The data is in <a href="data/signups.json">data/signups.json</a>.</p></noscript>
 
-  <p class="foot">Adding your email is optional. It&rsquo;s used only for a calendar invite. Up to two people can share a meeting slot. Please take one slot per person. Lunch and the Tuesday evening outing are open to everyone and don&rsquo;t use up your slot. Names, GitHub logins, and emails (if entered) are stored in this public repository and are visible to anyone. Something wrong? Open an issue or edit <code>data/signups.json</code> in the repository.</p>
+  <div class="pdays" id="days" aria-live="polite"></div>
+
+  <section class="info" aria-labelledby="about-heading">
+    <h2 id="about-heading" class="bar-label">About the presentation</h2>
+    <ul class="about">
+      <li><strong>Topic.</strong> A single numerical method for nonlinear problems that you have studied beyond the course material, such as the semi-smooth Newton method, the Gauss&ndash;Newton method, or the proximal Galerkin method, or a topic you propose.</li>
+      <li><strong>The lecture.</strong> About an hour, roughly half the class period. Motivate the problem, derive the method, analyze it (present one or two key proofs), describe your implementation in a finite element library, and show numerical results that verify the theory.</li>
+      <li><strong>Before you sign up.</strong> Meet with Brendan to select your topic and fix the scope of the project: office hours Wednesdays 3:00&ndash;4:00 pm, 182 George St, Room 303, or by appointment.</li>
+    </ul>
+  </section>
+
+  <p class="foot">Your name, GitHub login, title, and description are stored in this <a href="https://github.com/METHODS-Group/public">public repository</a> and are visible to anyone, so enter your name as you would like it shown. To change your title or description, use <em>Edit my sign-up</em>; to give up your slot, use <em>Cancel my sign-up</em>. Something wrong? Email Brendan.</p>
 </div>
-<script src="assets/app.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.19.1/dist/katex.min.js" integrity="sha384-a1WQdjRj162i159OYq041X6I4K8NenkrI09LlPmiHg0YOb7CR+wJOraXwK9abpnE" crossorigin="anonymous"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.19.1/dist/contrib/auto-render.min.js" integrity="sha384-bjyGPfbij8/NDKJhSGZNP/khQVgtHUE5exjm4Ydllo42FwIgYsdLO2lXGmRBf5Mz" crossorigin="anonymous"></script>
+<script defer src="assets/presentations.js"></script>
 </body>
 </html>

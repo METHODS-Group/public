@@ -1,0 +1,35 @@
+name: Sign up to present (APMA 2570B)
+description: Take a course project presentation slot. Start from the sign-up page so the slot is filled in for you.
+title: "Present: "
+labels: [present]
+body:
+  - type: markdown
+    attributes:
+      value: Everything you enter here appears on the public sign-up page. You can change it later with **Edit my sign-up** on that page.
+  - type: input
+    id: slot
+    attributes:
+      label: Slot
+      description: Filled in from the sign-up page; leave it as is
+    validations:
+      required: true
+  - type: input
+    id: name
+    attributes:
+      label: Your name
+      description: As you would like it shown on the sign-up page
+    validations:
+      required: true
+  - type: input
+    id: talk_title
+    attributes:
+      label: Presentation title
+    validations:
+      required: true
+  - type: textarea
+    id: description
+    attributes:
+      label: Brief description
+      description: A few sentences on the method and the problem you will apply it to. Math in $...$ is typeset on the page.
+    validations:
+      required: true

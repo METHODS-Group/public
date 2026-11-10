@@ -1,0 +1,281 @@
+{
+  "visitor": "Thomas Surowiec",
+  "archived": true,
+  "timezone": "America/New_York",
+  "rooms": [
+    "Room 105 (Thomas's visiting scholar office, 182 George St)",
+    "Room 303 (Brendan's office, 182 George St)"
+  ],
+  "days": [
+    {
+      "id": "tue",
+      "label": "Tuesday, October 13",
+      "date": "2026-10-13",
+      "note": null,
+      "slots": [
+        {
+          "id": "tue-2100",
+          "label": "Tue 9:00 pm, late dinner, a snack, or an ice cold beer with Thomas",
+          "title": "Late dinner, a snack, or an ice cold beer with Thomas 🍺",
+          "start": "21:00",
+          "end": null,
+          "kind": "group",
+          "capacity": null,
+          "open": true,
+          "description": "Location TBD. Everyone welcome."
+        }
+      ]
+    },
+    {
+      "id": "wed",
+      "label": "Wednesday, October 14",
+      "date": "2026-10-14",
+      "note": "Sign-ups for Wednesday are closed. Existing bookings stand; message Brendan if your plans change.",
+      "slots": [
+        {
+          "id": "wed-0900",
+          "label": "Wed 9:00 am, arrival",
+          "title": "Arrival at the Division of Applied Mathematics",
+          "start": "09:00",
+          "end": "10:00",
+          "kind": "reserved",
+          "capacity": 2,
+          "open": false,
+          "description": "Thomas arrives, collects his office key, and gets his ID card.",
+          "location": "182 George St",
+          "note": "Reserved"
+        },
+        {
+          "id": "wed-1000",
+          "label": "Wed 10:00 am",
+          "title": "One-on-one with Thomas",
+          "start": "10:00",
+          "end": "10:30",
+          "kind": "meeting",
+          "capacity": 2,
+          "open": true,
+          "description": "30-minute one-on-one with Thomas.",
+          "closes_at": "2026-10-14T10:20:00-04:00",
+          "closed_note": "Sign-ups closed",
+          "closed_message": "Sign-ups for Wednesday's meetings are closed; message Brendan if you'd still like to meet Thomas"
+        },
+        {
+          "id": "wed-1030",
+          "label": "Wed 10:30 am",
+          "title": "One-on-one with Thomas",
+          "start": "10:30",
+          "end": "11:00",
+          "kind": "meeting",
+          "capacity": 2,
+          "open": true,
+          "description": "30-minute one-on-one with Thomas.",
+          "closes_at": "2026-10-14T10:20:00-04:00",
+          "closed_note": "Sign-ups closed",
+          "closed_message": "Sign-ups for Wednesday's meetings are closed; message Brendan if you'd still like to meet Thomas"
+        },
+        {
+          "id": "wed-1100",
+          "label": "Wed 11:00 am",
+          "title": "One-on-one with Thomas",
+          "start": "11:00",
+          "end": "11:30",
+          "kind": "meeting",
+          "capacity": 2,
+          "open": true,
+          "description": "30-minute one-on-one with Thomas.",
+          "closes_at": "2026-10-14T10:20:00-04:00",
+          "closed_note": "Sign-ups closed",
+          "closed_message": "Sign-ups for Wednesday's meetings are closed; message Brendan if you'd still like to meet Thomas"
+        },
+        {
+          "id": "wed-lunch",
+          "label": "Wed lunch with Thomas",
+          "title": "Lunch with Thomas",
+          "start": "11:30",
+          "end": "13:00",
+          "kind": "group",
+          "capacity": null,
+          "open": true,
+          "description": "Location TBD. Everyone welcome.",
+          "closes_at": "2026-10-13T12:00:00-04:00",
+          "closes_note": "Sign-ups close Tuesday, Oct 13 at noon ET so we can book a table",
+          "closed_note": "Sign-ups closed Tuesday at noon so a table could be booked",
+          "closed_message": "Lunch sign-ups closed at noon on Tuesday so a table could be booked; message Brendan if you'd still like to come"
+        },
+        {
+          "id": "wed-talk",
+          "label": "Wed talk: PDE-Constrained Optimization",
+          "title": "Thomas's talk: PDE-Constrained Optimization",
+          "start": "13:00",
+          "end": "15:00",
+          "kind": "blocked",
+          "capacity": null,
+          "open": false,
+          "description": "Room 108, 170 Hope St. No sign-up needed; everyone is welcome to attend.",
+          "location": "Room 108, 170 Hope St",
+          "links": [
+            { "label": "Slides", "url": "https://github.com/thomas-surowiec/Brown-APMA-Lecture" }
+          ],
+          "link": {
+            "label": "Title and abstract on the group meetings page",
+            "url": "https://methods-group.github.io/public/meetings/#talk-2026-10-14"
+          }
+        },
+        {
+          "id": "wed-1500",
+          "label": "Wed 3:00 pm",
+          "title": "One-on-one with Thomas",
+          "start": "15:00",
+          "end": "15:30",
+          "kind": "meeting",
+          "capacity": 2,
+          "open": false,
+          "description": "30-minute one-on-one with Thomas.",
+          "note": "Temporarily reserved",
+          "closed_message": "Wed 3:00 pm is temporarily reserved; pick another slot on the sign-up page"
+        },
+        {
+          "id": "wed-1530",
+          "label": "Wed 3:30 pm",
+          "title": "One-on-one with Thomas",
+          "start": "15:30",
+          "end": "16:00",
+          "kind": "meeting",
+          "capacity": 2,
+          "open": true,
+          "description": "30-minute one-on-one with Thomas.",
+          "closes_at": "2026-10-14T10:20:00-04:00",
+          "closed_note": "Sign-ups closed",
+          "closed_message": "Sign-ups for Wednesday's meetings are closed; message Brendan if you'd still like to meet Thomas"
+        },
+        {
+          "id": "wed-1600",
+          "label": "Wed 4:00 pm",
+          "title": "One-on-one with Thomas",
+          "start": "16:00",
+          "end": "16:30",
+          "kind": "meeting",
+          "capacity": 2,
+          "open": true,
+          "description": "30-minute one-on-one with Thomas.",
+          "closes_at": "2026-10-14T10:20:00-04:00",
+          "closed_note": "Sign-ups closed",
+          "closed_message": "Sign-ups for Wednesday's meetings are closed; message Brendan if you'd still like to meet Thomas"
+        },
+        {
+          "id": "wed-1630",
+          "label": "Wed 4:30 pm",
+          "title": "One-on-one with Thomas",
+          "start": "16:30",
+          "end": "17:00",
+          "kind": "meeting",
+          "capacity": 2,
+          "open": true,
+          "description": "30-minute one-on-one with Thomas.",
+          "closes_at": "2026-10-14T10:20:00-04:00",
+          "closed_note": "Sign-ups closed",
+          "closed_message": "Sign-ups for Wednesday's meetings are closed; message Brendan if you'd still like to meet Thomas"
+        }
+      ]
+    },
+    {
+      "id": "thu",
+      "label": "Thursday, October 15",
+      "date": "2026-10-15",
+      "note": null,
+      "slots": [
+        {
+          "id": "thu-0900-talk",
+          "label": "Thu talk: presentation by David (Thomas's student)",
+          "title": "Presentation by David (Thomas's student)",
+          "start": "09:00",
+          "end": "10:00",
+          "kind": "blocked",
+          "capacity": null,
+          "open": false,
+          "description": "Talk by Thomas's student David. No sign-up needed; everyone is welcome to attend.",
+          "links": [
+            { "label": "Zoom", "url": "https://brown.zoom.us/my/brendankeith" }
+          ]
+        },
+        {
+          "id": "thu-1000",
+          "label": "Thu 10:00 am",
+          "title": "One-on-one with Thomas",
+          "start": "10:00",
+          "end": "10:30",
+          "kind": "meeting",
+          "capacity": 2,
+          "open": true,
+          "description": "30-minute one-on-one with Thomas."
+        },
+        {
+          "id": "thu-1030",
+          "label": "Thu 10:30 am",
+          "title": "One-on-one with Thomas",
+          "start": "10:30",
+          "end": "11:00",
+          "kind": "meeting",
+          "capacity": 2,
+          "open": true,
+          "description": "30-minute one-on-one with Thomas."
+        },
+        {
+          "id": "thu-1100",
+          "label": "Thu 11:00 am",
+          "title": "One-on-one with Thomas",
+          "start": "11:00",
+          "end": "11:30",
+          "kind": "meeting",
+          "capacity": 2,
+          "open": true,
+          "description": "30-minute one-on-one with Thomas."
+        },
+        {
+          "id": "thu-lunch",
+          "label": "Thu lunch with Thomas",
+          "title": "Lunch with Thomas",
+          "start": "11:30",
+          "end": "13:30",
+          "kind": "group",
+          "capacity": null,
+          "open": true,
+          "description": "Location TBD. Everyone welcome."
+        },
+        {
+          "id": "thu-1330",
+          "label": "Thu 1:30 pm",
+          "title": "One-on-one with Thomas",
+          "start": "13:30",
+          "end": "14:00",
+          "kind": "meeting",
+          "capacity": 2,
+          "open": true,
+          "description": "30-minute one-on-one with Thomas."
+        },
+        {
+          "id": "thu-1400",
+          "label": "Thu 2:00 pm",
+          "title": "One-on-one with Thomas",
+          "start": "14:00",
+          "end": "14:30",
+          "kind": "meeting",
+          "capacity": 2,
+          "open": true,
+          "description": "30-minute one-on-one with Thomas."
+        },
+        {
+          "id": "thu-1430",
+          "label": "Thu 2:30 pm",
+          "title": "One-on-one with Thomas",
+          "start": "14:30",
+          "end": "15:00",
+          "kind": "meeting",
+          "capacity": 2,
+          "open": true,
+          "description": "30-minute one-on-one with Thomas."
+        }
+      ]
+    }
+  ]
+}

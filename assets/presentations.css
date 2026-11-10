@@ -1,0 +1,35 @@
+/* Presentation sign-up sheet: one section per class day, one card per presentation slot. Tokens come from style.css. */
+.pdays { display: flex; flex-direction: column; gap: 26px; }
+.pday { display: flex; flex-direction: column; gap: 10px; min-width: 0; scroll-margin-top: 16px; }
+.pres-list { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; align-items: start; }
+@media (max-width: 720px) { .pres-list { grid-template-columns: 1fr; } }
+
+.pres { background: var(--surface); border: 1px solid var(--line); border-radius: 10px; padding: 14px 18px; display: flex; flex-direction: column; align-items: flex-start; gap: 8px; min-width: 0; scroll-margin-top: 16px; }
+.pres.open { border-style: dashed; border-color: var(--accent); }
+.pres.taken { border-left: 4px solid var(--accent); padding-left: 15px; }
+.pres.closed { background: repeating-linear-gradient(135deg, var(--lunch-soft) 0 8px, transparent 8px 16px), var(--surface); border-style: dashed; }
+
+.pres-head { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; width: 100%; }
+.pres .pos { font-family: var(--font-mono); font-size: 12px; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); }
+.pres .state { font-family: var(--font-mono); font-size: 11px; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); }
+.pres.open .state { color: var(--accent); font-weight: 500; }
+
+.pres .presenter { display: flex; flex-wrap: wrap; align-items: baseline; gap: 2px 8px; min-width: 0; }
+.pres .presenter .name { font-weight: 700; font-size: 15px; }
+.pres .title { font-family: var(--font-display); font-weight: 600; font-size: 20px; line-height: 1.25; margin: 0; text-wrap: balance; overflow-wrap: anywhere; }
+.pres .desc { margin: 0; font-size: 14.5px; max-width: 78ch; white-space: pre-line; overflow-wrap: anywhere; }
+.pres .free { margin: 0; color: var(--muted); font-size: 14px; }
+.pres .acts { display: flex; flex-wrap: wrap; gap: 4px 14px; margin-top: 2px; }
+.pres .btn.primary { margin-top: 2px; }
+.pres .katex { font-size: 1.05em; }
+
+.info { display: flex; flex-direction: column; gap: 10px; padding: 16px 18px; border-radius: 10px; background: var(--accent-soft); border: 1px solid var(--line); }
+.about { margin: 0; padding-left: 1.1em; display: flex; flex-direction: column; gap: 6px; font-size: 14.5px; max-width: 80ch; }
+.about strong { font-weight: 700; }
+
+@media (max-width: 560px) {
+  .pres { padding: 12px 14px; }
+  .pres.taken { padding-left: 11px; }
+  .pres .title { font-size: 18px; }
+}
+.pday .day-head { flex-wrap: wrap; row-gap: 2px; }

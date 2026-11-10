@@ -503,8 +503,8 @@
           "kind": "code"
         },
         {
-          "label": "Sign up to meet Thomas (visit page)",
-          "url": "https://methods-group.github.io/public/",
+          "label": "Sign-up sheet for Thomas's visit (archived)",
+          "url": "https://methods-group.github.io/public/thomas-visit-2026/",
           "kind": "signup"
         },
         {
@@ -514,7 +514,7 @@
         }
       ],
       "status": "past",
-      "title_source": "data/schedule.json (visit sign-up sheet, slot wed-talk); the sign-up sheet row has no title yet",
+      "title_source": "thomas-visit-2026/data/schedule.json (visit sign-up sheet, slot wed-talk); the sign-up sheet row has no title yet",
       "note": "Visiting speaker. Slides are in the speaker’s GitHub repository and may have been updated before the talk."
     },
     {

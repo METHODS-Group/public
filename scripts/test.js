@@ -5,7 +5,10 @@ const fs = require('fs');
 const path = require('path');
 const { parseBody, apply, templateFor } = require('./process.js');
 
-const schedule = JSON.parse(fs.readFileSync(path.join(__dirname, '..', 'data', 'schedule.json'), 'utf8'));
+// The meeting/group logic is tested against the archived visitor sheet; the presentation
+// logic (at the end of this file) against the live sheet in data/.
+const THOMAS = path.join(__dirname, '..', 'thomas-visit-2026', 'data');
+const schedule = JSON.parse(fs.readFileSync(path.join(THOMAS, 'schedule.json'), 'utf8'));
 const ROOM_105 = "Room 105 (Thomas's visiting scholar office, 182 George St)";
 const ROOM_303 = "Room 303 (Brendan's office, 182 George St)";
 
@@ -165,7 +168,7 @@ test('wed-1630 is a regular open meeting slot; wed-1500 is held and rejects clai
 });
 
 test('the reserved Wednesday arrival entry is pre-filled and rejects claim, join, and cancel', () => {
-  const signups = JSON.parse(fs.readFileSync(path.join(__dirname, '..', 'data', 'signups.json'), 'utf8'));
+  const signups = JSON.parse(fs.readFileSync(path.join(THOMAS, 'signups.json'), 'utf8'));
   const arrival = signups.claims.filter((c) => c.slot === 'wed-0900');
   assert.deepEqual(arrival.map((c) => c.login), ['brendankeith', 'ramimasri']);
   const slot = schedule.days.flatMap((d) => d.slots).find((s) => s.id === 'wed-0900');
@@ -224,7 +227,7 @@ test('Wednesday sign-ups closed at 10:20 am ET on Oct 14; bookings stand, Thursd
     else if (s.id === 'wed-lunch') assert.equal(s.closes_at, '2026-10-13T12:00:00-04:00');
     else assert.equal(s.open, false, s.id);
   }
-  const signups = JSON.parse(fs.readFileSync(path.join(__dirname, '..', 'data', 'signups.json'), 'utf8'));
+  const signups = JSON.parse(fs.readFileSync(path.join(THOMAS, 'signups.json'), 'utf8'));
   for (const id of ['wed-1000', 'wed-1030', 'wed-1100', 'wed-1530', 'wed-1600', 'wed-1630']) {
     // Just before the cutoff a free spot could still be claimed (wed-1000, wed-1100, wed-1630 are full).
     let r = apply(signups, schedule, { ...req('claim', claimBody(id, 'Ada', ROOM_105), 'ada'), now: '2026-10-14T10:19:59-04:00' });
@@ -242,8 +245,8 @@ test('Wednesday sign-ups closed at 10:20 am ET on Oct 14; bookings stand, Thursd
   let r = apply(signups, schedule, { ...req('cancel', '### Slot\n\nwed-1530', 'yJesseChen'), now: '2026-10-14T11:00:00-04:00' });
   assert.ok(r.ok, r.message);
   assert.equal(r.signups.claims.length, signups.claims.length - 1);
-  // Thursday is still open.
-  r = apply(signups, schedule, { ...req('claim', claimBody('thu-1000', 'Ada', ROOM_105), 'ada'), now: '2026-10-14T11:00:00-04:00' });
+  // Thursday is still open (thu-1430 was never booked).
+  r = apply(signups, schedule, { ...req('claim', claimBody('thu-1430', 'Ada', ROOM_105), 'ada'), now: '2026-10-14T11:00:00-04:00' });
   assert.ok(r.ok, r.message);
   r = apply(signups, schedule, { ...req('join', joinBody('tue-2100', 'Ada'), 'ada'), now: '2026-10-14T11:00:00-04:00' });
   assert.ok(r.ok, r.message);
@@ -296,4 +299,136 @@ test('issue #1 verbatim: unlabeled Join issue is recorded for tue-2100', () => {
     slot: 'tue-2100', name: 'Brendan Keith', login: 'brendankeith',
     email: 'brendan_keith@brown.edu', issue: 1, created_at: '2026-10-08T19:22:54Z',
   });
+});
+
+// ---- APMA 2570B presentation sheet (data/schedule.json) ----
+
+const course = JSON.parse(fs.readFileSync(path.join(__dirname, '..', 'data', 'schedule.json'), 'utf8'));
+const BEFORE = '2026-11-12T12:00:00-05:00';
+function presentBody(slot, name, title, description) {
+  return [
+    `### Slot\n\n${slot}`,
+    `### Your name\n\n${name}`,
+    `### Presentation title\n\n${title == null ? '_No response_' : title}`,
+    `### Brief description\n\n${description == null ? '_No response_' : description}`,
+  ].join('\n\n');
+}
+function preq(template, body, login, extra) {
+  return { template, fields: parseBody(body), login, number: n++, created_at: '2026-11-11T12:00:00Z', title: '', now: BEFORE, ...extra };
+}
+
+test('the course sheet: one talk on Nov 23, two on Nov 30 and Dec 7, each closing when class starts', () => {
+  assert.deepEqual(course.days.map((d) => [d.date, d.slots.map((s) => s.id)]), [
+    ['2026-11-23', ['nov23']],
+    ['2026-11-30', ['nov30-1', 'nov30-2']],
+    ['2026-12-07', ['dec07-1', 'dec07-2']],
+  ]);
+  for (const d of course.days) {
+    assert.equal(new Date(d.date + 'T12:00:00Z').getUTCDay(), 1, `${d.date} is a Monday`);
+    for (const s of d.slots) {
+      assert.deepEqual([s.kind, s.capacity, s.open], ['presentation', 1, true]);
+      assert.equal(s.closes_at, `${d.date}T15:00:00-05:00`);
+    }
+  }
+  assert.equal(course.max_per_person, 1);
+  const signups = JSON.parse(fs.readFileSync(path.join(__dirname, '..', 'data', 'signups.json'), 'utf8'));
+  assert.ok(Array.isArray(signups.claims));
+});
+
+test('present: records name, title, and description; parses CRLF bodies; no email or room', () => {
+  const body = presentBody('nov30-1', 'Ada Lovelace', 'Semismooth Newton for the $p$-Laplacian',
+    'We derive the method.\r\n\r\n\r\n\r\nThen we prove local superlinear convergence.   ').replace(/\n/g, '\r\n');
+  const r = apply({ claims: [] }, course, preq('present', body, 'ada'));
+  assert.ok(r.ok, r.message);
+  assert.match(r.message, /✅ Signed up: Mon Nov 30, first talk, "Semismooth Newton for the \$p\$-Laplacian"/);
+  const c = r.signups.claims[0];
+  assert.deepEqual(Object.keys(c), ['slot', 'name', 'login', 'title', 'description', 'issue', 'created_at']);
+  assert.equal(c.slot, 'nov30-1');
+  assert.equal(c.title, 'Semismooth Newton for the $p$-Laplacian');
+  assert.equal(c.description, 'We derive the method.\n\nThen we prove local superlinear convergence.');
+});
+
+test('present: a slot holds one person; one slot per person; title and description are required', () => {
+  let r = apply({ claims: [] }, course, preq('present', presentBody('nov23', 'Ada', 'T', 'D'), 'ada'));
+  assert.ok(r.ok, r.message);
+  const s = r.signups;
+  r = apply(s, course, preq('present', presentBody('nov23', 'Emmy', 'T2', 'D2'), 'emmy'));
+  assert.equal(r.ok, false);
+  assert.match(r.message, /already full/);
+  r = apply(s, course, preq('present', presentBody('nov23', 'Ada', 'T', 'D'), 'ada'));
+  assert.equal(r.ok, false);
+  assert.match(r.message, /already signed up for Mon Nov 23/);
+  r = apply(s, course, preq('present', presentBody('dec07-2', 'Ada', 'T', 'D'), 'ada'));
+  assert.equal(r.ok, false);
+  assert.match(r.message, /already signed up for Mon Nov 23, and each person can hold only one slot. To switch/);
+  assert.equal(r.signups.claims.length, 1);
+  r = apply(s, course, preq('present', presentBody('dec07-2', 'Emmy', null, 'D'), 'emmy'));
+  assert.equal(r.ok, false);
+  assert.match(r.message, /title of your presentation/);
+  r = apply(s, course, preq('present', presentBody('dec07-2', 'Emmy', 'T', '  '), 'emmy'));
+  assert.equal(r.ok, false);
+  assert.match(r.message, /brief description/);
+  // Switching: cancel, then sign up for the new slot.
+  r = apply(s, course, preq('cancel', '### Slot\n\nnov23', 'ada'));
+  assert.ok(r.ok, r.message);
+  r = apply(r.signups, course, preq('present', presentBody('dec07-2', 'Ada', 'T', 'D'), 'ada'));
+  assert.ok(r.ok, r.message);
+  assert.deepEqual(r.signups.claims.map((c) => [c.slot, c.login]), [['dec07-2', 'ada']]);
+});
+
+test('update: replaces name, title, and description of your own entry, even after the deadline', () => {
+  let r = apply({ claims: [] }, course, preq('present', presentBody('nov30-2', 'Ada', 'Old title', 'Old'), 'ada'));
+  const s = r.signups;
+  const after = '2026-11-30T16:00:00-05:00';
+  r = apply(s, course, preq('update', presentBody('nov30-2', 'Ada L.', 'New title', 'New text'), 'ada', { now: after, created_at: '2026-11-30T21:00:00Z' }));
+  assert.ok(r.ok, r.message);
+  assert.match(r.message, /✏️ Updated your sign-up for Mon Nov 30, second talk: "New title"/);
+  assert.deepEqual(
+    (({ slot, name, login, title, description, updated_at }) => ({ slot, name, login, title, description, updated_at }))(r.signups.claims[0]),
+    { slot: 'nov30-2', name: 'Ada L.', login: 'ada', title: 'New title', description: 'New text', updated_at: '2026-11-30T21:00:00Z' });
+  assert.equal(s.claims[0].title, 'Old title', 'input is not mutated');
+  // Someone else cannot edit it, and empty fields are rejected.
+  r = apply(s, course, preq('update', presentBody('nov30-2', 'Emmy', 'Mine now', 'x'), 'emmy'));
+  assert.equal(r.ok, false);
+  assert.match(r.message, /No sign-up by @emmy was found for Mon Nov 30, second talk/);
+  r = apply(s, course, preq('update', presentBody('nov30-2', 'Ada', '', 'x'), 'ada'));
+  assert.equal(r.ok, false);
+  assert.match(r.message, /all three fields/);
+});
+
+test('present: sign-ups close when that day\'s class starts; cancellations still work', () => {
+  const at = '2026-11-23T15:00:00-05:00';
+  let r = apply({ claims: [] }, course, preq('present', presentBody('nov23', 'Ada', 'T', 'D'), 'ada', { now: '2026-11-23T14:59:59-05:00' }));
+  assert.ok(r.ok, r.message);
+  const s = r.signups;
+  r = apply({ claims: [] }, course, preq('present', presentBody('nov23', 'Emmy', 'T', 'D'), 'emmy', { now: at }));
+  assert.equal(r.ok, false);
+  assert.equal(r.message, 'Sign-ups for Mon Nov 23 closed when that class started; email Brendan if you need to change the schedule');
+  // Nov 30 is still open on Nov 23 after class.
+  r = apply({ claims: [] }, course, preq('present', presentBody('nov30-1', 'Emmy', 'T', 'D'), 'emmy', { now: at }));
+  assert.ok(r.ok, r.message);
+  r = apply(s, course, preq('cancel', '### Slot\n\nnov23', 'ada', { now: at }));
+  assert.ok(r.ok, r.message);
+});
+
+test('present: the template comes from the label or the "Present:"/"Update:" title; wrong forms are rejected', () => {
+  assert.equal(templateFor({ title: 'Present: Mon Dec 7, first talk', labels: [] }), 'present');
+  assert.equal(templateFor({ title: 'Update: Mon Dec 7, first talk', labels: [] }), 'update');
+  assert.equal(templateFor({ title: 'x', labels: [{ name: 'present' }] }), 'present');
+  // Slot from the title when the field is missing.
+  const body = '### Your name\n\nAda\n\n### Presentation title\n\nT\n\n### Brief description\n\nD';
+  let r = apply({ claims: [] }, course, preq('present', body, 'ada', { title: 'Present: Mon Dec 7, first talk' }));
+  assert.ok(r.ok, r.message);
+  assert.equal(r.signups.claims[0].slot, 'dec07-1');
+  // The retired visitor forms do not book presentation slots.
+  r = apply({ claims: [] }, course, preq('claim', presentBody('dec07-1', 'Ada', 'T', 'D'), 'ada'));
+  assert.equal(r.ok, false);
+  assert.match(r.message, /use the "Sign up" button/);
+  r = apply({ claims: [] }, course, preq('present', presentBody('nope', 'Ada', 'T', 'D'), 'ada'));
+  assert.equal(r.ok, false);
+  assert.match(r.message, /Could not find that slot/);
+  // And the presentation form does not book a visitor meeting slot.
+  r = apply({ claims: [] }, schedule, req('present', presentBody('thu-1430', 'Ada', 'T', 'D'), 'ada'));
+  assert.equal(r.ok, false);
+  assert.match(r.message, /use the "Claim" button/);
 });

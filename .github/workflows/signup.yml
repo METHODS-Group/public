@@ -18,9 +18,13 @@ jobs:
     # not exist in the repo, so also accept the form's title prefix.
     if: >-
       github.event.issue.state == 'open' && (
-        contains(github.event.issue.labels.*.name, 'claim')
+        contains(github.event.issue.labels.*.name, 'present')
+        || contains(github.event.issue.labels.*.name, 'update')
+        || contains(github.event.issue.labels.*.name, 'claim')
         || contains(github.event.issue.labels.*.name, 'join')
         || contains(github.event.issue.labels.*.name, 'cancel')
+        || startsWith(github.event.issue.title, 'Present:')
+        || startsWith(github.event.issue.title, 'Update:')
         || startsWith(github.event.issue.title, 'Claim:')
         || startsWith(github.event.issue.title, 'Join:')
         || startsWith(github.event.issue.title, 'Cancel:')

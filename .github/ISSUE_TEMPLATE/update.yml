@@ -1,0 +1,34 @@
+name: Edit my presentation sign-up (APMA 2570B)
+description: Change the name, title, or description on your presentation sign-up. Start from the sign-up page so your current entry is filled in.
+title: "Update: "
+labels: [update]
+body:
+  - type: markdown
+    attributes:
+      value: Edit any of the fields below and submit. What you submit replaces your current entry; your slot stays the same.
+  - type: input
+    id: slot
+    attributes:
+      label: Slot
+      description: Filled in from the sign-up page; leave it as is
+    validations:
+      required: true
+  - type: input
+    id: name
+    attributes:
+      label: Your name
+    validations:
+      required: true
+  - type: input
+    id: talk_title
+    attributes:
+      label: Presentation title
+    validations:
+      required: true
+  - type: textarea
+    id: description
+    attributes:
+      label: Brief description
+      description: Math in $...$ is typeset on the page.
+    validations:
+      required: true
