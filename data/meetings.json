@@ -1,5 +1,5 @@
 {
-  "updated": "2026-11-05",
+  "updated": "2026-11-11",
   "semester": {
     "name": "Fall 2026",
     "when": "Wednesdays, 1:00–3:00 pm ET",
@@ -9,11 +9,11 @@
   },
   "sync": {
     "channel": "C083Q60ESNS",
-    "channel_last_ts": "1793728234.985979",
+    "channel_last_ts": "1794405600.086859",
     "sheet_id": "1jcNUKmm2uvCUYQMNY8rUwx8yA91LiCYYOIfEvkDuJIQ",
     "sheet_tab": "Fall 2026",
     "precedence": "channel",
-    "last_run": "2026-11-05"
+    "last_run": "2026-11-11"
   },
   "talks": [
     {
@@ -574,17 +574,23 @@
     },
     {
       "date": "2026-11-11",
-      "presenter": "Alexey Izmailov",
-      "title": "",
-      "abstract": "",
+      "presenter": "Alexey Izmailov & Pratyush Potu",
+      "title": "Two-fold Joys of Denoising Images with Proximal Galerkin",
+      "abstract": "In this joint presentation, we discuss how we have been denoising images using PG. We first review total bounded variation regularization (otherwise known as the Rudin-Osher-Fatemi model) and the Fenchel predual formulation derived by Hintermüller &amp; Kunisch, which lends itself to solution by PG. Following the usual story, we derive a two-fold saddle-point problem and state conditions under which triples of conforming finite element spaces are inf-sup stable. Several discretizations fit these requirements, including high-order de Rham complex elements as well as a new bubble-enriched, lowest-order space. We perform an a priori analysis and obtain rates of convergence with regularity assumptions. However, to ensure convergence of PG schemes for real denoising applications, the analysis requires different notions of convergence under minimal regularity, for which we survey some results and how we modified them. The concepts and techniques we found necessary for this problem extend broadly to the analysis of PG methods.<br><br>We will present a zoo of finite elements, answer existential questions about convergence of numerical methods, and show pretty (denoised!) pictures in this wrap-up of “the project that kept on giving”.",
       "keywords": [
         "Numerical Analysis",
         "Finite Elements",
         "Proximal Galerkin"
       ],
-      "links": [],
+      "links": [
+        {
+          "label": "Announcement",
+          "url": "https://methods-group-hq.slack.com/archives/C083Q60ESNS/p1794357136427139",
+          "kind": "announcement"
+        }
+      ],
       "status": "upcoming",
-      "note": "Title and abstract to be announced"
+      "title_source": "channel"
     },
     {
       "date": "2026-11-18",
