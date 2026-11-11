@@ -17,6 +17,15 @@
       "description": "We develop a proximal point framework for the asymptotic analysis and numerical computation of rare-event probabilities in stochastic partial differential equations (SPDEs).",
       "issue": 38,
       "created_at": "2026-11-11T14:30:27Z"
+    },
+    {
+      "slot": "dec07-2",
+      "name": "Aashutosh Kulakarni",
+      "login": "akulakar",
+      "title": "Proximal Galerkin for Regularized Variational Fracture",
+      "description": "The equations of regularized variational fracture in brittle solids with the pointwise constraint of crack irreversibility will be solved using the proximal Galerkin method, as presented by Castillon, Khara, Dokken, Surowiec, Keith and Bazilevs.",
+      "issue": 40,
+      "created_at": "2026-11-11T14:39:47Z"
     }
   ]
 }
