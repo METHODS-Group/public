@@ -26,6 +26,15 @@
       "description": "The equations of regularized variational fracture in brittle solids with the pointwise constraint of crack irreversibility will be solved using the proximal Galerkin method, as presented by Castillon, Khara, Dokken, Surowiec, Keith and Bazilevs.",
       "issue": 40,
       "created_at": "2026-11-11T14:39:47Z"
+    },
+    {
+      "slot": "nov23",
+      "name": "Michael Updike",
+      "login": "MichaelUpdike",
+      "title": "BV Regularization for Image Denoising",
+      "description": "We introduce the space of \\(BV\\) functions as the natural completion of \\(W^{1,1}\\). We describe the properties of \\(BV\\) functions, including the topology in which \\(\\mathbb{P}^{1}\\) finite elements approximate \\(BV\\) functions. We then focus on the Rudin–Osher–Fatemi functional, proving various well-posedness, stability, and convergence results for both the primal and dual problems in finite and infinite dimensions. Finally, using primal-dual iteration, we present several simple examples intended to highlight the properties of \\(BV\\) denoising and demonstrate the error bounds experimentally.",
+      "issue": 41,
+      "created_at": "2026-11-16T23:03:25Z"
     }
   ]
 }
