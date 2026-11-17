@@ -1,5 +1,5 @@
 {
-  "updated": "2026-11-12",
+  "updated": "2026-11-17",
   "semester": {
     "name": "Fall 2026",
     "when": "Wednesdays, 1:00–3:00 pm ET",
@@ -9,11 +9,11 @@
   },
   "sync": {
     "channel": "C083Q60ESNS",
-    "channel_last_ts": "1794405600.086859",
+    "channel_last_ts": "1794943942.453749",
     "sheet_id": "1jcNUKmm2uvCUYQMNY8rUwx8yA91LiCYYOIfEvkDuJIQ",
     "sheet_tab": "Fall 2026",
     "precedence": "channel",
-    "last_run": "2026-11-12"
+    "last_run": "2026-11-17"
   },
   "talks": [
     {
@@ -595,14 +595,20 @@
     {
       "date": "2026-11-18",
       "presenter": "Noe Reyes Rivas",
-      "title": "",
-      "abstract": "",
+      "title": "Proximal Galerkin for Contact Mechanics",
+      "abstract": "In this week’s group meeting, I’ll be presenting on problems in contact mechanics. We apply proximal Galerkin to Signorini’s problem, the classical model of a three-dimensional linearly elastic body resting on a rigid, frictionless surface, and multi-body contact problems. We also introduce a regularized primal form of proximal Galerkin and provide implementations using the finite element software MFEM.",
       "keywords": [
         "Proximal Galerkin"
       ],
-      "links": [],
+      "links": [
+        {
+          "label": "Announcement",
+          "url": "https://methods-group-hq.slack.com/archives/C083Q60ESNS/p1794943942453749",
+          "kind": "announcement"
+        }
+      ],
       "status": "upcoming",
-      "note": "Title and abstract to be announced"
+      "title_source": "channel"
     },
     {
       "date": "2026-12-02",
