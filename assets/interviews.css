@@ -2,7 +2,30 @@
 .iv .pres-list { grid-template-columns: 1fr; }
 .iv .day-sub { margin: 0; font-size: 14px; color: var(--muted); }
 .iv .day-sub strong { color: var(--fg); font-weight: 700; }
+.iv .day-sub .local { font-variant-numeric: tabular-nums; }
 .pres .when { margin: 0; font-family: var(--font-mono); font-size: 13px; font-variant-numeric: tabular-nums; display: flex; flex-wrap: wrap; gap: 2px 12px; }
 .pres .when .et { font-weight: 500; }
 .pres .when .local { color: var(--muted); }
 #tz-note { font-size: 14px; }
+
+/* Header: the two parts of the interview at a glance. */
+.iv .when-block { display: flex; flex-direction: column; gap: 4px; margin-top: 6px; }
+.iv .when-list { margin: 0; padding-left: 1.1em; display: flex; flex-direction: column; gap: 2px; font-size: 14.5px; max-width: 80ch; }
+.iv .when-list strong { font-weight: 700; }
+.iv .when-list .jump { white-space: nowrap; font-weight: 700; }
+
+/* The sign-up section: heading with the tally, rules, controls, then the days. */
+.iv .signup { display: flex; flex-direction: column; gap: 14px; scroll-margin-top: 16px; }
+.iv .signup-head { display: flex; flex-wrap: wrap; align-items: flex-end; justify-content: space-between; gap: 8px 24px; }
+.iv .signup-head h2 { font-family: var(--font-display); font-weight: 600; font-size: 28px; line-height: 1.1; margin: 0; }
+.iv .signup .bar { padding-block: 12px; }
+.iv .signup .pdays { margin-top: 8px; }
+.iv .change { border: 1px solid var(--line); border-radius: 8px; background: var(--surface); padding: 10px 14px; scroll-margin: 16px; }
+.iv .change summary { cursor: pointer; font-weight: 700; font-size: 14px; }
+.iv .change[open] summary { margin-bottom: 8px; }
+.iv .change .about { font-size: 14px; }
+@media (prefers-reduced-motion: no-preference) {
+  .iv .change.flash { animation: iv-flash 1.4s ease-out; }
+}
+@keyframes iv-flash { from { box-shadow: 0 0 0 4px var(--accent-soft); border-color: var(--accent); } to { box-shadow: 0 0 0 0 transparent; } }
+@media (max-width: 560px) { .iv .signup-head h2 { font-size: 24px; } }

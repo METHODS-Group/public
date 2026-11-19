@@ -19,48 +19,71 @@
   <header>
     <div class="eyebrow">METHODS Group &middot; Postdoctoral Research Associate &middot; Interviews, December 2026</div>
     <h1>Sign up for your research presentation</h1>
-    <p class="sub">For candidates shortlisted for the postdoctoral position in the METHODS Group, Division of Applied Mathematics, Brown University. The interview is online, via Zoom, and has two parts: a research presentation at the group meeting, then an individual interview with Brendan the next morning. Pick a presentation slot and press <strong>Sign up</strong> to open a pre-filled GitHub issue form, then enter your name, the title of your talk, and an abstract. Submit it and your entry appears here within about a minute.</p>
-    <p class="where-line"><span class="bar-label">When</span> Presentations: Wednesdays, December 9 and 16, 1:00&ndash;3:15 pm ET &middot; Individual interviews: the following Thursday mornings, ET</p>
-    <p class="where-line"><span class="bar-label">Zoom</span> Talks are given on Zoom at <a href="https://brown.zoom.us/my/brendankeith">brown.zoom.us/my/brendankeith</a></p>
+    <p class="sub">For candidates shortlisted for the postdoctoral position in the METHODS Group, Division of Applied Mathematics, Brown University.</p>
+    <div class="when-block">
+      <span class="bar-label">When</span>
+      <ul class="when-list">
+        <li><strong>Part 1: Research presentation (45 minutes):</strong> Wednesdays, December 9 and 16, 1:00&ndash;3:15 pm ET &middot; <a class="jump" href="#sign-up">Sign up here</a></li>
+        <li><strong>Part 2: Individual interview (30 minutes):</strong> the following Thursday mornings, 10:00 am&ndash;12:00 pm ET</li>
+      </ul>
+    </div>
+    <p class="where-line"><span class="bar-label">Zoom</span> <a href="https://brown.zoom.us/my/brendankeith">brown.zoom.us/my/brendankeith</a></p>
   </header>
-
-  <div class="bar">
-    <div class="fields">
-      <div class="field">
-        <span class="bar-label">Your sign-up</span>
-        <div class="btns">
-          <a id="my-issues" class="btn ghost" href="https://github.com/METHODS-Group/public/issues" target="_blank" rel="noopener">Open your sign-up issues</a>
-          <button id="refresh" type="button" class="btn ghost">Refresh</button>
-        </div>
-      </div>
-      <div class="field">
-        <span class="bar-label">Time zone</span>
-        <span id="tz-note">Times are Eastern Time (ET).</span>
-      </div>
-    </div>
-    <div class="tally">
-      <div class="count" id="count"><b>&ndash;</b> slots open</div>
-      <div class="status" id="status" data-state="wait" aria-live="polite"><span class="dot"></span><span id="status-text">Loading the schedule&hellip;</span></div>
-    </div>
-  </div>
-
-  <p class="notice" id="notice">One slot per person, first come, first served. You need to be signed in to GitHub. Sign-ups for each day close at noon ET the day before.</p>
-
-  <noscript><p class="notice">This page needs JavaScript to show the schedule. The data is in <a href="data/schedule.json">data/schedule.json</a> and <a href="data/signups.json">data/signups.json</a>.</p></noscript>
-
-  <div class="pdays" id="days" aria-live="polite"></div>
 
   <section class="info" aria-labelledby="about-heading">
     <h2 id="about-heading" class="bar-label">About the interview</h2>
     <ul class="about">
       <li><strong>Part 1: Research presentation.</strong> You will give your talk on Zoom at <a href="https://brown.zoom.us/my/brendankeith">brown.zoom.us/my/brendankeith</a>. Each slot is 45 minutes. Prepare a 30-minute research presentation: a five-minute overview of your collective works, followed by 20 minutes on a topic of your choice. Please consider devoting the last five minutes to highlighting connections with the group&rsquo;s research on finite element methods, variational inequalities, and optimization. The rest of the slot is for questions.</li>
-      <li><strong>Part 2: Individual interview.</strong> On the morning after your presentation (Thursday, December 10 or 17, Eastern Time), you will meet with Brendan on Zoom to discuss your research background, and you will have the opportunity to ask any questions about the position. Brendan will email you the time and the Zoom link. Members of the group may also reach out to you to arrange individual meetings.</li>
+      <li><strong>Part 2: Individual interview.</strong> On the morning after your presentation (Thursday, December 10 or 17), you will meet with Brendan on Zoom for 30 minutes, between 10:00 am and 12:00 pm ET, to discuss your research background and to ask any questions about the position. Brendan will email you the exact time and the Zoom link. Members of the group may also reach out to you to arrange individual meetings.</li>
       <li><strong>Audience.</strong> The presentations take place during the METHODS Group meeting. They are attended by the group and open to the public, and you are welcome to attend each other&rsquo;s talks.</li>
       <li><strong>Timing.</strong> Each of you has a specific time slot for both parts of the interview. Please be on time for both, and be respectful of each other&rsquo;s time so that the schedule does not get delayed.</li>
     </ul>
   </section>
 
-  <p class="foot">Your name, GitHub login, title, and abstract are stored in this <a href="https://github.com/METHODS-Group/public">public repository</a> and are visible to anyone, so enter them as you would like them shown. To change your title or abstract, use <em>Edit my sign-up</em>; to switch slots, use <em>Cancel my sign-up</em> and then sign up for another open slot. If you would rather not sign up through GitHub, or something goes wrong, email Brendan.</p>
+  <section class="signup" id="sign-up" aria-labelledby="signup-heading">
+    <div class="signup-head">
+      <h2 id="signup-heading">Sign up</h2>
+      <div class="tally">
+        <div class="count" id="count"><b>&ndash;</b> slots open</div>
+        <div class="status" id="status" data-state="wait" aria-live="polite"><span class="dot"></span><span id="status-text">Loading the schedule&hellip;</span></div>
+      </div>
+    </div>
+
+    <p class="notice" id="notice">Pick an open slot and press <strong>Sign up</strong>. A pre-filled GitHub form opens: enter your name, the title of your talk, and an abstract, then submit it. Your entry appears here within about a minute. One slot per person, first come, first served; you need to be signed in to GitHub. Sign-ups for each day close at noon ET the day before.</p>
+
+    <div class="bar">
+      <div class="fields">
+        <div class="field">
+          <span class="bar-label">Already signed up?</span>
+          <div class="btns">
+            <a id="change-btn" class="btn ghost" href="#change" aria-controls="change">Change your schedule</a>
+            <button id="refresh" type="button" class="btn ghost">Refresh</button>
+          </div>
+        </div>
+        <div class="field">
+          <span class="bar-label">Time zone</span>
+          <span id="tz-note">Times are Eastern Time (ET).</span>
+        </div>
+      </div>
+    </div>
+
+    <details class="change" id="change">
+      <summary>How to change your schedule</summary>
+      <ul class="about">
+        <li>Find your talk below. It shows your name and GitHub login.</li>
+        <li><strong>To change the title or abstract,</strong> press <em>Edit my sign-up</em> on your talk.</li>
+        <li><strong>To move to another slot,</strong> press <em>Cancel my sign-up</em> on your talk, then press <em>Sign up</em> on an open slot.</li>
+        <li>Each button opens a pre-filled GitHub form. Submit it, and this page updates within about a minute; press <em>Refresh</em> to see the change.</li>
+        <li>After sign-ups for your day close (noon ET the day before), email Brendan instead.</li>
+      </ul>
+    </details>
+
+    <noscript><p class="notice">This page needs JavaScript to show the schedule. The data is in <a href="data/schedule.json">data/schedule.json</a> and <a href="data/signups.json">data/signups.json</a>.</p></noscript>
+
+    <div class="pdays" id="days" aria-live="polite"></div>
+  </section>
+
+  <p class="foot">Your name, GitHub login, title, and abstract are stored in this <a href="https://github.com/METHODS-Group/public">public repository</a> and are visible to anyone, so enter them as you would like them shown. If you would rather not sign up through GitHub, or something goes wrong, email Brendan.</p>
 </div>
 <script defer src="https://cdn.jsdelivr.net/npm/katex@0.19.1/dist/katex.min.js" integrity="sha384-a1WQdjRj162i159OYq041X6I4K8NenkrI09LlPmiHg0YOb7CR+wJOraXwK9abpnE" crossorigin="anonymous"></script>
 <script defer src="https://cdn.jsdelivr.net/npm/katex@0.19.1/dist/contrib/auto-render.min.js" integrity="sha384-bjyGPfbij8/NDKJhSGZNP/khQVgtHUE5exjm4Ydllo42FwIgYsdLO2lXGmRBf5Mz" crossorigin="anonymous"></script>

@@ -87,6 +87,28 @@
     return p;
   }
 
+  // The day's individual-interview window, e.g. "Thursday, December 10, 10:00 am–12:00 pm ET
+  // (4:00–6:00 pm your time). 30 minutes each; Brendan will email you your time."
+  function interviewLine(iv) {
+    var p = el('p', 'day-sub');
+    p.append(el('strong', null, 'Individual interviews: '));
+    var start = Date.parse(iv.start), end = Date.parse(iv.end);
+    if (isNaN(start) || isNaN(end)) {
+      p.append(document.createTextNode(iv.label + ' (' + (iv.when || 'morning') + '), on Zoom'));
+      return p;
+    }
+    p.append(document.createTextNode(iv.label + ', ' + range(start, end, ET) + ' ET'));
+    if (showLocal) {
+      var local = range(start, end, localTz);
+      if (day(start, localTz) !== day(start, ET)) local = day(start, localTz) + ', ' + local;
+      p.append(document.createTextNode(' '), el('span', 'local', '(' + local + ' your time)'));
+    }
+    p.append(document.createTextNode(iv.minutes
+      ? '. ' + iv.minutes + ' minutes each, on Zoom; Brendan will email you your time.'
+      : ', on Zoom.'));
+    return p;
+  }
+
   // A slot with `closes_at` (ISO 8601 with offset) takes no new sign-ups after that time.
   function closesAt(slot) {
     if (!slot.closes_at) return null;
@@ -174,16 +196,16 @@
       sec.id = d.id;
       var head = el('div', 'day-head');
       var n = d.slots.length;
-      head.append(el('h2', null, d.label),
-        el('span', null, (WORDS[n] || n) + (n === 1 ? ' presentation' : ' presentations') + ' · ' +
+      head.append(el('h2', null, d.label + ' · Presentations'),
+        el('span', null, (WORDS[n] || n) + (n === 1 ? ' slot' : ' slots') + ' · ' +
           (allClosed ? 'sign-ups closed' : dayOpen === 0 ? 'full' : dayOpen + ' open')));
       sec.append(head);
-      if (d.interview) {
-        var sub = el('p', 'day-sub');
-        sub.append(el('strong', null, 'Individual interviews: '),
-          document.createTextNode(d.interview.label + ' (' + (d.interview.when || 'morning') + '), on Zoom'));
-        sec.append(sub);
+      if (d.audience) {
+        var aud = el('p', 'day-sub');
+        aud.append(el('strong', null, 'Audience: '), document.createTextNode(d.audience));
+        sec.append(aud);
       }
+      if (d.interview) sec.append(interviewLine(d.interview));
       if (d.note) sec.append(el('p', 'closed-note', d.note));
       var list = el('div', 'pres-list');
       d.slots.forEach(function (slot) { list.append(card(slot, byslot[slot.id] || [], now)); });
@@ -224,7 +246,24 @@
     document.getElementById('tz-note').textContent =
       'Times are Eastern Time (ET), with your time (' + localTz.replace(/_/g, ' ') + ') alongside.';
   }
-  document.getElementById('my-issues').href = issuesBase + '?q=' + encodeURIComponent('is:issue author:@me');
+  // "Change your schedule" opens the how-to panel next to the button instead of leaving the page.
+  var change = document.getElementById('change');
+  var changeBtn = document.getElementById('change-btn');
+  var calm = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  function syncChange() { changeBtn.setAttribute('aria-expanded', change.open ? 'true' : 'false'); }
+  changeBtn.addEventListener('click', function (e) {
+    e.preventDefault();
+    change.open = true;
+    change.scrollIntoView({ behavior: calm ? 'auto' : 'smooth', block: 'nearest' });
+    change.classList.remove('flash');
+    void change.offsetWidth; // restart the highlight
+    change.classList.add('flash');
+    change.querySelector('summary').focus({ preventScroll: true });
+  });
+  change.addEventListener('toggle', syncChange);
+  if (location.hash === '#change') change.open = true;
+  syncChange();
+
   document.getElementById('refresh').addEventListener('click', load);
   load();
 })();
