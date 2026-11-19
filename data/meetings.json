@@ -1,5 +1,5 @@
 {
-  "updated": "2026-11-17",
+  "updated": "2026-11-19",
   "semester": {
     "name": "Fall 2026",
     "when": "Wednesdays, 1:00–3:00 pm ET",
@@ -9,11 +9,11 @@
   },
   "sync": {
     "channel": "C083Q60ESNS",
-    "channel_last_ts": "1794943942.453749",
+    "channel_last_ts": "1795113062.952039",
     "sheet_id": "1jcNUKmm2uvCUYQMNY8rUwx8yA91LiCYYOIfEvkDuJIQ",
     "sheet_tab": "Fall 2026",
     "precedence": "channel",
-    "last_run": "2026-11-17"
+    "last_run": "2026-11-19"
   },
   "talks": [
     {
@@ -607,7 +607,7 @@
           "kind": "announcement"
         }
       ],
-      "status": "upcoming",
+      "status": "past",
       "title_source": "channel"
     },
     {
