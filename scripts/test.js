@@ -458,10 +458,15 @@ function liveSheets() {
 }
 const SITE = 'https://methods-group.github.io/public/';
 
-test('the interview sheet: three 45-minute talks on Wed Dec 9 and 16, 1:00-3:15 pm ET; 30-minute interviews the next morning, 10-12 ET', () => {
+test('the interview sheet: 45-minute talks, two on Wed Dec 9 (1:15-2:45 pm ET) and three on Wed Dec 16 (1:00-3:15 pm ET); 30-minute interviews the next morning, 10-12 ET', () => {
   assert.deepEqual(interviews.days.map((d) => [d.date, d.interview.date, d.slots.map((s) => s.id)]), [
-    ['2026-12-09', '2026-12-10', ['iv-dec09-1', 'iv-dec09-2', 'iv-dec09-3']],
+    ['2026-12-09', '2026-12-10', ['iv-dec09-1', 'iv-dec09-2']],
     ['2026-12-16', '2026-12-17', ['iv-dec16-1', 'iv-dec16-2', 'iv-dec16-3']],
+  ]);
+  // First start and last end of each day's talks.
+  assert.deepEqual(interviews.days.map((d) => [d.slots[0].start, d.slots[d.slots.length - 1].end]), [
+    ['2026-12-09T13:15:00-05:00', '2026-12-09T14:45:00-05:00'],
+    ['2026-12-16T13:00:00-05:00', '2026-12-16T15:15:00-05:00'],
   ]);
   for (const d of interviews.days) {
     assert.equal(new Date(d.date + 'T12:00:00Z').getUTCDay(), 3, `${d.date} is a Wednesday`);
@@ -470,8 +475,6 @@ test('the interview sheet: three 45-minute talks on Wed Dec 9 and 16, 1:00-3:15 
     assert.deepEqual([d.interview.start, d.interview.end, d.interview.minutes],
       [`${d.interview.date}T10:00:00-05:00`, `${d.interview.date}T12:00:00-05:00`, 30]);
     assert.equal(d.audience, 'METHODS Group members; open to the public');
-    assert.equal(d.slots[0].start, `${d.date}T13:00:00-05:00`);
-    assert.equal(d.slots[2].end, `${d.date}T15:15:00-05:00`);
     d.slots.forEach((s, i) => {
       assert.deepEqual([s.kind, s.capacity, s.open, s.minutes], ['presentation', 1, true, 45]);
       assert.equal((Date.parse(s.end) - Date.parse(s.start)) / 60000, 45);
