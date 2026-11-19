@@ -432,3 +432,162 @@ test('present: the template comes from the label or the "Present:"/"Update:" tit
   assert.equal(r.ok, false);
   assert.match(r.message, /use the "Claim" button/);
 });
+
+// ---- Postdoc interview sheet (postdoc-interviews-2026/data/) and routing between sheets ----
+
+const { sheetFor, processIssues, loadSheets, SHEETS } = require('./process.js');
+const IV = path.join(__dirname, '..', 'postdoc-interviews-2026', 'data');
+const interviews = JSON.parse(fs.readFileSync(path.join(IV, 'schedule.json'), 'utf8'));
+const IV_BEFORE = '2026-11-20T12:00:00-05:00';
+function ivBody(slot, name, title, abstract) {
+  return [
+    `### Slot\n\n${slot}`,
+    `### Your name\n\n${name}`,
+    `### Presentation title\n\n${title == null ? '_No response_' : title}`,
+    `### Abstract\n\n${abstract == null ? '_No response_' : abstract}`,
+  ].join('\n\n');
+}
+function ivreq(template, body, login, extra) {
+  return { template, fields: parseBody(body), login, number: n++, created_at: '2026-11-20T17:00:00Z', title: '', now: IV_BEFORE, ...extra };
+}
+// Both live sheets, loaded fresh from the repository for each test.
+function liveSheets() {
+  const sheets = loadSheets(path.join(__dirname, '..'));
+  for (const s of sheets) s.signups = { claims: [] };
+  return sheets;
+}
+const SITE = 'https://methods-group.github.io/public/';
+
+test('the interview sheet: three 45-minute talks on Wed Dec 9 and 16, 1:00-3:15 pm ET; interviews the next morning', () => {
+  assert.deepEqual(interviews.days.map((d) => [d.date, d.interview.date, d.slots.map((s) => s.id)]), [
+    ['2026-12-09', '2026-12-10', ['iv-dec09-1', 'iv-dec09-2', 'iv-dec09-3']],
+    ['2026-12-16', '2026-12-17', ['iv-dec16-1', 'iv-dec16-2', 'iv-dec16-3']],
+  ]);
+  for (const d of interviews.days) {
+    assert.equal(new Date(d.date + 'T12:00:00Z').getUTCDay(), 3, `${d.date} is a Wednesday`);
+    assert.equal(new Date(d.interview.date + 'T12:00:00Z').getUTCDay(), 4, `${d.interview.date} is a Thursday`);
+    assert.equal(d.slots[0].start, `${d.date}T13:00:00-05:00`);
+    assert.equal(d.slots[2].end, `${d.date}T15:15:00-05:00`);
+    d.slots.forEach((s, i) => {
+      assert.deepEqual([s.kind, s.capacity, s.open, s.minutes], ['presentation', 1, true, 45]);
+      assert.equal((Date.parse(s.end) - Date.parse(s.start)) / 60000, 45);
+      if (i) assert.equal(s.start, d.slots[i - 1].end, 'slots are back to back');
+      // Sign-ups close at noon ET the day before.
+      assert.equal(Date.parse(s.closes_at), Date.parse(`${d.date}T12:00:00-05:00`) - 24 * 3600 * 1000);
+    });
+  }
+  assert.equal(interviews.max_per_person, 1);
+  assert.deepEqual(JSON.parse(fs.readFileSync(path.join(IV, 'signups.json'), 'utf8')), { claims: [] });
+  // Slot ids are unique across the live sheets, so a cancellation finds its sheet.
+  const ids = liveSheets().flatMap((s) => s.schedule.days.flatMap((d) => d.slots.map((x) => x.id)));
+  assert.equal(new Set(ids).size, ids.length);
+});
+
+test('interview: records name, title, and abstract; one slot per person; the abstract is required', () => {
+  let r = apply({ claims: [] }, interviews, ivreq('interview', ivBody('iv-dec09-2', 'Ada Lovelace', 'Proximal Galerkin for $p$-Laplace obstacles', 'We prove convergence.'), 'ada'));
+  assert.ok(r.ok, r.message);
+  assert.match(r.message, /✅ Signed up: Wed Dec 9, 1:45 pm ET, "Proximal Galerkin for \$p\$-Laplace obstacles"/);
+  assert.deepEqual(r.signups.claims[0].description, 'We prove convergence.');
+  const s = r.signups;
+  r = apply(s, interviews, ivreq('interview', ivBody('iv-dec09-2', 'Emmy', 'T', 'A'), 'emmy'));
+  assert.equal(r.ok, false);
+  assert.match(r.message, /already full/);
+  r = apply(s, interviews, ivreq('interview', ivBody('iv-dec16-1', 'Ada', 'T', 'A'), 'ada'));
+  assert.equal(r.ok, false);
+  assert.match(r.message, /already signed up for Wed Dec 9, 1:45 pm ET, and each person can hold only one slot/);
+  r = apply(s, interviews, ivreq('interview', ivBody('iv-dec16-1', 'Emmy', 'T', ' '), 'emmy'));
+  assert.equal(r.ok, false);
+  assert.equal(r.message, 'Please fill in the abstract of your presentation.');
+});
+
+test('interview-update edits your own entry; cancel frees the slot; deadlines close sign-ups at noon the day before', () => {
+  let r = apply({ claims: [] }, interviews, ivreq('interview', ivBody('iv-dec16-3', 'Ada', 'Old', 'Old abstract'), 'ada'));
+  const s = r.signups;
+  r = apply(s, interviews, ivreq('interview-update', ivBody('iv-dec16-3', 'Ada L.', 'New', 'New abstract'), 'ada', { now: '2026-12-16T09:00:00-05:00' }));
+  assert.ok(r.ok, r.message);
+  assert.deepEqual([r.signups.claims[0].name, r.signups.claims[0].title, r.signups.claims[0].description], ['Ada L.', 'New', 'New abstract']);
+  r = apply(s, interviews, ivreq('interview-update', ivBody('iv-dec16-3', 'Ada', 'New', ''), 'ada'));
+  assert.equal(r.ok, false);
+  assert.equal(r.message, 'Please fill in all three fields: your name, the presentation title, and the abstract.');
+  r = apply(s, interviews, ivreq('interview-update', ivBody('iv-dec16-3', 'Emmy', 'Mine', 'x'), 'emmy'));
+  assert.equal(r.ok, false);
+  assert.match(r.message, /No sign-up by @emmy/);
+  r = apply(s, interviews, ivreq('cancel', '### Slot\n\niv-dec16-3', 'ada'));
+  assert.ok(r.ok, r.message);
+  assert.equal(r.signups.claims.length, 0);
+  // Dec 9 closes at noon on Dec 8; Dec 16 is still open then.
+  r = apply({ claims: [] }, interviews, ivreq('interview', ivBody('iv-dec09-1', 'Emmy', 'T', 'A'), 'emmy', { now: '2026-12-08T11:59:59-05:00' }));
+  assert.ok(r.ok, r.message);
+  r = apply({ claims: [] }, interviews, ivreq('interview', ivBody('iv-dec09-1', 'Emmy', 'T', 'A'), 'emmy', { now: '2026-12-08T12:00:00-05:00' }));
+  assert.equal(r.ok, false);
+  assert.equal(r.message, 'Sign-ups for Wed Dec 9 closed at noon ET on Tue Dec 8; email Brendan if you need to change the schedule');
+  r = apply({ claims: [] }, interviews, ivreq('interview', ivBody('iv-dec16-1', 'Emmy', 'T', 'A'), 'emmy', { now: '2026-12-08T12:00:00-05:00' }));
+  assert.ok(r.ok, r.message);
+});
+
+test('interview forms are recognized by label or title; the slot can come from the title', () => {
+  assert.equal(templateFor({ title: 'Interview: Wed Dec 9, 1:00 pm ET', labels: [] }), 'interview');
+  assert.equal(templateFor({ title: 'Interview update: Wed Dec 9, 1:00 pm ET', labels: [] }), 'interview-update');
+  assert.equal(templateFor({ title: 'x', labels: [{ name: 'interview-update' }] }), 'interview-update');
+  assert.equal(templateFor({ title: 'x', labels: ['interview'] }), 'interview');
+  assert.equal(templateFor({ title: 'Interviews are great', labels: [] }), null);
+  const body = '### Your name\n\nAda\n\n### Presentation title\n\nT\n\n### Abstract\n\nA';
+  const r = apply({ claims: [] }, interviews, ivreq('interview', body, 'ada', { title: 'Interview: Wed Dec 16, 2:30 pm ET' }));
+  assert.ok(r.ok, r.message);
+  assert.equal(r.signups.claims[0].slot, 'iv-dec16-3');
+});
+
+test('routing: each form books its own sheet; a cancellation goes to the sheet that has the slot', () => {
+  const sheets = liveSheets();
+  assert.deepEqual(sheets.map((s) => s.id), SHEETS.map((s) => s.id));
+  const id = (t, slot) => (sheetFor(t, { slot }, '', sheets) || {}).id;
+  assert.equal(id('interview', 'iv-dec09-1'), 'postdoc-interviews-2026');
+  assert.equal(id('interview-update', 'iv-dec09-1'), 'postdoc-interviews-2026');
+  assert.equal(id('present', 'dec07-1'), 'apma2570b');
+  assert.equal(id('update', 'dec07-1'), 'apma2570b');
+  assert.equal(id('cancel', 'iv-dec16-2'), 'postdoc-interviews-2026');
+  assert.equal(id('cancel', 'nov30-2'), 'apma2570b');
+  assert.equal(id('cancel', 'nope'), 'apma2570b');
+  assert.equal(sheetFor('bogus', { slot: 'x' }, '', sheets), null);
+  // The course form cannot book an interview slot, and vice versa.
+  const course = sheets.find((s) => s.id === 'apma2570b');
+  let r = apply({ claims: [] }, course.schedule, ivreq('present', presentBody('iv-dec09-1', 'Ada', 'T', 'D'), 'ada'));
+  assert.equal(r.ok, false);
+  assert.match(r.message, /Could not find that slot/);
+  const iv = sheets.find((s) => s.id === 'postdoc-interviews-2026');
+  r = apply({ claims: [] }, iv.schedule, ivreq('interview', ivBody('dec07-1', 'Ada', 'T', 'A'), 'ada'));
+  assert.equal(r.ok, false);
+  assert.match(r.message, /Could not find that slot/);
+});
+
+test('processIssues: a burst is handled oldest first across both sheets; closed, non-form, and PR issues are skipped', () => {
+  const sheets = liveSheets();
+  const issue = (number, created_at, title, body, login, extra) =>
+    ({ number, created_at, title, body, user: { login }, labels: [], state: 'open', ...extra });
+  const issues = [
+    // Listed out of order: Emmy opened her issue after Ada did, for the same slot.
+    issue(52, '2026-11-20T17:00:05Z', 'Interview: Wed Dec 9, 1:00 pm ET', ivBody('iv-dec09-1', 'Emmy', 'Emmy talk', 'A'), 'emmy'),
+    issue(51, '2026-11-20T17:00:01Z', 'Interview: Wed Dec 9, 1:00 pm ET', ivBody('iv-dec09-1', 'Ada', 'Ada talk', 'A'), 'ada'),
+    issue(53, '2026-11-20T17:00:09Z', 'Present: Mon Dec 7, second talk', presentBody('dec07-2', 'Carl', 'Course talk', 'D'), 'carl'),
+    issue(54, '2026-11-20T17:00:10Z', 'Cancel: Wed Dec 9, 1:00 pm ET', '### Slot\n\niv-dec09-1', 'ada'),
+    issue(55, '2026-11-20T17:00:11Z', 'Interview: Wed Dec 9, 1:00 pm ET', ivBody('iv-dec09-1', 'Emmy', 'Emmy talk', 'A'), 'emmy'),
+    issue(56, '2026-11-20T17:00:12Z', 'A question', 'hello', 'sofia'),
+    issue(57, '2026-11-20T17:00:13Z', 'Interview: Wed Dec 16, 1:00 pm ET', ivBody('iv-dec16-1', 'Sofia', 'T', 'A'), 'sofia', { state: 'closed' }),
+    issue(58, '2026-11-20T17:00:14Z', 'Interview: Wed Dec 16, 1:00 pm ET', ivBody('iv-dec16-1', 'Sofia', 'T', 'A'), 'sofia', { pull_request: {} }),
+  ];
+  const results = processIssues(issues, sheets, SITE, IV_BEFORE);
+  assert.deepEqual(results.map((r) => [r.issue.number, r.sheet, r.ok]), [
+    [51, 'postdoc-interviews-2026', true],
+    [52, 'postdoc-interviews-2026', false],
+    [53, 'apma2570b', true],
+    [54, 'postdoc-interviews-2026', true],
+    [55, 'postdoc-interviews-2026', true],
+  ]);
+  assert.match(results[1].message, /already full; pick another on the sign-up page: https:\/\/methods-group\.github\.io\/public\/postdoc-interviews-2026\/$/);
+  assert.match(results[2].message, /sign-up page: https:\/\/methods-group\.github\.io\/public\/$/);
+  const iv = sheets.find((s) => s.id === 'postdoc-interviews-2026');
+  const course = sheets.find((s) => s.id === 'apma2570b');
+  assert.deepEqual(iv.signups.claims.map((c) => [c.slot, c.login, c.issue]), [['iv-dec09-1', 'emmy', 55]]);
+  assert.deepEqual(course.signups.claims.map((c) => [c.slot, c.login]), [['dec07-2', 'carl']]);
+  assert.ok(iv.changed && course.changed);
+});

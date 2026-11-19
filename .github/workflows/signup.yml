@@ -3,6 +3,8 @@ name: Record sign-up
 on:
   issues:
     types: [opened, reopened, labeled]
+  # A manual run sweeps all open sign-up issues (each run does that anyway).
+  workflow_dispatch:
 
 permissions:
   contents: write
@@ -17,18 +19,23 @@ jobs:
     # The issue forms set a label, but GitHub silently drops a label that does
     # not exist in the repo, so also accept the form's title prefix.
     if: >-
+      github.event_name == 'workflow_dispatch' || (
       github.event.issue.state == 'open' && (
         contains(github.event.issue.labels.*.name, 'present')
         || contains(github.event.issue.labels.*.name, 'update')
         || contains(github.event.issue.labels.*.name, 'claim')
         || contains(github.event.issue.labels.*.name, 'join')
         || contains(github.event.issue.labels.*.name, 'cancel')
+        || contains(github.event.issue.labels.*.name, 'interview')
+        || contains(github.event.issue.labels.*.name, 'interview-update')
         || startsWith(github.event.issue.title, 'Present:')
         || startsWith(github.event.issue.title, 'Update:')
         || startsWith(github.event.issue.title, 'Claim:')
         || startsWith(github.event.issue.title, 'Join:')
         || startsWith(github.event.issue.title, 'Cancel:')
-      )
+        || startsWith(github.event.issue.title, 'Interview:')
+        || startsWith(github.event.issue.title, 'Interview update:')
+      ))
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -40,21 +47,28 @@ jobs:
         with:
           node-version: 20
 
-      - name: Process the issue
+      - name: Process open sign-up issues
         env:
           GH_TOKEN: ${{ github.token }}
+          GITHUB_REPOSITORY: ${{ github.repository }}
         run: node scripts/process.js "$GITHUB_EVENT_PATH"
 
       - name: Commit and push
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          if git diff --quiet -- data/signups.json; then
-            echo "No change to data/signups.json"
+          # The sign-ups of every live sheet (see SHEETS in scripts/process.js).
+          FILES="data/signups.json postdoc-interviews-2026/data/signups.json"
+          CHANGED=""
+          for f in $FILES; do
+            if [ -f "$f" ] && ! git diff --quiet -- "$f"; then CHANGED="$CHANGED $f"; fi
+          done
+          if [ -z "$CHANGED" ]; then
+            echo "No change to the sign-ups"
             exit 0
           fi
-          git add data/signups.json
-          git commit -m "Sign-up update from #${{ github.event.issue.number }}"
+          git add $CHANGED
+          git commit -m "Sign-up update${{ github.event.issue.number && format(' from #{0}', github.event.issue.number) || '' }}"
           for attempt in 1 2 3 4 5; do
             git pull --rebase origin main && git push origin HEAD:main && exit 0
             echo "Push rejected, retrying ($attempt)"

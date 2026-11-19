@@ -1,0 +1,8 @@
+/* Postdoc interview sign-up sheet (postdoc-interviews-2026/): builds on presentations.css. */
+.iv .pres-list { grid-template-columns: 1fr; }
+.iv .day-sub { margin: 0; font-size: 14px; color: var(--muted); }
+.iv .day-sub strong { color: var(--fg); font-weight: 700; }
+.pres .when { margin: 0; font-family: var(--font-mono); font-size: 13px; font-variant-numeric: tabular-nums; display: flex; flex-wrap: wrap; gap: 2px 12px; }
+.pres .when .et { font-weight: 500; }
+.pres .when .local { color: var(--muted); }
+#tz-note { font-size: 14px; }

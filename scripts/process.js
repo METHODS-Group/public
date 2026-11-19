@@ -1,5 +1,6 @@
-// Records a sign-up from a GitHub issue opened through one of the issue forms.
-// Pure logic lives in parseBody() and apply(); main() does the file and GitHub I/O.
+// Records sign-ups from GitHub issues opened through the issue forms.
+// Pure logic lives in parseBody(), apply(), sheetFor(), and processIssues();
+// main() does the file and GitHub I/O.
 'use strict';
 
 const fs = require('fs');
@@ -9,9 +10,18 @@ const ROOT = path.join(__dirname, '..');
 const SCHEDULE_PATH = path.join(ROOT, 'data', 'schedule.json');
 const SIGNUPS_PATH = path.join(ROOT, 'data', 'signups.json');
 
+// The live sign-up sheets. Each has its own schedule.json and signups.json in `dir`,
+// its page at `page` (relative to the site root), and the issue forms that book it.
+// A form shared by several sheets (cancel) goes to the sheet whose schedule has the slot.
+const SHEETS = [
+  { id: 'apma2570b', dir: 'data', page: '', templates: ['claim', 'join', 'present', 'update', 'cancel'] },
+  { id: 'postdoc-interviews-2026', dir: 'postdoc-interviews-2026/data', page: 'postdoc-interviews-2026/', templates: ['interview', 'interview-update', 'cancel'] },
+];
+
 // Issue-form field labels (from .github/ISSUE_TEMPLATE/*.yml) mapped to field ids.
 // Room and Email belong to the meeting/group forms of visitor sheets (see
-// thomas-visit-2026/); the presentation forms use the title and description.
+// thomas-visit-2026/); the presentation forms use the title and description,
+// which the interview forms label "Abstract".
 const FIELD_IDS = {
   'Slot': 'slot',
   'Your name': 'name',
@@ -19,12 +29,17 @@ const FIELD_IDS = {
   'Email (optional, for a calendar invite)': 'email',
   'Presentation title': 'talk_title',
   'Brief description': 'description',
+  'Abstract': 'description',
 };
 
 // Which slot kind each sign-up form books, and the page button for each kind.
-const TEMPLATE_KIND = { claim: 'meeting', join: 'group', present: 'presentation' };
+const TEMPLATE_KIND = { claim: 'meeting', join: 'group', present: 'presentation', interview: 'presentation' };
 const BUTTON = { meeting: 'Claim', group: 'Join', presentation: 'Sign up' };
-const TEMPLATES = ['claim', 'join', 'present', 'update', 'cancel'];
+const TEMPLATES = ['claim', 'join', 'present', 'update', 'cancel', 'interview', 'interview-update'];
+// Forms that edit the title and description of one's own presentation sign-up.
+const UPDATE_TEMPLATES = ['update', 'interview-update'];
+// Issue-title prefixes of the forms ("Interview update: Wed Dec 9, 1:00 pm ET").
+const TITLE_PREFIX = /^(claim|join|cancel|present|update|interview update|interview):\s*(.*)$/i;
 
 // GitHub renders an issue form as "### <label>\n\n<value>" sections.
 function parseBody(body) {
@@ -55,9 +70,9 @@ function findSlot(schedule, fields, title) {
     if (byLabel) return byLabel;
   }
   // Fall back to the title, e.g. "Claim: Wed 10:00 am".
-  const m = /^(?:Claim|Join|Cancel|Present|Update):\s*(.+)$/i.exec(title || '');
-  if (m) {
-    const text = m[1].trim().toLowerCase();
+  const m = TITLE_PREFIX.exec(String(title || '').trim());
+  if (m && m[2].trim()) {
+    const text = m[2].trim().toLowerCase();
     return slots.find((s) => s.label.toLowerCase() === text || s.id === text) || null;
   }
   return null;
@@ -119,9 +134,12 @@ function apply(signups, schedule, req) {
     return { ok: true, message: `🗑️ Removed your sign-up for ${slot.label}. The sign-up page will update shortly: ${page}`, signups: next };
   }
 
+  // What the sheet calls the description in messages ("abstract" on the interview sheet).
+  const descLabel = schedule.description_label || 'brief description';
+
   // Edit the name, title, and description of your own presentation sign-up.
   // Like cancel, this still works after the slot's deadline.
-  if (template === 'update') {
+  if (UPDATE_TEMPLATES.includes(template)) {
     if (slot.kind !== 'presentation') return fail(`${slot.label} has no title or description to edit.`);
     const i = next.claims.findIndex((c) => c.slot === slot.id && c.login === login);
     if (i === -1) {
@@ -131,7 +149,7 @@ function apply(signups, schedule, req) {
     const talkTitle = text(fields.talk_title);
     const description = text(fields.description);
     if (!name || !talkTitle || !description) {
-      return fail('Please fill in all three fields: your name, the presentation title, and the brief description.');
+      return fail(`Please fill in all three fields: your name, the presentation title, and the ${descLabel}.`);
     }
     next.claims[i] = { ...next.claims[i], name, title: talkTitle, description, updated_at: created_at || new Date().toISOString() };
     return { ok: true, message: `✏️ Updated your sign-up for ${slot.label}: "${talkTitle}". The sign-up page will update shortly: ${page}`, signups: next };
@@ -173,7 +191,11 @@ function apply(signups, schedule, req) {
     const talkTitle = text(fields.talk_title);
     const description = text(fields.description);
     if (!talkTitle) return fail('Please fill in the title of your presentation.');
-    if (!description) return fail('Please fill in a brief description of your presentation.');
+    if (!description) {
+      return fail(descLabel === 'brief description'
+        ? 'Please fill in a brief description of your presentation.'
+        : `Please fill in the ${descLabel} of your presentation.`);
+    }
     next.claims.push({
       slot: slot.id,
       name,
@@ -249,52 +271,131 @@ function templateFor(issue) {
   const labels = (issue.labels || []).map((l) => (typeof l === 'string' ? l : l.name));
   const byLabel = TEMPLATES.find((t) => labels.includes(t));
   if (byLabel) return byLabel;
-  const m = /^(claim|join|cancel|present|update):/i.exec(String(issue.title || '').trim());
-  return m ? m[1].toLowerCase() : null;
+  const m = TITLE_PREFIX.exec(String(issue.title || '').trim());
+  return m ? m[1].toLowerCase().replace(/\s+/g, '-') : null;
 }
 
+// The sheet an issue belongs to: the one whose forms include its template; for a form
+// several sheets share (cancel), the one whose schedule has the slot, else the first.
+// `sheets` are SHEETS entries with their `schedule` loaded.
+function sheetFor(template, fields, title, sheets) {
+  const candidates = sheets.filter((s) => s.templates.includes(template));
+  if (candidates.length <= 1) return candidates[0] || null;
+  return candidates.find((s) => findSlot(s.schedule, fields, title)) || candidates[0];
+}
+
+// Applies open sign-up issues in the order they were opened, oldest first, so that
+// arrival order decides a contested slot. `sheets` carry `schedule` and `signups`,
+// which are updated in place; `site` is the page URL of the site root; `now` (for
+// tests) is the clock for `closes_at` deadlines, which defaults to the current time.
+// Returns one { issue, sheet, ok, message } per sign-up issue; other issues are skipped.
+function processIssues(issues, sheets, site, now) {
+  const ordered = [...issues].sort((a, b) =>
+    (Date.parse(a.created_at) - Date.parse(b.created_at)) || (a.number - b.number));
+  const results = [];
+  for (const issue of ordered) {
+    if (issue.pull_request || (issue.state && issue.state !== 'open')) continue;
+    const template = templateFor(issue);
+    if (!template) continue;
+    const fields = parseBody(issue.body);
+    const sheet = sheetFor(template, fields, issue.title, sheets) || sheets[0];
+    const result = apply(sheet.signups, sheet.schedule, {
+      template,
+      fields,
+      login: issue.user && issue.user.login,
+      number: issue.number,
+      created_at: issue.created_at,
+      title: issue.title,
+      now,
+      pageUrl: site + sheet.page,
+    });
+    if (result.ok) {
+      sheet.signups = result.signups;
+      sheet.changed = true;
+    }
+    results.push({ issue, sheet: sheet.id, ok: result.ok, message: result.message });
+  }
+  return results;
+}
+
+// The live sheets with their schedule and sign-ups read from disk; a sheet whose
+// folder is gone (archived elsewhere) is skipped.
+function loadSheets(root = ROOT) {
+  return SHEETS.flatMap((s) => {
+    const schedulePath = path.join(root, s.dir, 'schedule.json');
+    const signupsPath = path.join(root, s.dir, 'signups.json');
+    if (!fs.existsSync(schedulePath) || !fs.existsSync(signupsPath)) return [];
+    return [{
+      ...s,
+      schedulePath,
+      signupsPath,
+      schedule: JSON.parse(fs.readFileSync(schedulePath, 'utf8')),
+      signups: JSON.parse(fs.readFileSync(signupsPath, 'utf8')),
+      changed: false,
+    }];
+  });
+}
+
+// All open issues in the repository, oldest first (pull requests excluded).
+async function openIssues(repo, token) {
+  const all = [];
+  for (let page = 1; page <= 10; page += 1) {
+    const batch = await github('GET',
+      `https://api.github.com/repos/${repo}/issues?state=open&sort=created&direction=asc&per_page=100&page=${page}`, token);
+    all.push(...batch.filter((i) => !i.pull_request));
+    if (batch.length < 100) break;
+  }
+  return all;
+}
+
+// Every run handles all open sign-up issues, not just the one that triggered it:
+// GitHub keeps at most one pending run per concurrency group and cancels the older
+// pending run when another is queued, so a burst of sign-ups would otherwise lose
+// requests. With a sweep, the next run picks up whatever a cancelled run missed.
 async function main(eventPath) {
-  const event = JSON.parse(fs.readFileSync(eventPath, 'utf8'));
-  const issue = event.issue;
-  const template = templateFor(issue);
-
-  const schedule = JSON.parse(fs.readFileSync(SCHEDULE_PATH, 'utf8'));
-  const signups = JSON.parse(fs.readFileSync(SIGNUPS_PATH, 'utf8'));
-
-  const result = apply(signups, schedule, {
-    template,
-    fields: parseBody(issue.body),
-    login: issue.user && issue.user.login,
-    number: issue.number,
-    created_at: issue.created_at,
-    title: issue.title,
-  });
-
-  console.log(result.ok ? 'OK' : 'REJECTED', result.message);
-  if (result.ok) {
-    fs.writeFileSync(SIGNUPS_PATH, JSON.stringify(result.signups, null, 2) + '\n');
-  }
-
+  const event = eventPath ? JSON.parse(fs.readFileSync(eventPath, 'utf8')) : {};
   const token = process.env.GITHUB_TOKEN || process.env.GH_TOKEN;
-  if (!token) {
-    console.log('No GITHUB_TOKEN/GH_TOKEN set; skipping the issue comment and close.');
-    return;
-  }
   const repo = process.env.GITHUB_REPOSITORY || (event.repository && event.repository.full_name);
-  const base = `https://api.github.com/repos/${repo}/issues/${issue.number}`;
-  await github('POST', `${base}/comments`, token, { body: result.message });
-  await github('PATCH', base, token, {
-    state: 'closed',
-    state_reason: result.ok ? 'completed' : 'not_planned',
-  });
+
+  let issues = [];
+  if (token && repo) {
+    issues = await openIssues(repo, token);
+  } else {
+    console.log('No GITHUB_TOKEN/GH_TOKEN or repository set; processing only the event\'s issue, without comments.');
+  }
+  // The issue list can lag a moment behind the event, so include the event's issue.
+  if (event.issue && event.issue.state === 'open' && !issues.some((i) => i.number === event.issue.number)) {
+    issues.push(event.issue);
+  }
+
+  const sheets = loadSheets();
+  const results = processIssues(issues, sheets, pageUrl(repo));
+  for (const s of sheets) {
+    if (s.changed) fs.writeFileSync(s.signupsPath, JSON.stringify(s.signups, null, 2) + '\n');
+  }
+  for (const r of results) {
+    console.log(`#${r.issue.number} [${r.sheet}]`, r.ok ? 'OK' : 'REJECTED', r.message);
+    if (!token || !repo) continue;
+    const base = `https://api.github.com/repos/${repo}/issues/${r.issue.number}`;
+    await github('POST', `${base}/comments`, token, { body: r.message });
+    await github('PATCH', base, token, {
+      state: 'closed',
+      state_reason: r.ok ? 'completed' : 'not_planned',
+    });
+  }
+  if (!results.length) console.log('No open sign-up issues to process.');
 }
 
-module.exports = { parseBody, apply, findSlot, templateFor, pageUrl, closedAt, FIELD_IDS, SCHEDULE_PATH, SIGNUPS_PATH };
+module.exports = {
+  parseBody, apply, findSlot, templateFor, sheetFor, processIssues, loadSheets, pageUrl, closedAt,
+  FIELD_IDS, SHEETS, SCHEDULE_PATH, SIGNUPS_PATH,
+};
 
 if (require.main === module) {
+  // With no event file (a manual run), the sweep alone does the work.
   const eventPath = process.argv[2] || process.env.GITHUB_EVENT_PATH;
-  if (!eventPath) {
-    console.error('Usage: node scripts/process.js <event.json>');
+  if (!eventPath && !(process.env.GITHUB_TOKEN || process.env.GH_TOKEN)) {
+    console.error('Usage: node scripts/process.js <event.json>  (or set GITHUB_TOKEN and GITHUB_REPOSITORY to sweep open issues)');
     process.exit(2);
   }
   main(eventPath).catch((err) => {

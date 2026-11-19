@@ -1,0 +1,114 @@
+{
+  "sheet": "Postdoctoral Research Associate interviews",
+  "group": "METHODS Group",
+  "term": "December 2026",
+  "timezone": "America/New_York",
+  "max_per_person": 1,
+  "description_label": "abstract",
+  "days": [
+    {
+      "id": "dec09",
+      "label": "Wednesday, December 9",
+      "date": "2026-12-09",
+      "interview": {
+        "date": "2026-12-10",
+        "label": "Thursday, December 10",
+        "when": "morning, ET"
+      },
+      "note": null,
+      "slots": [
+        {
+          "id": "iv-dec09-1",
+          "label": "Wed Dec 9, 1:00 pm ET",
+          "position": "First talk",
+          "start": "2026-12-09T13:00:00-05:00",
+          "end": "2026-12-09T13:45:00-05:00",
+          "minutes": 45,
+          "kind": "presentation",
+          "capacity": 1,
+          "open": true,
+          "closes_at": "2026-12-08T12:00:00-05:00",
+          "closed_message": "Sign-ups for Wed Dec 9 closed at noon ET on Tue Dec 8; email Brendan if you need to change the schedule"
+        },
+        {
+          "id": "iv-dec09-2",
+          "label": "Wed Dec 9, 1:45 pm ET",
+          "position": "Second talk",
+          "start": "2026-12-09T13:45:00-05:00",
+          "end": "2026-12-09T14:30:00-05:00",
+          "minutes": 45,
+          "kind": "presentation",
+          "capacity": 1,
+          "open": true,
+          "closes_at": "2026-12-08T12:00:00-05:00",
+          "closed_message": "Sign-ups for Wed Dec 9 closed at noon ET on Tue Dec 8; email Brendan if you need to change the schedule"
+        },
+        {
+          "id": "iv-dec09-3",
+          "label": "Wed Dec 9, 2:30 pm ET",
+          "position": "Third talk",
+          "start": "2026-12-09T14:30:00-05:00",
+          "end": "2026-12-09T15:15:00-05:00",
+          "minutes": 45,
+          "kind": "presentation",
+          "capacity": 1,
+          "open": true,
+          "closes_at": "2026-12-08T12:00:00-05:00",
+          "closed_message": "Sign-ups for Wed Dec 9 closed at noon ET on Tue Dec 8; email Brendan if you need to change the schedule"
+        }
+      ]
+    },
+    {
+      "id": "dec16",
+      "label": "Wednesday, December 16",
+      "date": "2026-12-16",
+      "interview": {
+        "date": "2026-12-17",
+        "label": "Thursday, December 17",
+        "when": "morning, ET"
+      },
+      "note": null,
+      "slots": [
+        {
+          "id": "iv-dec16-1",
+          "label": "Wed Dec 16, 1:00 pm ET",
+          "position": "First talk",
+          "start": "2026-12-16T13:00:00-05:00",
+          "end": "2026-12-16T13:45:00-05:00",
+          "minutes": 45,
+          "kind": "presentation",
+          "capacity": 1,
+          "open": true,
+          "closes_at": "2026-12-15T12:00:00-05:00",
+          "closed_message": "Sign-ups for Wed Dec 16 closed at noon ET on Tue Dec 15; email Brendan if you need to change the schedule"
+        },
+        {
+          "id": "iv-dec16-2",
+          "label": "Wed Dec 16, 1:45 pm ET",
+          "position": "Second talk",
+          "start": "2026-12-16T13:45:00-05:00",
+          "end": "2026-12-16T14:30:00-05:00",
+          "minutes": 45,
+          "kind": "presentation",
+          "capacity": 1,
+          "open": true,
+          "closes_at": "2026-12-15T12:00:00-05:00",
+          "closed_message": "Sign-ups for Wed Dec 16 closed at noon ET on Tue Dec 15; email Brendan if you need to change the schedule"
+        },
+        {
+          "id": "iv-dec16-3",
+          "label": "Wed Dec 16, 2:30 pm ET",
+          "position": "Third talk",
+          "start": "2026-12-16T14:30:00-05:00",
+          "end": "2026-12-16T15:15:00-05:00",
+          "minutes": 45,
+          "kind": "presentation",
+          "capacity": 1,
+          "open": true,
+          "closes_at": "2026-12-15T12:00:00-05:00",
+          "closed_message": "Sign-ups for Wed Dec 16 closed at noon ET on Tue Dec 15; email Brendan if you need to change the schedule"
+        }
+      ]
+    }
+  ]
+}
