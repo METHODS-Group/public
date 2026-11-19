@@ -493,7 +493,7 @@ test('the interview sheet: 45-minute talks, two on Wed Dec 9 (1:15-2:45 pm ET) a
 test('interview: records name, title, and abstract; one slot per person; the abstract is required', () => {
   let r = apply({ claims: [] }, interviews, ivreq('interview', ivBody('iv-dec09-2', 'Ada Lovelace', 'Proximal Galerkin for $p$-Laplace obstacles', 'We prove convergence.'), 'ada'));
   assert.ok(r.ok, r.message);
-  assert.match(r.message, /✅ Signed up: Wed Dec 9, 1:45 pm ET, "Proximal Galerkin for \$p\$-Laplace obstacles"/);
+  assert.match(r.message, /✅ Signed up: Wed Dec 9, 2:00 pm ET, "Proximal Galerkin for \$p\$-Laplace obstacles"/);
   assert.deepEqual(r.signups.claims[0].description, 'We prove convergence.');
   const s = r.signups;
   r = apply(s, interviews, ivreq('interview', ivBody('iv-dec09-2', 'Emmy', 'T', 'A'), 'emmy'));
@@ -501,7 +501,7 @@ test('interview: records name, title, and abstract; one slot per person; the abs
   assert.match(r.message, /already full/);
   r = apply(s, interviews, ivreq('interview', ivBody('iv-dec16-1', 'Ada', 'T', 'A'), 'ada'));
   assert.equal(r.ok, false);
-  assert.match(r.message, /already signed up for Wed Dec 9, 1:45 pm ET, and each person can hold only one slot/);
+  assert.match(r.message, /already signed up for Wed Dec 9, 2:00 pm ET, and each person can hold only one slot/);
   r = apply(s, interviews, ivreq('interview', ivBody('iv-dec16-1', 'Emmy', 'T', ' '), 'emmy'));
   assert.equal(r.ok, false);
   assert.equal(r.message, 'Please fill in the abstract of your presentation.');
@@ -533,8 +533,8 @@ test('interview-update edits your own entry; cancel frees the slot; deadlines cl
 });
 
 test('interview forms are recognized by label or title; the slot can come from the title', () => {
-  assert.equal(templateFor({ title: 'Interview: Wed Dec 9, 1:00 pm ET', labels: [] }), 'interview');
-  assert.equal(templateFor({ title: 'Interview update: Wed Dec 9, 1:00 pm ET', labels: [] }), 'interview-update');
+  assert.equal(templateFor({ title: 'Interview: Wed Dec 9, 1:15 pm ET', labels: [] }), 'interview');
+  assert.equal(templateFor({ title: 'Interview update: Wed Dec 9, 1:15 pm ET', labels: [] }), 'interview-update');
   assert.equal(templateFor({ title: 'x', labels: [{ name: 'interview-update' }] }), 'interview-update');
   assert.equal(templateFor({ title: 'x', labels: ['interview'] }), 'interview');
   assert.equal(templateFor({ title: 'Interviews are great', labels: [] }), null);
@@ -573,11 +573,11 @@ test('processIssues: a burst is handled oldest first across both sheets; closed,
     ({ number, created_at, title, body, user: { login }, labels: [], state: 'open', ...extra });
   const issues = [
     // Listed out of order: Emmy opened her issue after Ada did, for the same slot.
-    issue(52, '2026-11-20T17:00:05Z', 'Interview: Wed Dec 9, 1:00 pm ET', ivBody('iv-dec09-1', 'Emmy', 'Emmy talk', 'A'), 'emmy'),
-    issue(51, '2026-11-20T17:00:01Z', 'Interview: Wed Dec 9, 1:00 pm ET', ivBody('iv-dec09-1', 'Ada', 'Ada talk', 'A'), 'ada'),
+    issue(52, '2026-11-20T17:00:05Z', 'Interview: Wed Dec 9, 1:15 pm ET', ivBody('iv-dec09-1', 'Emmy', 'Emmy talk', 'A'), 'emmy'),
+    issue(51, '2026-11-20T17:00:01Z', 'Interview: Wed Dec 9, 1:15 pm ET', ivBody('iv-dec09-1', 'Ada', 'Ada talk', 'A'), 'ada'),
     issue(53, '2026-11-20T17:00:09Z', 'Present: Mon Dec 7, second talk', presentBody('dec07-2', 'Carl', 'Course talk', 'D'), 'carl'),
-    issue(54, '2026-11-20T17:00:10Z', 'Cancel: Wed Dec 9, 1:00 pm ET', '### Slot\n\niv-dec09-1', 'ada'),
-    issue(55, '2026-11-20T17:00:11Z', 'Interview: Wed Dec 9, 1:00 pm ET', ivBody('iv-dec09-1', 'Emmy', 'Emmy talk', 'A'), 'emmy'),
+    issue(54, '2026-11-20T17:00:10Z', 'Cancel: Wed Dec 9, 1:15 pm ET', '### Slot\n\niv-dec09-1', 'ada'),
+    issue(55, '2026-11-20T17:00:11Z', 'Interview: Wed Dec 9, 1:15 pm ET', ivBody('iv-dec09-1', 'Emmy', 'Emmy talk', 'A'), 'emmy'),
     issue(56, '2026-11-20T17:00:12Z', 'A question', 'hello', 'sofia'),
     issue(57, '2026-11-20T17:00:13Z', 'Interview: Wed Dec 16, 1:00 pm ET', ivBody('iv-dec16-1', 'Sofia', 'T', 'A'), 'sofia', { state: 'closed' }),
     issue(58, '2026-11-20T17:00:14Z', 'Interview: Wed Dec 16, 1:00 pm ET', ivBody('iv-dec16-1', 'Sofia', 'T', 'A'), 'sofia', { pull_request: {} }),
