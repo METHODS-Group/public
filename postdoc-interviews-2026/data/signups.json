@@ -1,3 +1,13 @@
 {
-  "claims": []
+  "claims": [
+    {
+      "slot": "iv-dec16-3",
+      "name": "Tim van Beeck",
+      "login": "TimvanBeeck",
+      "title": "Acoustic wave propagation in nematic liquid crystals: modeling, analysis, and discretization",
+      "description": "Nematic liquid crystals consist of rod-like molecules whose mean orientation, the director, can be rotated by an external electric field. Because sound travels faster along the director, the acoustic response of the medium can be tuned. After a brief overview of my work on structure-preserving finite element methods for incompressible flows and on hybrid discontinuous Galerkin methods for helioseismology, this talk focuses on the modeling, analysis and numerical analysis of time-harmonic wave equations in nematic liquid crystals. For a constant director, sound waves are modeled by the nematic Helmholtz–Korteweg (NHK) equation, a fourth-order, anisotropic augmentation of the Helmholtz equation. I will show how a Cordes condition on the anisotropy yields a Gårding inequality and, in turn, well-posedness, and how these results lead to convergent $C^1$-conforming and hybrid $C^0$-interior penalty discretizations. Numerical examples illustrate the theory. Finally, I will discuss the extension to variable directors, for which a variational approach based on constrained energy minimization appears promising.",
+      "issue": 43,
+      "created_at": "2026-11-25T17:05:42Z"
+    }
+  ]
 }
