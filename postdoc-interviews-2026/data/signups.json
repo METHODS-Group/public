@@ -8,6 +8,15 @@
       "description": "Nematic liquid crystals consist of rod-like molecules whose mean orientation, the director, can be rotated by an external electric field. Because sound travels faster along the director, the acoustic response of the medium can be tuned. After a brief overview of my work on structure-preserving finite element methods for incompressible flows and on hybrid discontinuous Galerkin methods for helioseismology, this talk focuses on the modeling, analysis and numerical analysis of time-harmonic wave equations in nematic liquid crystals. For a constant director, sound waves are modeled by the nematic Helmholtz–Korteweg (NHK) equation, a fourth-order, anisotropic augmentation of the Helmholtz equation. I will show how a Cordes condition on the anisotropy yields a Gårding inequality and, in turn, well-posedness, and how these results lead to convergent $C^1$-conforming and hybrid $C^0$-interior penalty discretizations. Numerical examples illustrate the theory. Finally, I will discuss the extension to variable directors, for which a variational approach based on constrained energy minimization appears promising.",
       "issue": 43,
       "created_at": "2026-11-25T17:05:42Z"
+    },
+    {
+      "slot": "iv-dec09-2",
+      "name": "Alessio Cesarano",
+      "login": "cesarano-unikoblenz",
+      "title": "Shape optimization of electric machines",
+      "description": "This talk focuses on shape optimization of electric machines with the aid of shape derivatives. The numerical methods presented include steepest-descent algorithms, the adjoint method, and Hilbertian regularization for smoothing shape derivatives. Particular attention is given to the treatment of time-dependent effects present in electric machines, and in particular to rotating electric machines with time-periodic conditions, where a space-time finite element method is used for the approximate solution of the time-dependent state and adjoint equations. In addition, multi-descent shape optimization algorithms and a shape-Newton method are presented for multi-objective shape optimization problems, with the advantages of being able to detect points in so-called non-convex regions of the Pareto front and to trace the Pareto front with a path-following continuation method using second-order shape derivatives, respectively. Finally, mesh-preserving shape optimization algorithms based on Lipschitz transformations and their application to electric machines are presented. This approach does not use the Hilbertian regularization procedure to extract a deformation field that is a descent direction, but instead computes it as the solution of a minimization problem, with the aim of avoiding costly remeshing procedures, often required due to mesh degradation in the course of the optimization process.",
+      "issue": 44,
+      "created_at": "2026-11-25T22:05:32Z"
     }
   ]
 }
