@@ -17,6 +17,15 @@
       "description": "This talk focuses on shape optimization of electric machines with the aid of shape derivatives. The numerical methods presented include steepest-descent algorithms, the adjoint method, and Hilbertian regularization for smoothing shape derivatives. Particular attention is given to the treatment of time-dependent effects present in electric machines, and in particular to rotating electric machines with time-periodic conditions, where a space-time finite element method is used for the approximate solution of the time-dependent state and adjoint equations. In addition, multi-descent shape optimization algorithms and a shape-Newton method are presented for multi-objective shape optimization problems, with the advantages of being able to detect points in so-called non-convex regions of the Pareto front and to trace the Pareto front with a path-following continuation method using second-order shape derivatives, respectively. Finally, mesh-preserving shape optimization algorithms based on Lipschitz transformations and their application to electric machines are presented. This approach does not use the Hilbertian regularization procedure to extract a deformation field that is a descent direction, but instead computes it as the solution of a minimization problem, with the aim of avoiding costly remeshing procedures, often required due to mesh degradation in the course of the optimization process.",
       "issue": 44,
       "created_at": "2026-11-25T22:05:32Z"
+    },
+    {
+      "slot": "iv-dec09-1",
+      "name": "Zeyi Xu",
+      "login": "zeyi-xu",
+      "title": "Accelerated Mirror Descent Methods in Scientific Computing",
+      "description": "Many computational problems require iterates that respect positivity and conservation of mass. Mirror descent methods enforce such structure through a Bregman divergence, and classical solvers such as the Sinkhorn algorithm for optimal transport can be viewed in this way. In this talk, I present accelerated solvers of this type. I begin with a brief overview of our work and its two main applications, entropic optimal transport and the JKO time steps of Wasserstein gradient flows such as the Poisson–Nernst–Planck system. I then discuss these solvers in more details. I show how acceleration can be added to a classical method while keeping its structure, and why the gain grows as the problem becomes harder. I close with possible connections to the group's Bregman-based finite element methods for variational inequalities, and to solvers for nonlinear PDEs. This is joint work with Long Chen.",
+      "issue": 45,
+      "created_at": "2026-11-26T06:33:23Z"
     }
   ]
 }
