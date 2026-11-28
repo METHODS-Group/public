@@ -32,9 +32,10 @@
       "name": "Mansur Shakipov",
       "login": "chromomons",
       "title": "Surface fluids without the saddle-point structure",
-      "description": "Fluid flow on closed surfaces models lipid vesicles and surfactant-laden interfaces. Standard finite element methods for the surface Stokes equations inherit the saddle-point structure of the problem and must satisfy a discrete inf-sup condition. We take a different route. The commutator between the viscous operator and the surface divergence is a lower-order term involving the Gauss curvature, which yields a pressure Poisson equation; since a closed surface has no boundary, this equation needs no artificial boundary condition. Replacing the incompressibility constraint by the pressure Poisson equation gives a second-order elliptic system for the velocity-pressure pair, which can therefore be discretized with any pair of polynomial degrees, including equal order. We will show how this informal idea survives scrutiny, how it extends to transient Stokes and Navier-Stokes flow, and what practical consequences it brings.",
+      "description": "Fluid flow on closed surfaces models lipid vesicles and surfactant-laden interfaces. Standard finite element methods for the surface Stokes equations inherit the saddle-point structure of the problem and must satisfy a discrete inf-sup condition. We take a different route. The commutator between the viscous operator and the surface divergence is a lower-order term involving the Gauss curvature, which yields a pressure Poisson equation; since a closed surface has no boundary, this equation needs no artificial boundary condition. Replacing the incompressibility constraint by the pressure Poisson equation gives a second-order elliptic system for the velocity-pressure pair, which can therefore be discretized with any pair of polynomial degrees, including equal order. We will show how this informal idea survives scrutiny, how it extends to transient Stokes and Navier-Stokes flow, and what practical consequences it brings. This is joint work with R. H. Nochetto.",
       "issue": 46,
-      "created_at": "2026-11-28T00:27:46Z"
+      "created_at": "2026-11-28T00:27:46Z",
+      "updated_at": "2026-11-28T00:42:43Z"
     }
   ]
 }
